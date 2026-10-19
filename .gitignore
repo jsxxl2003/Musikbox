@@ -1,0 +1,35 @@
+# Erzeugte Programme und Pakete
+*.exe
+*.dll
+*.pdb
+*.zip
+*.bundle
+bin/
+obj/
+artifacts/
+
+# Private Musiksammlungen und lokale Projekte
+*.mp3
+*.wav
+*.flac
+*.m4a
+*.aac
+*.ogg
+*.opus
+*.wma
+*.aif
+*.aiff
+*.musikbox.json
+test-input/
+test-output*/
+
+# Zugangsdaten und lokale Einstellungen
+.env
+.env.*
+*.key
+*.pem
+.vs/
+*.user
+*.suo
+Thumbs.db
+Desktop.ini

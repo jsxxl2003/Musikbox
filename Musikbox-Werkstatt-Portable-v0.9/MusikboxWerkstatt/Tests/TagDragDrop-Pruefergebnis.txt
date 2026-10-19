@@ -1,0 +1,16 @@
+OK Vorhandene Album-Tags haben Vorrang vor ausgewähltem Ordner
+OK Sortierung nach Interpret und Titel statt Dateiname
+OK Unterschiedliche Album-Tags ergeben getrennte Themen
+OK Erneuter Drop legt neue Ordner an und lässt bestehende unverändert
+OK Fehlender Album-Tag nutzt ausgewähltes Thema als Vorlage für neuen Ordner
+OK Ohne Album und Ziel wird Neue Musik verwendet
+OK Auch Ordnerinhalt wird anhand Album-Tags zugeordnet
+OK Vorhandene gleichnamige Themenordner nicht verändert oder gruppiert
+OK 472 Titel desselben Albums automatisch aufgeteilt
+OK Alphabetische Reihenfolge über Album-Folgeordner
+OK Projekt und Originaldateien unverändert erhalten
+OK Abbruch der Tag-Zuordnung ohne Teiländerungen
+OK Fünf Referenzordner mit und ohne Album-Tags eingelesen
+OK Vorhandene Ordnerdaten, Tags und Titelreihenfolge vollständig erhalten
+OK Neue Nummern schließen hinter höchster bestehender Nummer an
+BESTANDEN: 15 Tag-Zuordnungsprüfungen

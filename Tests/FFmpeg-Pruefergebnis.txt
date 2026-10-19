@@ -1,0 +1,24 @@
+OK Unicode-Metadaten aus flac eingelesen
+OK Unicode-Metadaten aus wav eingelesen
+OK Unicode-Metadaten aus m4a eingelesen
+OK Unicode-Metadaten aus ogg eingelesen
+OK Gemischte Audioformate gemeinsam importiert
+OK Vier unterschiedliche Formate als MP3 exportiert
+OK MP3-Tags nach Konvertierung vollständig
+OK MP3-Ausgabe 192 kbit/s, 44,1 kHz, Stereo geprüft
+OK MP3-Tags nach Konvertierung vollständig
+OK MP3-Ausgabe 192 kbit/s, 44,1 kHz, Stereo geprüft
+OK MP3-Tags nach Konvertierung vollständig
+OK MP3-Ausgabe 192 kbit/s, 44,1 kHz, Stereo geprüft
+OK MP3-Tags nach Konvertierung vollständig
+OK MP3-Ausgabe 192 kbit/s, 44,1 kHz, Stereo geprüft
+OK Originaldateien nach Konvertierung bytegleich
+OK Zwei-Pass-Lautheitsanalyse protokolliert
+OK Kodierte Ausgabe nachgemessen: -16.25 LUFS, -15.52 dBTP
+OK FFmpeg-Einstellungen gespeichert und geladen
+OK FFmpeg-Einstellung nach automatischer Aufteilung erhalten
+OK Gleichzeitige MP3Gain- und FFmpeg-Anpassung verhindert
+OK Abbruch erzeugt keine fertige MP3
+OK Nicht messbare Stille mit verständlicher Meldung abgefangen
+OK Eingebettete Cover und weitere ID3-Frames aus MP3 erhalten
+BESTANDEN: 23 FFmpeg-Prüfungen (Linux-Programme)

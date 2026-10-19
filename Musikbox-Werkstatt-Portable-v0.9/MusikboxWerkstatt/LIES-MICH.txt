@@ -1,0 +1,263 @@
+MUSIKBOX-WERKSTATT – Portable Testversion 0.9
+
+START AUF WINDOWS
+1. Die gesamte ZIP-Datei in einen eigenen Ordner entpacken.
+2. Musikbox-Werkstatt.exe per Doppelklick starten, nicht aus dem ZIP heraus.
+3. Voraussetzung: Windows mit .NET Framework 4.8. Keine App-Installation erforderlich.
+4. Die EXE und die gleichnamige .config-Datei zusammen aufbewahren.
+
+ERSTE SCHRITTE
+- Deine Musik-ZIP-Dateien vorher mit dem Windows-Explorer entpacken.
+- 'Ordner laden' liest einen Musikordner und seine Unterordner ein.
+- 'Neuer Ordner' und 'Titel hinzufügen' ermöglichen neue Zusammenstellungen.
+- Interpret und Titel lassen sich direkt in der Tabelle ändern.
+- Anzeige: Interpret | Titel | Album. Der Albumwert zeigt zunächst den Quelltag.
+- Der Album-Tag wird beim Export verbindlich auf den Themennamen gesetzt.
+- Thema, Ordnername und Sortiergruppe über 'Ordner bearbeiten' einstellen.
+- Gelbe Zeilen markieren fehlende Tags. Der Dateiname wird nicht automatisch als Tag geraten.
+
+THEMEN UND SORTIERUNG
+- Bis zu 99 Ordner mit jeweils bis zu 99 MP3-Titeln.
+- Ordner tragen dreistellige, eindeutige Nummern, z. B. 000 Charts 2000.
+- Vorhandene Nummern einschließlich Lücken bleiben beim Import erhalten.
+- Hoch/Runter tauscht die Nummern der beiden Ordner und ihre Position im Projekt.
+- Ordnernamen dürfen verschieden sein; das Thema enthält keine führende Nummer.
+- Mehrere Country-Ordner erhalten dasselbe Thema UND dieselbe Sortiergruppe.
+- Ohne Sortiergruppe wird jeder Ordner einzeln sortiert.
+- Verschiedene Chartjahre bleiben getrennt.
+- Sortierung: Interpret, dann Titel; deutsche Sprachsortierung ohne Unterscheidung
+  zwischen Groß- und Kleinschreibung. Artikel wie 'The' werden nicht entfernt.
+- Eine Gruppe wird gemeinsam sortiert und mit je bis zu 99 Titeln gefüllt.
+  Fehlende Folgeordner entstehen automatisch, mit demselben Thema, Album und Cover.
+  Beim Hinzufügen und Importieren wird sofort aufgeteilt. Bereits gespeicherte
+  Projekte mit überfüllten Ordnern werden beim Öffnen automatisch aufgeteilt.
+  Beispiel: 472 Titel ergeben 99 + 99 + 99 + 99 + 76 Titel.
+  Folgeordner werden hinter dem letzten Themenordner eingefügt; vorhandene
+  Ordnernummern werden bei Kollisionen nach hinten verschoben.
+  Unnummerierte Ordner erhalten automatisch eine dreistellige Nummer.
+  Passt die Aufteilung nicht in maximal 99 Ordner, wird sie ohne Teiländerung abgelehnt.
+- Bei kleinen Beispielsammlungen kann dadurch ein Folgeordner leer werden.
+- Sortiervorschau zeigt die resultierende Verteilung vor dem Übernehmen.
+
+PROJEKTE
+- Speichern schreibt eine Projektdatei mit Verweisen auf deine Musikdateien.
+- Es werden keine Musikdateien in die Projektdatei eingebettet.
+- Quelldateien und Cover nicht verschieben, solange das Projekt verwendet wird.
+- 'Titel entfernen' und 'Entfernen' entfernen nur Einträge aus dem Projekt.
+
+EXPORT
+- Vor jedem Export erscheint eine Vorschau.
+- Ein neuer Unterordner Musikbox-Export-Datum-Kennung wird angelegt.
+- Bestehende Exporte und Musikquellen werden nicht überschrieben.
+- Die nummerierten Themenordner AUS diesem Exportordner auf den vorbereiteten
+  Datenträger kopieren. Der zusätzliche Export-Unterordner gehört nicht als neue
+  Ebene auf die Musikbox. Vorhandenen Datenträgerinhalt zuvor sichern.
+- Titel erhalten Dateinamen '01 - Interpret - Titel.mp3' bis '99 - ...'.
+  Die Titel-Tags enthalten diese Nummern nicht.
+- ID3v2.3-Tags für Interpret, Titel und Album werden mit UTF-16 geschrieben.
+- Weitere unterstützte ID3v2.3-Frames einschließlich Cover bleiben bytegleich.
+- ID3v1 wird als Kompatibilitätskopie ergänzt. Dieses ältere Format ist auf
+  30 Bytes pro Feld und einen begrenzten Zeichensatz beschränkt.
+- Externe JPG-, JPEG- und PNG-Bilder aus dem Quellordner werden mitkopiert.
+- Ein ausgewähltes JPEG wird zusätzlich als Folder.jpg hinterlegt. PNG wird
+  als Cover.png kopiert. Die Bildunterstützung der Box muss getestet werden.
+- Die vorhandenen eingebetteten Cover werden durch die externe Coverauswahl
+  nicht ersetzt. Welche Bildquelle die Box nutzt, muss dort geprüft werden.
+- Nach jeder geschriebenen MP3 werden die drei Tags wieder eingelesen und geprüft.
+- Ein CSV-Protokoll liegt neben dem Exportordner.
+- Bei Abbruch werden unvollständige Kopien nach Möglichkeit entfernt. Bei
+  entferntem USB-Datenträger können Reste mit '.Musikbox-unvollstaendig' bleiben;
+  diese sind kein fertiger Export.
+
+UMFANG UND TESTSTATUS
+- Version 0.6 unterstützt die vorhandenen ID3v2.3-Beispiele und MP3 ohne v2-Tag.
+- Andere ID3-Versionen und spezielle Frame-Flags werden gemeldet und nicht importiert.
+- Optionale Lautstärkeanpassung über die Schaltfläche Audio-Einstellungen.
+  Dort das Kommandozeilenprogramm mp3gain.exe aus deiner MP3Gain-Installation
+  auswählen (nicht MP3GainGUI.exe), Zielpegel einstellen und aktivieren.
+  Anfangswert: 89 dB nach MP3Gain-Skala. Track-Anpassung mit Clipping-Schutz.
+  Die Einstellungen werden mit dem Projekt gespeichert; ohne Aktivierung erfolgt
+  keine Lautstärkeänderung. Fehlende Engine blockiert den aktivierten Export.
+  Verarbeitung erfolgt ausschließlich auf temporären Kopien.
+  Ein separates Lautstärkeprotokoll wird neben dem Exportordner angelegt.
+  Die Bedienung und die alte Windows-MP3Gain-Engine müssen auf Windows noch
+  getestet werden. 25 zusätzliche Integrationstests liefen mit Linux-MP3Gain.
+- WAV, FLAC, M4A, AAC, Ogg, Opus, WMA und AIFF werden optional eingelesen
+  und beim Export über FFmpeg nach MP3 konvertiert.
+  Verfügbarkeit hängt von der ausgewählten FFmpeg-Ausgabe ab.
+- fre:ac, Mp3tag und MP3Gain sind nicht eingebaut und werden nicht mitgeliefert.
+- Keine Internetverbindung für die vorhandenen Funktionen erforderlich.
+- Die EXE wurde kompiliert. Zusätzliche Tests prüfen die automatische Aufteilung
+  von 472 Titeln, Nummernkollisionen und die Grenzen 99/100 bis 9801/9802 Titel.
+  Verarbeitungstests mit den 15 Beispieltiteln prüfen
+  unter anderem Audioerhalt, Cover-Frames, Tags, Unicode, Ordnergrenzen und Abbruch.
+- Ein echter Windows-Oberflächentest und der Test an der Musikbox stehen aus.
+  Die grafische Testumgebung hier konnte nicht gestartet werden.
+- Zunächst mit einer Kopie deiner Musiksammlung und einem Testdatenträger arbeiten.
+
+QUELLCODE
+src/Model.cs: Daten und Regeln
+src/View.cs: Windows-Oberfläche
+src/Controller.cs: Bedienabläufe
+src/Tags.cs und Services.cs: Tag-Verarbeitung, Import, Export, Projektspeicherung
+Tests/CoreTests.cs: Verarbeitungstests
+Neu-bauen.cmd: Erneut kompilieren unter Windows mit dem Framework-C#-Compiler
+
+Es werden keine Musikdateien oder fremden Programme mit diesem Paket geliefert.
+
+MP3GAIN-HINWEIS
+MP3Gain ist ein separates Programm und wird nicht mitgeliefert.
+Verwende die von dir bereitgestellte Installation oder die Originalquelle:
+https://mp3gain.sourceforge.net/
+Der Zielpegel ist kein garantierter Schalldruckpegel an den Boxen.
+Mit aktiviertem Clipping-Schutz können einzelne Titel leiser bleiben.
+
+Entwickler: src/Gain.cs kapselt den externen Prozess, prüft Ergebnisse und Tags,
+begrenzt die Laufzeit und unterstützt Abbruch.
+
+NEU IN VERSION 0.6 – FFMPEG
+- Audio-Einstellungen: genau eines von drei Verfahren wählen:
+  1. Lautstärke unverändert (vorhandene MP3-Audiodaten bleiben erhalten).
+  2. MP3Gain (MP3-Anpassung ohne Neucodierung).
+  3. FFmpeg-Lautheitsanpassung (auch vorhandene MP3 werden neu kodiert).
+- Für FFmpeg ffmpeg.exe wählen; ffprobe.exe muss im selben Ordner liegen.
+  Die Werkzeuge sind nicht im Paket enthalten und müssen separat bereitgestellt
+  werden. Windows-Ausgaben sind über die offizielle Projektseite verlinkt:
+  https://ffmpeg.org/download.html
+  Benötigt werden der libmp3lame-Encoder und der loudnorm-Filter.
+- Diese Werkzeuge zusammen in einem eigenen Ordner aufbewahren. Keine
+  Installation unserer App erforderlich; Programme werden über ihre Pfade eingebunden.
+- Bei anderen Audioformaten erfolgt die Formatkonvertierung unabhängig vom
+  gewählten Lautstärkeverfahren immer erst beim Export.
+- MP3-Konvertierung standardmäßig 192 kbit/s CBR, 44,1 kHz, Stereo.
+- FFmpeg-Zielwert standardmäßig -16 LUFS, einstellbar von -23 bis -10 LUFS.
+  Zwei-Pass-Lautheitsanalyse; True-Peak-Ziel vor MP3-Kodierung: -2 dBTP.
+  Das ist ein Zielwert; die erneute MP3-Kodierung kann Spitzen leicht verändern.
+- Die MP3Gain-dB-Skala ist nicht mit der LUFS-Skala gleichzusetzen.
+- Tags werden über ffprobe aus Format- und Audiospur-Metadaten eingelesen.
+  Fehlende Angaben lassen sich in der Tabelle ergänzen. Album wird Thema.
+- Bereits vorhandene eingebettete ID3v2.3-Cover aus MP3 bleiben erhalten.
+  Eingebettete Cover aus anderen Audioformaten werden in dieser Version nicht
+  übernommen; dafür das Themen-Cover als externe Bilddatei auswählen.
+- Externe Themen-Cover werden weiterhin mit exportiert.
+- Import und Hinzufügen laufen im Hintergrund und können abgebrochen werden.
+- Audioverarbeitungs-Protokoll steht neben dem Exportordner.
+- Stille, nicht messbare und defekte Dateien führen zu einer Fehlermeldung;
+  ein solcher Export wird nicht als fertig übernommen.
+- Alle bisherigen Projektdateien lassen sich weiterhin öffnen.
+- Tests: 80 Kernprüfungen, 25 MP3Gain-Prüfungen und 23 FFmpeg-Prüfungen.
+  Die Medienprozesse wurden mit Linux-Ausgaben getestet. Windows-Programme,
+  neue Einstellungsoberfläche und reale Musikbox sind noch praktisch zu testen.
+
+NEU IN VERSION 0.6 – MP3-BITRATE
+- Standard für neue Projekte und ältere Projekte ohne diese Einstellungen:
+  192 kbit/s, feste Bitrate (CBR).
+- CBR-Auswahl: 128, 160, 192, 224, 256 oder 320 kbit/s.
+- Variable Bitrate (VBR): Qualitätsstufen V0 bis V5, Standard V2.
+  V0 bedeutet höchste Qualität, V5 kleinere Dateien.
+  Bei echtem VBR wird eine Qualität gewählt und keine feste Bitrate garantiert.
+  Die CBR-Bitratenauswahl ist deshalb im VBR-Modus ausgegraut.
+- Modus, CBR-Bitrate und VBR-Qualität werden mit dem Projekt gespeichert und
+  bleiben beim Import, bei der Sortierung und automatischen Aufteilung erhalten.
+- Die Einstellungen gelten für alle neu kodierten Dateien. Vorhandene MP3s
+  werden standardmäßig ohne Neucodierung übernommen; deren Bitrate bleibt gleich.
+- Optional: 'Auch vorhandene MP3s auf diese Qualität neu kodieren' aktivieren,
+  wenn alle MP3s in der gewählten Qualität neu erstellt werden sollen.
+  Dafür ist FFmpeg erforderlich. Erneute MP3-Kodierung kann Qualität verlieren.
+- Bei FFmpeg-Lautheitsanpassung erfolgt die Neucodierung ohnehin. Die gewählten
+  Bitrateneinstellungen gelten dann ebenfalls. Bei MP3Gain allein erfolgt sie
+  nur, wenn die zusätzliche MP3-Neucodierungsoption aktiviert ist.
+- Vorschau und Audioverarbeitungsprotokoll zeigen die Kodierungseinstellung.
+- Ausgabe bleibt 44,1 kHz, Stereo.
+- Zusätzliche Tests prüfen alle sechs CBR-Bitraten anhand der tatsächlichen
+  Audiospur-Bitrate und alle sechs VBR-Stufen anhand wechselnder MP3-Framegrößen,
+  außerdem Standardwerte, ältere Projektdateien und das Speichern der Optionen.
+
+NEU IN VERSION 0.6 – DOWNLOADS
+- Audio-Einstellungen: 'MP3Gain ZIP laden' öffnet den Windows-ZIP-Download des
+  MP3Gain-Projekts auf SourceForge im Standardbrowser.
+- 'FFmpeg ZIP laden' öffnet die Windows-64-Bit Release-Essentials-ZIP von gyan.dev,
+  einem auf der FFmpeg-Projektseite verlinkten Anbieter.
+- Die Links darunter öffnen die jeweiligen Projekt-Downloadseiten als Alternative.
+- MP3Gain: ZIP herunterladen, vollständig entpacken und mp3gain.exe wählen.
+  Nicht MP3GainGUI.exe auswählen. Für unsere App ist die Kommandozeile erforderlich.
+- FFmpeg: ZIP herunterladen, vollständig entpacken und im Unterordner bin die
+  ffmpeg.exe auswählen. Die ffprobe.exe im selben Ordner belassen.
+- Die Programme werden nicht automatisch installiert oder gestartet.
+  Der Download läuft im Browser; danach erfolgt die EXE-Auswahl in unserer App.
+- Die Downloadfunktionen benötigen Internet. Musikbearbeitung und Export arbeiten
+  nach der Einrichtung weiterhin offline.
+- Falls der Direktdownload nicht funktioniert, die verlinkte Downloadseite nutzen.
+- Geprüfte Quellen am 15.10.2026:
+  https://mp3gain.sourceforge.net/download.php
+  https://ffmpeg.org/download.html
+  https://www.gyan.dev/ffmpeg/builds/
+- Links und neue Oberfläche sind unter Windows noch praktisch zu prüfen.
+  Die EXE wurde nach der Änderung erfolgreich kompiliert. Die Medienverarbeitung
+  wurde für diese reine Oberflächenänderung nicht geändert.
+
+NEU IN VERSION 0.7 – DRAG-AND-DROP
+- Audiodateien und Ordner aus dem Windows-Explorer direkt ins App-Fenster ziehen.
+- Mehrere Dateien, mehrere Ordner und gemischte Auswahlen sind möglich.
+- Einzelne Audiodateien werden dem ausgewählten Themenordner hinzugefügt.
+  Bei Ablage direkt auf einem Eintrag der linken Ordnerliste ist dieser das Ziel.
+- Ohne Zielordner wird für Einzeldateien automatisch 'Neue Musik' angelegt.
+- Gezogene Ordner werden als neue Themenordner einschließlich Unterordnern und
+  vorhandenen externen Coverdateien eingelesen.
+- ZIP-Dateien vorher im Explorer entpacken.
+- Bereits vorhandene Dateipfade innerhalb des Zielthemas werden übersprungen.
+  Derselbe Quellordner wird nicht mehrfach importiert. Namenskollisionen zwischen
+  unterschiedlichen Quellordnern werden durch einen Zusatz aufgelöst.
+- Überlappende Auswahlen (Sammlungsordner plus Unterordner oder Dateien daraus)
+  erzeugen keine doppelten Einträge innerhalb desselben Importvorgangs.
+- Automatische Sortierung, Folgeordner und maximal 99 Ordner mit je 99 Titeln
+  gelten auch bei Drag-and-drop. Vorhandene Einstellungen bleiben erhalten.
+- Import läuft im Hintergrund. Mit Abbrechen wird das ganze Importvorhaben
+  verworfen; bereits vorhandene Projekte und Originaldateien bleiben erhalten.
+- Während eines anderen Vorgangs ist Drag-and-drop gesperrt.
+- Ergebniszahlen erscheinen in der Statuszeile; ungeeignete Dateien werden gemeldet.
+- 15 zusätzliche Verarbeitungsprüfungen bestanden, einschließlich 472 Dateien,
+  Duplikaten, Ordnerüberschneidungen, Grenzwerten, Abbruch und Originalerhalt.
+- Die EXE wurde kompiliert; die Explorer-Geste und Zielauswahl sind unter Windows
+  noch praktisch zu prüfen. App und Explorer zum Test normal starten.
+
+NEU IN VERSION 0.8 – TAG-ZUORDNUNG NUR IN NEUEN ORDNERN
+Diese Regeln ersetzen die Zuordnungsregeln der Version 0.7:
+- Drag-and-drop liest zuerst Interpret, Titel und Album aus den Audio-Tags.
+- Ein vorhandener Album-Tag bestimmt den Themennamen neu angelegter Ordner.
+  Der Dateiname und der Ablageort bestimmen nicht die angezeigten Titel.
+- Mehrere Alben im selben gezogenen Quellordner ergeben getrennte neue Themen.
+- Ausschließlich die neu importierten Titel werden nach Interpret und Titel
+  sortiert und bei Bedarf auf Folgeordner mit maximal 99 Titeln verteilt.
+- Bestehende Ordner werden NICHT ergänzt, umbenannt, sortiert oder gruppiert.
+  Ihre Nummern, Tags, Coverzuordnungen und Titelreihenfolgen bleiben unverändert.
+  Dies gilt auch dann, wenn dort dasselbe Album oder dieselbe Quelldatei existiert.
+- Alle neuen Ordner werden hinten angehängt und hinter der höchsten vorhandenen
+  dreistelligen Ordnernummer fortlaufend nummeriert.
+- Fehlt Album: Bei einzelnen Dateien dient der ausgewählte Themenname nur als
+  Vorlage für einen NEUEN Ordner. Bei gezogenen Ordnern dient der Quellordnername
+  als Vorlage. Ohne Album und Vorlage wird ein neuer Ordner Neue Musik angelegt.
+- Innerhalb eines einzigen Importvorgangs werden doppelte Pfade und überlappende
+  Ordnerauswahlen weiterhin übersprungen. Ein erneuter Drop ist dagegen ein neuer
+  Import in neue Ordner; bestehende Sammlungen werden dabei nicht aktualisiert.
+- Die Gesamtgrenze von 99 Ordnern bleibt bestehen. Reicht der freie Platz nicht,
+  wird der Import ohne Teiländerung abgelehnt. Auch Nummern über 999 sind gesperrt.
+- Originaldateien werden nicht verändert. Änderungen an Dateien erfolgen erst
+  beim Export in Kopien.
+- 15 Tag-Zuordnungsprüfungen und 15 Drag-and-drop-Verarbeitungsprüfungen bestanden.
+  Unter anderem geprüft: unterschiedliche und fehlende Alben, Sortierung nach
+  Tags statt Dateinamen, 472 Titel, Abbruch und vollständiger Erhalt vorhandener
+  Ordnerdaten einschließlich bestehender Titelreihenfolge.
+
+NEU IN VERSION 0.9 – WINDOWS-KOMPATIBILITÄT
+- Behebt den Fehler: Methode nicht gefunden: System.String.TrimEnd(Char).
+- Vergleichbare Aufrufe von Trim und Split sind ebenfalls auf explizite
+  Zeichen-Arrays umgestellt, damit .NET Framework 4.8 sie sicher unterstützt.
+- EXE und sämtliche Testprogramme wurden ausschließlich gegen die Referenz-
+  Schnittstellen von .NET Framework 4.8 kompiliert, nicht gegen Mono-Laufzeit-APIs.
+- 178 Verarbeitungstests bestanden: Kern 80, Drag-and-drop 15, Tag-Zuordnung 15,
+  Bitraten 20, FFmpeg 23 und MP3Gain 25.
+- Die Verarbeitungstests liefen hier mit Mono und Linux-Medienprogrammen.
+  Der ursprüngliche Fehler wurde durch den Windows-Screenshot nachgewiesen;
+  der korrigierte Drag-and-drop-Aufruf muss unter Windows erneut getestet werden.
+- Bestehende Ordner bleiben beim Drag-and-drop unverändert.

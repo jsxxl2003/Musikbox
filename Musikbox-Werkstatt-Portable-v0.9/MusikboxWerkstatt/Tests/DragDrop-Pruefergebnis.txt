@@ -1,0 +1,16 @@
+OK Einzeldatei ohne Ziel wird nach Album-Tag zugeordnet
+OK Eingangsprojekt bleibt unverändert
+OK Doppelte Dateipfade innerhalb desselben Drops werden übersprungen
+OK Album-Tag bestimmt das Thema vor dem ausgewählten Ziel
+OK Sammlungsordner mit fünf Themenordnern importiert
+OK Überlappende Ordner und mitgezogene Einzeldatei nicht doppelt importiert
+OK Erneuter Ordnerimport erstellt neue Sammlung neben bestehenden Ordnern
+OK Ungeeignete und fehlende Dateien verständlich gemeldet
+OK 472 fallengelassene Dateien auf fünf Ordner verteilt
+OK Alphabetische Reihenfolge über Ordnergrenzen erhalten
+OK Erneut gezogene Datei landet in neuem Ordner statt bestehendem Folgeordner
+OK Abbruch hinterlässt kein teilweise geändertes Projekt
+OK 99-Ordner-Grenze ohne Teiländerungen eingehalten
+OK Originaldatei nach allen Drop-Vorgängen bytegleich
+OK Namenskollision beim Ordnerimport aufgelöst
+BESTANDEN: 15 Drag-and-drop-Verarbeitungsprüfungen
