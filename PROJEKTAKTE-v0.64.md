@@ -39,3 +39,7 @@ Korrektur: Ladeflag erst bei abgeschlossenem Einlesen zurücksetzen; alte Genera
 ## Auslieferung ueber GitHub Actions
 
 Nutzermeldung: Explorer-Fehler 0x80010135 beim Entpacken langer Paketpfade. Das Actions-Artefakt wird auf `MW-064` verkuerzt. Anwendung, Werkzeuge, vollstaendiger versionierter Quellcode und Pruefbericht werden gemeinsam gebaut. Keine verschachtelten ZIPs. Paketbau mit 120-Zeichen-Grenze fuer Archivpfade und realer Entpackpruefung; generierte bin/obj-Verzeichnisse werden nicht als Quellcode kopiert. Werkzeugbereitstellung und Cache laufen auf dem Windows-Runner. Physische Mikrofon- und Ziel-PC-Abnahmen bleiben offen.
+
+## Kompakte Bereiche und feste Metadaten-Startansicht
+
+Grosse Bereichsueberschriften und Einleitungstexte entfallen zentral in Bibliothek und Werkzeugseiten. Bedienelemente ruecken nach oben; die Navigation bezeichnet den aktuellen Bereich. Der Track-Nummern-Assistent ist wieder als eigener Button im Metadatenbereich vorhanden. Bei jedem Programmstart gelten Interpret, Titel, Album, Genre, Track, Jahr und Ordner in dieser Reihenfolge. Die Feldauswahl kann fuer die laufende Sitzung geaendert werden; gespeicherte Dateinamen-/Tag-Ausgabeformate bleiben erhalten. Windows-QS prueft diese Startansicht auch bei abweichend gespeichertem Ausgabeformat, die Bedienbarkeit und ueberlappungsfreie Lage des Assistenten sowie die kompakten Bereichskoepfe. Nachweis fuer diesen neuen Stand: zugehoeriger Actions-Lauf und mitgelieferte aktuelle QS-Protokolle.

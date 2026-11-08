@@ -38,3 +38,7 @@ Die tatsächlichen Ergebnisse und offenen Abnahmen stehen in `Dokumentation/PRUE
 Der Workflow baut und prueft unter Windows. `Werkzeuge.ps1` stellt die festgelegten Werkzeugversionen inklusive Whisper-Basismodell bereit; ein Actions-Cache vermeidet wiederholte Downloads und Werkzeug-Builds. Kleine originale MP3Gain-Dateien sind samt LGPL-Quellen versioniert.
 
 `Bauen.ps1` uebernimmt das vorhandene Publish-Ergebnis, alle versionierten Quelldateien und die aktuellen Pruefprotokolle. ZIP-Innenpfade duerfen hoechstens 120 Zeichen haben; das Archiv wird in einen langen Testpfad entpackt. Ein Fehler verhindert die Auslieferung. Die Datei `Dokumentation/Paket.txt` nennt Commit und Pfadpruefung.
+
+## Kompakte Bereiche und feste Metadaten-Startansicht
+
+Grosse Bereichsueberschriften und Einleitungstexte entfallen zentral in Bibliothek und Werkzeugseiten. Bedienelemente ruecken nach oben; die Navigation bezeichnet den aktuellen Bereich. Der Track-Nummern-Assistent ist wieder als eigener Button im Metadatenbereich vorhanden. Bei jedem Programmstart gelten Interpret, Titel, Album, Genre, Track, Jahr und Ordner in dieser Reihenfolge. Die Feldauswahl kann fuer die laufende Sitzung geaendert werden; gespeicherte Dateinamen-/Tag-Ausgabeformate bleiben erhalten. Windows-QS prueft diese Startansicht auch bei abweichend gespeichertem Ausgabeformat, die Bedienbarkeit und ueberlappungsfreie Lage des Assistenten sowie die kompakten Bereichskoepfe. Nachweis fuer diesen neuen Stand: zugehoeriger Actions-Lauf und mitgelieferte aktuelle QS-Protokolle.

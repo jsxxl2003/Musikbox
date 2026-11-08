@@ -49,3 +49,7 @@ Das Paket ist ein implementierter und automatisiert geprüfter Korrekturstand. D
 ## Paketkorrektur nach Fehler 0x80010135
 
 Neuer Paketbau: kurzes Actions-Artefakt `MW-064`, vollstaendige Werkzeuge und Quellen, maximal 120 Zeichen pro Archivpfad, ZIP-Erstellung und Entpacken in einen langen Zielpfad. Die erfolgreiche Ausfuehrung wird vom ausliefernden Actions-Lauf nachgewiesen; bei Fehlern wird kein Komplettpaket hochgeladen. Diese Paketpruefung ersetzt keine Abnahme auf Jens Rechner.
+
+## Kompakte Bereiche und feste Metadaten-Startansicht
+
+Grosse Bereichsueberschriften und Einleitungstexte entfallen zentral in Bibliothek und Werkzeugseiten. Bedienelemente ruecken nach oben; die Navigation bezeichnet den aktuellen Bereich. Der Track-Nummern-Assistent ist wieder als eigener Button im Metadatenbereich vorhanden. Bei jedem Programmstart gelten Interpret, Titel, Album, Genre, Track, Jahr und Ordner in dieser Reihenfolge. Die Feldauswahl kann fuer die laufende Sitzung geaendert werden; gespeicherte Dateinamen-/Tag-Ausgabeformate bleiben erhalten. Windows-QS prueft diese Startansicht auch bei abweichend gespeichertem Ausgabeformat, die Bedienbarkeit und ueberlappungsfreie Lage des Assistenten sowie die kompakten Bereichskoepfe. Nachweis fuer diesen neuen Stand: zugehoeriger Actions-Lauf und mitgelieferte aktuelle QS-Protokolle.
