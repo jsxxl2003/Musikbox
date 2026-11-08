@@ -1,0 +1,59 @@
+Die Lieferung besteht aus zwei ZIP-Dateien:
+1. Musikbox-Werkstatt-Studio-v0.57-CSharp-Portable.zip (Anwendung, Werkzeuge, schnelles Modell)
+2. Musikbox-Werkstatt-Studio-v0.57-Sprachmodell.zip (genaueres small-Modell)
+Beim Entpacken BEIDER Dateien denselben Zielordner auswählen. Beide enthalten
+denselben Hauptordner Musikbox-Werkstatt-Studio-v0.57 und ergänzen sich darin.
+Danach Musikbox-Werkstatt-Studio.exe starten. Keine weitere Installation nötig.
+Das Hauptpaket ist bereits mit dem schnellen mehrsprachigen Modell lauffähig.
+Für das geprüfte genauere Modell zusätzlich das zweite ZIP entpacken.
+
+Musikbox-Werkstatt Studio v0.57
+
+Programm, Werkzeuge und Daten nach dem Entpacken zusammenlassen.
+Die Windows-x64-Laufzeit und beide Sprachmodelle sind enthalten; kein SDK erforderlich.
+
+Audio-Werkzeuge aufklappen: Konvertierung (Tag-Konvertierung), MP3Gain, fre:ac,
+FFmpeg. Cover-Studio hat ebenfalls Untergruppen. Die aktuelle Titelliste bleibt
+in den Werkzeugansichten verfügbar. Ein neuer Import ersetzt den alten Bestand.
+Ältere Testimporte werden beim Start nicht automatisch geladen.
+
+Tracknummern: Titel in der gewünschten sichtbaren Reihenfolge markieren,
+Tag-Editor öffnen und „Tracknummern …“ wählen. Vorschau kontrollieren und speichern.
+Nur die markierten Dateien werden direkt verändert. Rückgängig/Wiederholen gelten
+auch für diese Dateiänderungen innerhalb derselben Sitzung. Bei zwischenzeitlich
+extern veränderten Dateien wird die Wiederherstellung verweigert.
+
+Tag-Konvertierung: Titel markieren, eine der fünf Arten wählen, Muster eingeben,
+Vorschau erstellen und ausdrücklich speichern. Dateinamen werden erst beim
+Speichern geändert. Kollisionen werden vorab abgewiesen.
+Platzhalter: %artist%, %title%, %album%, %year%, %genre%, %comment%, %track%,
+%composer%, %albumartist%, %discnumber%, %_filename%, %_extension%, %_directory%.
+Zusätzliche ID3v2-Textfelder sind über ihren Feldnamen nutzbar.
+Formatfunktionen: $upper, $lower, $trim, $replace, $num. Dies ist keine vollständige
+Implementierung sämtlicher MP3tag-Skriptfunktionen.
+Beispiel: $num(%track%,2) - %artist% - %title%
+Textdatei → Tag: UTF-8-Datei, eine Zeile pro markiertem Titel in sichtbarer Reihenfolge;
+die Zuordnung erscheint in der Vorschau. Beispielmuster: %artist%;%title%.
+
+Mikrofon: Windows-Standardeingabegerät auswählen, Mikrofon anklicken, Namen/Titel
+sprechen und kurz pausieren. Aufnahme/Erkennung erscheinen in der Bibliothekszeile.
+Erkannten Text im Suchfeld bei Bedarf korrigieren. Während der Erkennung bitte warten.
+Die Sprache wird automatisch erkannt. Aufnahmen werden lokal temporär verarbeitet
+und anschließend entfernt. Keine kostenpflichtige API und kein Modell-Download nötig.
+Unter Einstellungen: automatisch, schnell oder genauer. Automatisch nutzt bei
+mindestens 4 logischen Prozessoren, AVX2 und mindestens 6 GiB verfügbarem Speicher
+das größere Modell, sonst das Basismodell. Eine kompatible Whisper-Variante für
+Prozessoren ohne AVX2 liegt bei. Auch das genauere Modell kann Namen falsch hören.
+
+MP3Gain, fre:ac und FFmpeg schreiben neue Ausgabekopien in einen gewählten Ordner.
+Die eingelesenen Originale bleiben dabei erhalten. Für MP3Gain-Rücknahme die zuvor
+bearbeiteten Ausgabedateien importieren und „Gain zurücknehmen“ wählen.
+FFmpeg kann MP4/MKV/MOV/AVI/WebM u.a. über „Mediendateien importieren …“ einlesen
+und deren Audiospur extrahieren. Diese Auswahl ersetzt ebenfalls die aktuelle Liste.
+
+Coversuche: Klammerzusätze werden nur für Suchanfragen entfernt. Original-Tags
+bleiben erhalten. Ergebnisse werden gewichtet; ein Cover wird erst nach eigener
+Auswahl und Bestätigung übernommen. Die Online-Dienste benötigen Internet.
+
+Prüfbericht und Protokolle: Dokumentation/PRUEFBERICHT.txt und Pruefungen/v0.57.
+Quellcode und Build-Anleitung: Quellcode/Bauen.ps1.

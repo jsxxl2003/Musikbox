@@ -1,0 +1,81 @@
+Musikbox-Werkstatt Studio v0.60 – Korrektur der Windows-Darstellung
+31.10.2026
+
+Ausgangsbasis: unveränderte produktive C#-Basis v0.59. Keine Neuentwicklung.
+
+Vom Nutzer dokumentierte Fehler:
+- Wiederkehrende weiße vertikale Windows-Leiste in der Navigation.
+- "Fehler beim Erstellen eines Visual Style-Handles" bei MP3Gain, fre:ac, FFmpeg;
+  im Screenshot zusätzlich fehlerhaft gezeichnete Pfeile der Zahleneingabe.
+- Sehr kurz weißes oberes Wiedergabelistenfeld.
+- Unruhiger Kategorienwechsel mit Zwischenzuständen und Listen-Neuaufbau.
+
+Korrekturen:
+1. Der in v0.59 eingeführte pauschale SetWindowTheme-Aufruf an allen Controls,
+   internen Windows-Unterfenstern und Kombinationslisten ist vollständig entfernt.
+   Er entzog nativen WinForms-Renderern ihre Theme-Handles. Dies ist eine konkrete
+   Fehlerquelle passend zur Meldung; der exakte Windows-Stacktrace lag nicht vor.
+   Es werden weder Windows-Designs noch systemweite Einstellungen abgeschaltet.
+2. Navigation und rechter Metadatenbereich verwenden eigene StudioScrollPanel-
+   Flächen mit vollständig selbst gezeichneten, 5 logischen Pixel breiten Reglern.
+   Dort existiert keine native Windows-Scrollleiste mehr. Es wird nichts über eine
+   helle Windows-Leiste gemalt. Automatischer nativer Bildlauf ist ausgeschaltet.
+   Mausrad auch über Untereinträgen, Ziehen, Spurklick, Home/End/PageUp/PageDown,
+   Fokus-Nachführung, Fenstergröße und Ein-/Ausklappen werden selbst verarbeitet.
+3. Die alten 20-ms-Übermal-Timer wurden entfernt. Eigene Scrollflächen werden
+   nicht mit dem nativen Scrollbar-Hook verbunden. Die verbleibende Zeichenhilfe
+   für andere native Listen-/Textscrollleisten ändert keine Windows-Theme-Handles.
+4. Wiedergabelisten beginnen bereits im Konstruktor dunkel. Der gesamte neue
+   Modulbaum erhält seine Farben vor dem Einfügen und vor Erstellen der Handles.
+   Die alte Modulfläche wird erst nach Aufbau der neuen ersetzt.
+5. Kategorien wechseln in einer kurzen gemeinsamen Layout-/Redraw-Transaktion.
+   Es gibt nur einen abschließenden Hauptlayoutdurchlauf und keine vorgezogene
+   Anzeige der alten Modulfläche unter neuen Abmessungen. Bereits sichtbare
+   Windows-Fenster werden während des synchronen Umbaus kurz nicht neu gezeichnet;
+   ihre tatsächliche Sichtbarkeit wird danach ausdrücklich erhalten.
+6. Bibliothek/Tag-Editor bauen beim bloßen Seitenwechsel nicht mehr die vorhandene
+   Titeltabelle neu auf. Sortierung, Auswahl und gemeinsame Zeilen bleiben bestehen.
+   Nur tatsächlich geänderte Navigationsmarkierungen werden neu gezeichnet.
+   Player und Metadaten bleiben an ihrem Platz; keine Übergangsanimationen.
+7. Unbehandelte Programmfehler schreiben zusätzlich einen begrenzten lokalen
+   Stacktrace nach Daten/Programmfehler.log. Keine Übertragung dieser Protokolle.
+8. Versionsnummer v0.60 in Oberfläche, Assembly und nativer Start-EXE.
+   Vollständige Windows-x64-Laufzeit, Werkzeuge und mehrsprachiges base-Modell
+   wie in v0.59 enthalten. Start weiterhin maximiert.
+
+Ausgeführte Prüfungen:
+- Optimierter Windows-.NET-8-Build gegen die vorhandenen Windows-Assemblies,
+  Manifest, portable Debugsymbole; zusätzlich Kernbuild mit expliziten 4.8-
+  Referenzassemblies unter Mono. Beide erfolgreich.
+- 99 neue UI-Prüfungen unter Mono/Xvfb: keine native Scrollleiste in Navigation;
+  schmale violette eigene Leiste; Pixelkontrolle auf weiße Stellen vor/nach
+  Hoverzyklen; Rad über Unterbutton; Ziehen; Home/End/PageUp; kleine/große Fenster;
+  Ein-/Ausklappen; 55 wiederholte Kategorienwechsel; keine unbehandelte
+  Zeichen-Ausnahme; Einstellungen ohne Titelliste; keine neuen Tabellenzeilen
+  beim Wechsel; Auswahl erhalten; Playlist hinzufügen/entfernen; Zahlenfelder in
+  MP3Gain, fre:ac und FFmpeg weiterhin bedienbar; echte Ansichten gerendert geprüft.
+- 32 Such-/UI-Prüfungen aus v0.59 erneut bestanden, einschließlich 20.000
+  Suchindexeinträge, Abbruch, verspäteter Ergebnisse, X/Suchtext, 5.000 sichtbarer
+  Ergebniszeilen mit reagierender UI sowie Projektwechsel während Trefferaufbau.
+- 21 gemeinsame Dialog-/Controlprüfungen erneut bestanden.
+- Bestehende Modul-/Tracknummern-UI-Prüfung erneut ausgeführt. Ihre alte Annahme
+  einer synchron abgeschlossenen Suche wurde auf das bereits in v0.59 eingeführte
+  asynchrone Suchverhalten angepasst; die Modul-/Suchprüfungen bestehen danach.
+- Quellenvergleich, Assemblyversion, relativer Apphost-Pfad, Laufzeit-/Werkzeug-
+  Vollständigkeit sowie ZIP-CRC und SHA-256-Prüfsummen vor Bereitstellung geprüft.
+
+Grenzen:
+- Die Containerumgebung ist Linux. Es wurde KEIN Lauf auf echtem Windows und KEIN
+  echter Windows-Mikrofon-/Audio-/DPI-Test durchgeführt. Insbesondere die native
+  WM_SETREDRAW-Abwicklung ist hier nicht ausgeführt worden. Dies bleibt eine
+  Windows-Abnahmegrenze und wird nicht als bestanden dargestellt.
+- Die eigene Navigationsleiste selbst ist plattformunabhängig und wurde mit
+  ihren tatsächlichen Zeichen- und Eingabepfaden geprüft. Andere native Controls
+  unter Mono bestätigen nicht die Pixel-/Theme-Ausgabe derselben Controls unter
+  Windows. Deren eventuell helle Mono-Systemleisten sind keine Windows-Abnahme.
+- Such-, Audio-, Tag-, Cover- und Mikrofonalgorithmen bleiben gegenüber v0.59
+  unverändert; frühere Hardware-/Online-Testgrenzen gelten weiter.
+- Kein dotnet-publish-Lauf und kein GitHub-Push behauptet. Roslyn kompiliert
+  gegen die mitgelieferten Windows-Assemblies; die komplette bekannte Laufzeit
+  wird mit dem aktualisierten nativen Apphost weiterverwendet. Quellen und der
+  vollständige lokale Git-Verlauf liegen im Paket.

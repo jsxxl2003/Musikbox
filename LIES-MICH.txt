@@ -1,3 +1,105 @@
+NEU IN VERSION 0.13
+
+Vor dem Wechsel das bisherige Projekt speichern. Diese ZIP vollständig in
+einen neuen Ordner entpacken, EXE starten und das gespeicherte Projekt öffnen.
+.NET Framework 4.8 erforderlich; kein Installer nötig.
+
+1. Moderner Tag-Arbeitsplatz: links Ordner, Tag-Felder und Cover; rechts Titel.
+   Mehrfachauswahl mit Strg/Umschalt. „Tags übernehmen“ oder Auswahlwechsel
+   übernimmt angehakte Felder ins Projekt. Album bleibt der Themenname.
+2. Rechte Maustaste auf Ordner oder Titel öffnet passende Bearbeitungsbefehle.
+3. Audio und Export → Audio-Einstellungen: MP3Gain oder FFmpeg priorisieren.
+   Künftige Importe laufen automatisch mit diesen Einstellungen im Hintergrund.
+   „Lautstärke unverändert“ bewirkt keine Lautheitsanpassung. Bestehende Projekte
+   werden beim Öffnen nicht ungefragt komplett neu verarbeitet.
+4. Arbeitskopien liegen in AppData, Originalmusik bleibt unverändert.
+   Passende vorbereitete Audiodaten werden beim Export ohne doppelte
+   Lautheitsanpassung übernommen. Zusätzlichen Speicherplatz einplanen.
+5. Unten: Ordner-/Titelzahlen beim Einlesen, Audiofortschritt und Gesamtbestand.
+6. Ordner → Cover gestalten: Textfelder, Schrift, Farben, Verlauf, Foto, Rahmen.
+   Gewähltes Textfeld in der Vorschau ziehen. Platzhalter: {Thema}, {Jahr},
+   {Nummer}. Cover-Serie erstellt Bilder für angekreuzte Themenordner.
+7. Titel → Abspielen / Stopp; Cover online suchen zeigt Vorschläge.
+   „Covervorschläge beim Abspielen“ lässt sich in der Werkzeugleiste abschalten.
+   Die Suche sendet Interpret/Titel an MusicBrainz und lädt Covervorschauen aus
+   dem Cover Art Archive. Erst „Als Titelcover übernehmen“ ordnet ein Bild zu.
+   Themenordner-Cover bleiben erhalten. Titelcover werden beim Export eingebettet.
+8. Optionale ACRCloud-Erkennung: eigener Account, Tarif und Zugangsdaten nötig.
+   Audio und Export → Erkennungszugang. Schlüssel bleiben verschlüsselt beim
+   Windows-Benutzer. Vor dem Senden einer 12-Sekunden-Probe wird gefragt.
+   Ohne diesen Zugang funktioniert weiterhin die Suche nach Interpret/Titel.
+
+Die eingebauten Funktionen bilden die für unsere Musikbox benötigten Abläufe
+ab; die App enthält weder das Programm Mp3tag noch Shazam.
+Der reale Windows-/Musikbox-Test und die Erkennung mit eigenem Anbieterzugang
+stehen weiterhin aus. Details und Prüfgrenzen: Tests/Pruefung-v0.13.txt.
+
+-----------------------------------------------------------------------
+
+NEU IN VERSION 0.12 – SAMMLUNGSÜBERSICHT
+
+Vor dem Wechsel das Projekt in der bisherigen App speichern.
+Neue ZIP vollständig in eigenen Ordner entpacken, EXE starten, Projekt öffnen.
+
+Oben auf "Sammlungsübersicht" klicken:
+- Ordner-/Titelzahl, freie Ordner und freie Plätze vorhandener Ordner.
+- Hinweise filtern: fehlende Angaben, mögliche Dubletten, fehlende Ordnercover.
+- "Öffnen" oder Doppelklick führt zum betreffenden Ordner bzw. Titel.
+- Reiter "Alle Ordner" zeigt Thema, Titelanzahl, freie Plätze und Coverstatus.
+
+Mögliche Dubletten haben dieselben Interpret-/Titel-Angaben; es findet kein
+Audiovergleich statt. Ordnercover werden als ausgewählte Bilddateien geprüft.
+Eingebettete Cover in MP3-Dateien werden in dieser Übersicht nicht geprüft.
+Es wird nichts automatisch geändert oder gelöscht. Nach einer Bearbeitung die
+Übersicht erneut öffnen, damit die Hinweise neu berechnet werden.
+
+150 Verarbeitungstests bestanden. Die neue Oberfläche muss unter Windows
+noch praktisch geprüft werden. Der Exporttest bleibt wie besprochen offen.
+
+-----------------------------------------------------------------------
+
+NEU IN VERSION 0.11 – IMPORTBERICHT
+
+Nach einem fehlgeschlagenen Drag-and-drop-Import erscheint ein Textbericht.
+Darin stehen die tatsächlich erkannten Ordner, Titelzahlen und Quellpfade.
+Mit Strg+A und Strg+C den Bericht kopieren und zur Fehleranalyse bereitstellen.
+Die Schaltfläche "Importbericht" öffnet ihn erneut. Es wird nichts automatisch
+übertragen oder als Berichtdatei gespeichert.
+
+Diese Version macht die Ursache untersuchbar. Die Ursache bei der echten
+88-Ordner-Sammlung ist noch offen; die Fehlermeldung ist nicht als behoben
+bestätigt. Die zulässigen Grenzen bleiben 99 Ordner mit je 99 Titeln.
+Vorher Projekt speichern, ZIP in neuen Ordner entpacken und EXE starten.
+
+-----------------------------------------------------------------------
+
+NEU IN VERSION 0.10 – ORDNERSTRUKTUR ÜBERNEHMEN
+
+Vor dem Wechsel das aktuelle Projekt speichern. Neue ZIP in einen eigenen
+Ordner entpacken und die enthaltene Musikbox-Werkstatt.exe öffnen.
+
+Für eine bereits vorbereitete Sammlung (z. B. 88 Ordner mit 8.098 Titeln):
+1. Mit einem leeren Projekt beginnen, damit die Sammlung nicht doppelt vorliegt.
+2. Oben ist "Ordnerimport: Struktur übernehmen" voreingestellt.
+3. Alle Themenordner oder den übergeordneten Sammlungsordner hineinziehen.
+
+Quellordner bleiben getrennt, auch bei abweichenden Album-Tags. Ihre freien
+Nummern und Themen werden übernommen. Titel werden je Ordner alphabetisch
+sortiert; mehr als 99 Titel werden auf Folgeordner verteilt. Bei belegten
+Nummern müssen neue Ordner nach hinten rücken. Bestehende Projektordner und
+Originaldateien bleiben unverändert. Album im Projekt/Export = Ordner-Thema.
+
+Alternative im Menü "Ordnerimport": "Nach Album-Tags neu ordnen".
+Lose Dateien werden weiterhin anhand der Album-Tags in neue Ordner eingeordnet.
+Die Auswahl gilt nur für Drag-and-drop von Ordnern und wird beim App-Start
+auf "Struktur übernehmen" zurückgesetzt. "Ordner laden" übernimmt ebenfalls
+die Ordnerstruktur, verwendet aber den bisherigen Importablauf.
+
+Die Windows-Oberfläche und die echte Sammlung müssen noch auf Windows getestet
+werden. Frühere Versionshinweise darunter beschreiben den damaligen Stand.
+
+-----------------------------------------------------------------------
+
 MUSIKBOX-WERKSTATT – Portable Testversion 0.9
 
 START AUF WINDOWS

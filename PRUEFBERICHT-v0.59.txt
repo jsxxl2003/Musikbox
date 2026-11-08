@@ -1,0 +1,81 @@
+Musikbox-Werkstatt Studio v0.59 – Prüfung und Änderungen
+31.10.2026
+
+Basis: vollständige C#-Quellen und portables Windows-x64-Paket v0.58.
+Keine Neuentwicklung. .NET-8-Laufzeit, Werkzeuge und vorhandenes mehrsprachiges Whisper-base-Modell beibehalten.
+
+Änderungen:
+- Gemeinsame dunkle Dropdowns mit eigener Auswahlliste, Pfeil und Fokusrahmen.
+  Dunkle Checkboxen/Optionsfelder, Listenauswahl, ListView-Spalten, Register,
+  Nummerneingaben und violette Fortschrittsanzeigen. Dynamisch hinzugefügte
+  Bedienelemente erhalten ebenfalls die Studio-Gestaltung.
+- Native Windows-Scrollleisten: Windows-Themenanimation deaktiviert, eigene
+  5-Pixel-Regler auch nach Hover-/Timer-/Fokusnachrichten sowie während der
+  nativen Mausverfolgung nachgezeichnet. Keine systemweiten Änderungen.
+- Alte helle Initialfarben in vorhandenen Ansichten bereinigt; die Studio-
+  Playerregler verwenden Anthrazit/Violett. Playerfunktionen beibehalten.
+- Drei Tag-Konvertierungsfelder: gleicher Hintergrund, Höhe, Schrift und
+  dunkler Fokus-/Randstil. Dropdown einschließlich geöffneter Liste dunkel.
+- Navigationslayout verwendet logischen Sichtbarkeitszustand statt des während
+  Fensteraufbau/Verbergen falschen Visible-Getters. Scrollversatz berücksichtigt,
+  keine leeren oberen Blöcke, eingerückte Unterprogramme erhalten.
+- Einstellungen ohne Titelliste und Spaltenauswahl, Modul nutzt volle Höhe.
+- Suchindex auf Metadaten-Snapshots ohne Dateisystem- oder Tagabfragen pro
+  Suchbegriff. 180 ms Eingabeverzögerung, Hintergrundfilterung, Abbruch und
+  Generation gegen verspätete Ergebnisse. Suchindex bei Änderungen ungültig.
+- Tabellenaufbau in 192-Zeilen-Batches; kein Layout pro hinzugefügter Zeile.
+  Projektwechsel/Import verwirft alte Tabellenaufbauten. Vorhandene Teilwort-,
+  Akzent-, Satzzeichen-, phonetische und Fuzzy-Regeln bleiben erhalten.
+- Mikrofon: gespeicherte Geräteauswahl in Einstellungen, Versuch des ausgewählten
+  Geräts, Windows-Mappers und weiterer WaveIn-Eingänge. Fehlgeschlagene Öffnung
+  gibt Geräte frei; verständliche Hinweise zu Windows-Berechtigungen.
+- X in Suchleiste, erneuter Mikrofonklick und Schließen des Hauptfensters stoppen
+  Aufnahme und Erkennung. Stop setzt keine abschließende Transkription mehr in
+  Gang. Sitzungsprüfung verwirft verzögerte Aufnahme-/Erkennungsereignisse.
+- Suchtext und laufender Suchfilter bleiben beim Mikrofonstopp erhalten.
+  Escape leert das Suchfeld. Whisper-Sprachautomatik und vorhandenes base-Modell beibehalten.
+  Das optionale small-Modell ist bereits in der Basis v0.58 nicht enthalten;
+  dessen Auswahl wird nur angezeigt, wenn es tatsächlich installiert ist.
+- Version v0.59 in Assembly und EXE-Dateieigenschaften, Programmoberfläche nutzt
+  dieselbe Assemblyversion. Start weiterhin maximiert.
+
+Ausgeführte Prüfungen:
+- Release-Kompilierung für Windows .NET 8 gegen mitgelieferte Windows-Assemblies
+  erfolgreich, Roslyn, optimiert, Manifest, portable Debugsymbole.
+  Selbstenthaltende Windows-x64-Laufzeit mit vorhandenem nativen Apphost und
+  relativ gebundener Programm-Assembly weiterverwendet. Kein dotnet-publish-
+  Lauf und kein Windows-Ausführungstest in dieser Linux-Umgebung behauptet.
+- Gemeinsame Quellen zusätzlich gegen explizite .NET-Framework-4.8-Referenzen
+  kompiliert (NET8-Hardwareteile ausgenommen).
+- 32 neue Such-/UI-Prüfungen: Vergleich alter/neuer Suche, Abbruch, Dateiname
+  ohne reale Datei, 20.000 Testtitel, Navigation, Einstellungen, Tag-Felder,
+  X/Suchtext, Spracheingabe-Suchtext, verspätete Ergebnisse, 5.000 Tabellenzeilen
+  mit weiterlaufenden UI-Ereignissen sowie Projektwechsel während Tabellenaufbau.
+  Messung unter Mono: Folgefilter für 20.000 Titel ungefähr 30–40 ms;
+  Erstaufbau ungefähr 1,4 s im Hintergrund. Keine Windows-Leistungszusage.
+- 21 Dialog-/Controlprüfungen: Einstellungen, Tag-Editor, Cover-Designer,
+  Sicherungen, Coversuche, Dateiauswahl, Checkboxen, Register, Nummerneingabe,
+  Fortschrittsanzeige. Reale gerenderte Ansichten unter Mono/Xvfb geprüft.
+- 45 bestehende Darstellungsprüfungen bestanden: Navigation, Hinweise,
+  Tooltips, schmale Scroll-Zeichenroutine bei 100/150/200 Prozent.
+- 13 Coversuche-UI-Prüfungen bestanden (lokale Testdienste).
+- 195 Funktionsprüfungen mit echten MP3-Dateien (Tag-Konvertierung,
+  Tracknummern, Sprach-/Suchregeln, Kopien, Audioverarbeitung).
+- 22 Import-Ersetzungsprüfungen mit echten MP3-Dateien.
+- 7 Tag-Editor-Prüfungen, 23 Cover-/Erkennungsprüfungen mit lokalen Testdaten.
+- 26 Playerprüfungen mit simuliertem Windows-Gerät.
+- 4 Prüfungen echter Video-/Audioextraktion (MP4/MKV → MP3, Quellen bytegleich).
+- ZIP und Vollständigkeit einschließlich Programm, Laufzeit, Werkzeugen,
+  Sprachmodellen, Quellen und lokalem Git-Verlauf vor Bereitstellung geprüft.
+
+Nicht abschließend prüfbar:
+- Diese Umgebung bietet keine echte Windows-Mikrofonhardware. Erkennung,
+  Berechtigungen, Treiber, Neustart und Hardwarefreigabe müssen auf Windows
+  bestätigt werden. Geräte-Fallback und Sitzungslogik sind implementiert,
+  eine nachgewiesene Behebung jedes konkreten Hardwareproblems wird nicht behauptet.
+- Native Windows-Hover-/Scrollnachrichten und native DPI-Darstellung konnten
+  nicht ausgeführt werden. Mono rendert seine eigenen Scrollleisten und Ränder;
+  die dort teils hellen Systemrahmen sind kein Nachweis der Windows-Anbindung.
+- Kein realer Windows-Audioausgabetest, keine erneute Online-Dienstabnahme.
+- Ältere Prüfberichte sind Historie und keine neu ausgeführten Tests.
+- Kein GitHub-Push behauptet; lokale Versionshistorie ist mitgeliefert.

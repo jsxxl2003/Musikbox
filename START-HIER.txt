@@ -1,0 +1,134 @@
+﻿MUSIKBOX-WERKSTATT – PORTABLE WINDOWS-TESTVERSION 0.19 (WINDOWS x64)
+
+START
+1. Die ZIP-Datei im Windows-Explorer mit "Alle extrahieren" entpacken.
+2. Im Ordner MusikboxWerkstatt die Musikbox-Werkstatt.exe starten.
+   Die Datei Musikbox-Werkstatt.exe.config daneben liegen lassen.
+3. Keine Installation; .NET Framework 4.8 erforderlich.
+
+ERSTER TEST
+- Einen kleinen Musikordner ins Fenster ziehen oder "Ordner laden" verwenden.
+- Interpret, Titel und Album links oder in der Tabelle bearbeiten.
+- Projekt > Rückgängig / Wiederholen testen; Projekt anschließend speichern.
+- Rechtsklick auf einen Titel > Im Player öffnen. Start, Pause und Stopp testen.
+- Bei unerwünschtem Coverdialog im Menü Titel "Covervorschläge beim Abspielen" ausschalten.
+- Eigene Themenbilder über Ordner > Cover / Cover gestalten zuordnen.
+- Coverauswahl: Themenordnercover, Single-Cover oder bisheriges Cover behalten.
+- Einstellungen > Einstellungen öffnen bündelt die Einrichtungsbereiche.
+
+ZUSATZWERKZEUGE
+MP3Gain/FFmpeg für die ausgewählte Audioverarbeitung einrichten.
+fpcalc.exe ist bereits im Unterordner tools enthalten und wird automatisch gefunden.
+Für AcoustID nur den eigenen Anwendungsschlüssel unter Fingerabdruck einrichten
+eintragen. ACRCloud bleibt eine getrennte Alternative mit eigenem Zugang.
+Mp3tag ist nicht zusätzlich erforderlich; die Tag-Funktionen sind eigenständig
+implementiert. MP3Gain und die separate ffmpeg.exe sind nicht im Paket enthalten.
+
+DATEN
+Originaldateien bleiben erhalten. Projektdateien und automatische Sicherungen
+enthalten Verweise; Musik und Bilder separat aufbewahren. Automatische
+Sicherungen und Arbeitskopien liegen im lokalen Windows-Benutzerprofil.
+
+TESTGRENZEN
+Intern unter Linux/Mono geprüft; echte Windows-Oberfläche, Windows-Audio und
+Musikbox-Export müssen auf dem Zielsystem getestet werden. Keine Live-Erkennung
+ohne eigenen Schlüssel geprüft. Details: Tests/Pruefung-v0.19.txt.
+
+KORRIGIERTE COVERSUCHE
+Rechtsklick > Cover online suchen > Single-Cover suchen.
+Suchart: Interpret und/oder Titel, Nur Interpret, Nur Titel oder Freie Namenssuche.
+Ein Name reicht. Namen können für die Suche korrigiert werden, ohne Tags zu ändern.
+Treffer auswählen und Cover prüfen; Themenordnercover bleibt eine Alternative.
+Falls der Dienst nicht antwortet: Bildersuche im Browser verwenden, Bild speichern
+und über Bilddatei auswählen laden. Auch dabei die Auswahl ausdrücklich bestätigen.
+
+IMPORT UND BEDIENUNG
+- Gleiche Themen mit gleichem Bild werden auf 99 Titel je Folgeordner aufgefüllt.
+  Verschiedene Themen/Bilder und bereits vorhandene Projektordner bleiben getrennt.
+- Ordner anklicken: Covervorschau direkt unter der Ordnerliste.
+- Waagerechte linke Trennleiste nach oben/unten ziehen: Höhe ändern.
+- Senkrechte Trennleiste nach links/rechts ziehen: Breite ändern.
+- Leere Fläche anklicken: Bearbeitung beenden, Titelauswahl aufheben.
+  Eingegebene Änderungen bleiben im Projekt; Projekt anschließend speichern.
+
+OBERE LEISTE
+Eine gemeinsame Menüzeile enthält alle Befehle. Die zusätzliche
+Programmüberschrift und doppelte Schnellzugriffe wurden entfernt.
+
+FEST ENTHALTENES FPCALC
+Den Unterordner tools zusammen mit der Haupt-EXE belassen. Beim Verschieben
+den gesamten entpackten Programmordner mitnehmen. Keine Dateiauswahl nötig.
+Lizenztexte und vollständige Fremdprogramm-Quellen liegen bei.
+
+TITEL MARKIEREN
+Menü Titel: Alle auswählen / Markierung umkehren / Markierung aufheben.
+Gilt für die angezeigten Titel im aktuellen Ordner.
+
+ALBUM BEARBEITEN
+Album ist wie Interpret und Titel frei bearbeitbar, auch für mehrere markierte
+Titel im Tag-Editor. Ein eigenes Album bleibt beim Sortieren und Export erhalten.
+Ohne eigene Albumänderung gilt weiterhin der Themenname als Standard.
+Themenname und Ordnercover bleiben erhalten.
+
+ARBEITSFLÄCHE ALS BAUKASTEN
+Fünf Module: Ordnerübersicht, Titelliste, Tag-Bearbeitung, Cover und Player.
+Im Menü Ansicht einzeln ein- und ausblenden; Häkchen = eingeblendet. Die gesamte Kopfzeile links anklicken und gedrückt halten,
+dann ziehen: Das Modul löst sich und lässt sich frei platzieren.
+Andocken bringt ihn zurück; × blendet nur aus.
+
+Nur Ordner und Titel: ruhige Ansicht.
+Fenster nebeneinander: alle Module anordnen.
+Anordnung speichern: beim nächsten Start wieder dieselbe Zusammenstellung.
+Standardansicht wiederherstellen: zurück zur voreingestellten Aufteilung.
+
+Ausblenden verliert keine Eingaben und bricht keine Verarbeitung ab.
+Ein ausgeblendeter Player spielt weiter. Seine Taste Player schließen
+beendet die Wiedergabe. Die Auswahl bleibt zwischen allen Modulen verbunden.
+
+NEU IN 0.17: SILBERBLAUE MODULFENSTER
+Dunkelblaue Listen mit heller Schrift, silberblaue Rahmen und Befehlsfelder.
+Ansicht zeigt alle fünf Fenster mit Häkchen. Alt+1 bis Alt+5 schalten sie um.
+Grau schraffierte Ecke unten rechts am freien Modul mit der Maus ziehen:
+Breite und Höhe ändern sich gleichzeitig. Kleine Mindestgrößen bleiben erhalten.
+
+Magnetisch andocken: nahe Kanten rasten ein; anliegende Fenster werden beim
+Ziehen gemeinsam bewegt. Umschalt beim Beginn des Ziehens trennt ein Modul.
+Die Magnetfunktion kann im Menü Ansicht ausgeschaltet werden.
+Anordnung speichern merkt sich auch Größen und die Magnet-Einstellung.
+
+KOMPAKTERE BESCHRIFTUNG IN 0.17.1
+Modultitel in Segoe UI 8 pt, flachere Kopfzeilen, Feldbeschriftungen in 8,5 pt.
+Fenster und Andocken sind ebenfalls kompakter beschriftet.
+
+Untere Informationsleiste in 0.17.1: ausschließlich „Ordner: … · Titel: …“.
+Gezählt wird der übernommene Projektbestand; laufende Arbeit und Sicherungen
+erscheinen dort nicht mehr.
+
+DIREKTES VERSCHIEBEN IN 0.17.2
+Keine Fenster-/Zeigen-Schaltfläche mehr. Kopfzeile an beliebiger Stelle
+(Beschriftung oder freie Fläche) links anklicken, gedrückt halten und ziehen.
+Loslassen setzt das Modul ab; X und Andocken behalten ihre eigene Funktion.
+Beschriftungen und Modulkopfzeilen nochmals rund 15 Prozent verkleinert.
+
+FENSTERRAHMEN IN 0.17.3
+Dunkelblaue schmale Titelleiste, zentrierter Titel und silberne Zierlinien.
+Plastische silberne Rahmen und Fußleisten. Im freien Fenster bringt der
+kleine Fenster-Symbolknopf das Modul zurück in die Hauptansicht (Andocken).
+Das Kreuz blendet das Modul aus. Maus kurz darüber halten zeigt die Funktion.
+
+EINHEITLICHE OBERFLÄCHE IN 0.18
+Auch Hauptfenster, Einstellungen, Cover-Designer, Tag-Dialoge, Sicherungen
+und Hinweise erhalten die silberblauen Rahmen mit schmaler Titelleiste.
+Oben rechts: Minimieren, Maximieren/Wiederherstellen und Schließen,
+soweit für das jeweilige Fenster verfügbar. Ganze Titelleiste zum Verschieben.
+Doppelklick maximiert ein dafür geeignetes Fenster bzw. stellt es wieder her.
+Auch Datei-, Ordner-, Speicher-, Farb- und Schriftwahl verwenden jetzt
+app-eigene Fenster in diesem Design. Andere Windows-Programme bleiben unverändert.
+Dateiauswahl: Laufwerk oder direkten Pfad wählen, Ordner doppelt anklicken,
+Dateien mit Strg/Umschalt mehrfach markieren; Alt+Pfeil hoch und F5 sind möglich.
+Vor dem Ersetzen einer vorhandenen Speicherdatei erscheint eine Rückfrage.
+Abbrechen übernimmt keine Auswahl.
+
+NEU IN 0.19
+Import ab Laufwerken, Musik-Namensfilter, Cover-Wortteile, wählbare
+Informationsspalten und Größenänderung angedockter Module an den Rändern.

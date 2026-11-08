@@ -1,0 +1,52 @@
+Musikbox-Werkstatt Studio v0.58 – Darstellungskorrekturen
+31.10.2026
+
+Basis: vorhandenes vollständiges Portable-Paket v0.57, C#-Codebasis beibehalten.
+
+Änderungen:
+- Zentrale dunkle Darstellung für native vertikale und horizontale Windows-
+  Scrollleisten: anthrazitfarbener Hintergrund, schmale violette Schieber
+  (5 logische Pixel, DPI-skaliert) und schmale dunkle Spuren.
+- Gilt für scrollbare Panels, Tabellen, Text-/Listenfelder, Dialoge und
+  Kombinationslisten. Native Scrollbereiche und Bedienflächen bleiben erhalten;
+  keine systemweiten Windows-Einstellungen oder Änderungen anderer Programme.
+- Cover-Studio- und Audio-Werkzeug-Unterprogramme rechts eingerückt.
+  Die Navigation reserviert Platz für die Scrollleiste und erzeugt keinen
+  unnötigen horizontalen Bildlauf. Lange einzeilige Beschriftungen bleiben
+  einzeilig; die lange Cover-Export-Beschriftung bleibt zweizeilig.
+- Tooltips einschließlich Tabellen und Werkzeugleisten in Anthrazit/Violett,
+  mit lesbarer Schrift, Umbruch und Innenabstand.
+- Hinweisdialoge mit eigenen Studio-Symbolen und violetten Bestätigungstasten.
+  Bestehende Ja/Nein-/Abbruch-Semantik beibehalten. Bestätigung erhält Fokus,
+  damit der Informationstext nicht beim Öffnen blau markiert wird.
+- Versionsnummer 0.58.0.0; voriges Paket bleibt als v0.57 erhalten.
+
+Prüfungen dieses Arbeitsstands:
+- Windows-.NET-8-Kompilierung erfolgreich, optimierter Release-Code, nativer
+  bestehender Apphost mit unverändertem relativem Assemblypfad und aktualisierten
+  Versionsressourcen. Bestehende selbstenthaltende Windows-x64-Laufzeit und
+  sämtliche Werkzeuge/Modelle aus dem v0.57-Paket weiterverwendet.
+- SDK-CLI/MSBuild konnte in dieser Containerumgebung wegen Prozessinformationen
+  nicht starten. Kompilierung daher direkt mit dem Roslyn-Compiler des SDK 8.0.427
+  gegen die vorhandenen .NET-8-Windows-Assemblies, nicht über dotnet publish.
+- Zusätzlicher Kernbuild gegen explizite .NET-Framework-4.8-Referenzen erfolgreich.
+- 45 Darstellungsprüfungen unter Mono/Xvfb bestanden: alle acht Unterprogramme,
+  Einrückung/Platzbedarf, Auf-/Zuklappen, niedrige Fensterhöhe, Hinweisdialog und
+  Abbruch, Tabellenhinweise, Rail-Renderer bei 100/150/200 Prozent und horizontale
+  Variante sowie Tooltip-Farben.
+- Gerenderte Hauptansicht, Hinweisdialog, Tooltip und Rail-Renderer visuell geprüft.
+- Native Eingabe- und Scrollfunktionen werden nicht ersetzt.
+
+Grenzen / nicht durchgeführt:
+- Die neue native Windows-Scrollbar-Überzeichnung und deren Aktualisierung bei
+  Ziehen, Tastatur und Mausrad konnten hier NICHT direkt unter Windows geprüft
+  werden. Geprüft sind Kompilierung und gemeinsame Zeichenroutine. Mono/Xvfb
+  zeichnet seine eigenen Scrollleisten und bestätigt diese Windows-Anbindung nicht.
+- Keine erneute Windows-Hardwareabnahme von Audio, Mikrofon oder DPI.
+- Cover-/Sprach-/Tag-Verarbeitung wurde für diese reine Oberflächenänderung
+  nicht erneut geprüft. Frühere v0.57-Protokolle bleiben getrennt erhalten und
+  sind keine neu ausgeführten Tests.
+- Die bekannte v0.57-Gesamtzahlregel im Trackassistenten bleibt unverändert:
+  Gesamtzahl je Verzeichnis nur bei aktivierter Verzeichnisrücksetzung.
+
+Quellen und lokaler Git-Verlauf beigefügt. Kein GitHub-Push behauptet.
