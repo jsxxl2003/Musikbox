@@ -17,7 +17,7 @@ namespace Musikbox {
    InitializeImportCounters();PortablePaths.Configure(p);personalVoice=new VoiceCorrections(Path.Combine(PortablePaths.Data,"Sprachkorrekturen.tsv"));v.OnlineCover.Checked=false;v.TagEditor.TrackNumbersRequested+=()=>Run(OpenTrackNumbers);if(!v.Songs.Columns.Contains("Tracknummer"))v.Songs.Columns.Add("Tracknummer","Tracknummer");
    v.SearchChanged+=q=>{libraryFolder=null;groupField=null;groupValue=null;v.LibraryMode="Titel";v.PresentSearchResults(false);QueueLibrarySearch(q,false);};
    v.VoiceStopRequested+=()=>voice.Stop();
-   v.LibraryModeChanged+=SwitchLibraryMode;v.Groups.SelectionChanged+=(s,e)=>SelectGroupFolder();
+   v.LibraryModeChanged+=SwitchLibraryMode;v.FolderSaveRequested+=(path,name,number)=>Run(()=>SaveSelectedFolder(path,name,number));v.Groups.SelectionChanged+=(s,e)=>SelectGroupFolder();
    v.TagPathsDropped+=paths=>{var wanted=AllSongs.Where(song=>paths.Any(path=>String.Equals(song.Source,path,StringComparison.OrdinalIgnoreCase)||(Directory.Exists(path)&&Path.GetFullPath(song.Source).StartsWith(Path.GetFullPath(path).TrimEnd(Path.DirectorySeparatorChar)+Path.DirectorySeparatorChar,StringComparison.OrdinalIgnoreCase)))).ToList();
     if(wanted.Count==0)return;v.SearchBox.Clear();v.LibraryMode="Titel";libraryFolder=null;groupField=groupValue=null;PopulateLibrary();v.Songs.ClearSelection();foreach(DataGridViewRow row in v.Songs.Rows)row.Selected=wanted.Contains(row.Tag as Song);SyncSideTags();};
    v.StudioAction+=OpenStudioModule;
