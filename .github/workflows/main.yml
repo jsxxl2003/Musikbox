@@ -9,7 +9,9 @@ concurrency:
 jobs:
   build:
     runs-on: windows-latest
-    timeout-minutes: 20
+    timeout-minutes: 15
+    env:
+      MUSIKBOX_QS_OUTPUT: ${{ github.workspace }}/qs-output
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-dotnet@v4
@@ -24,7 +26,7 @@ jobs:
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force qs-output | Out-Null
-          foreach ($test in @('v061/Regression61.csproj','v064/Voice64.csproj')) {
+          foreach ($test in @('v061/Regression61.csproj','v064/Voice64.csproj','v064/TagEditing.csproj')) {
             $name = [IO.Path]::GetFileNameWithoutExtension($test)
             dotnet run --project $test -c Release -p:NuGetAudit=false 2>&1 | Tee-Object "qs-output/$name.txt"
             if ($LASTEXITCODE) { exit $LASTEXITCODE }
