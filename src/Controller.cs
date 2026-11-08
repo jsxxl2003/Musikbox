@@ -171,7 +171,7 @@ namespace Musikbox {
   void PlayerError(string message){try{playback.Clear();}catch{}playerTimer.Stop();UpdatePlayer();v.Player.ShowError(message);}
   void RunPlayback(Action action){try{action();}catch(Exception ex){PlayerError(ex.Message);}}
   void SearchCover(){var song=v.LibraryMode=="Ordner"?SelectedSongs().FirstOrDefault():SelectedSong;if(song==null)return;ChooseTitleCover(song);}
-  void ChooseTitleCover(Song song){var folder=p.Folders.FirstOrDefault(f=>f.Songs.Contains(song));if(folder==null)return;using(var d=new TitleCoverChoiceView(song,folder.Cover))if(d.ShowDialog(v)==DialogResult.OK){var selected=SelectedSongs();if(!selected.Contains(song))selected=new List<Song>{song};SaveFileChanges(EmbeddedArtwork.Plan(selected,d.SelectedArtwork,d.AppendArtwork),"Titelcover");SyncSideTags();}}
+  void ChooseTitleCover(Song song){var folder=p.Folders.FirstOrDefault(f=>f.Songs.Contains(song));if(folder==null)return;using(var d=new TitleCoverChoiceView(song,folder.Cover))if(d.ShowDialog(v)==DialogResult.OK){var selected=SelectedSongs();if(!selected.Contains(song))selected=new List<Song>{song};SaveFileChanges(EmbeddedArtwork.Plan(selected,d.SelectedArtwork,d.AppendArtwork),"Titelcover");}}
   void FingerprintConfig(){AcoustIdSettings settings;try{settings=AcoustIdSettings.Load();}catch{settings=new AcoustIdSettings();}using(var d=new FingerprintSettingsView(settings))d.ShowDialog(v);}
   async void IdentifyFingerprints(){
    var songs=v.Songs.SelectedRows.Cast<DataGridViewRow>().Select(row=>row.Tag as Song).Where(item=>item!=null).ToList();
