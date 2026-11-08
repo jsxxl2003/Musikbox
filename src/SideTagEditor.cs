@@ -14,7 +14,7 @@ namespace Musikbox {
    DirectoryName.ReadOnly=FolderName.ReadOnly=true;
    var menu=new ContextMenuStrip{BackColor=ModernTheme.Silver,ForeColor=ModernTheme.Ink};
    menu.Items.Add("Metadatenfelder auswählen …",null,(sender,e)=>ChooseFields());
-   ModernTheme.Apply(menu);
+   menu.Renderer=new ToolStripProfessionalRenderer();
    card.ContextMenuStrip=menu;
    var choose=new StudioActionButton{Text="Felder auswählen",Width=136,Height=34};
    choose.Click+=(sender,e)=>ChooseFields();
