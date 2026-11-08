@@ -1,1 +1,33 @@
+name: Musikbox-Werkstatt Windows Build
 
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Quellcode herunterladen
+        uses: actions/checkout@v4
+
+      - name: .NET 8 installieren
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Projektdatei finden und EXE erstellen
+        shell: pwsh
+        run: |
+          $project = Get-ChildItem -Path . -Recurse -Filter MusikboxWerkstatt.csproj | Select-Object -First 1
+          if (-not $project) { throw "MusikboxWerkstatt.csproj nicht gefunden. Quellcode im Repository prüfen." }
+          dotnet publish $project.FullName -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o "$env:GITHUB_WORKSPACE\build-output"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+      - name: Portable Windows-Version bereitstellen
+        uses: actions/upload-artifact@v4
+        with:
+          name: Musikbox-Werkstatt-Windows-Portable
+          path: build-output/
+          if-no-files-found: error
