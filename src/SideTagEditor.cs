@@ -11,9 +11,18 @@ namespace Musikbox {
    fields=new Dictionary<string,TextBox>{{"artist",Artist},{"title",Title},{"album",Album},{"year",Year},{"genre",Genre},{"track",Track},{"acoustid_id",Acoustid},{"_directory",DirectoryName},{"ordner",FolderName}};
    string[] names={"Interpret","Titel","Album","Jahr","Genre","Track","AcoustID","Quellordner","Ordner"};var flags=new[]{ChangeArtist,ChangeTitle,ChangeAlbum,ChangeYear,ChangeGenre,ChangeTrack,ChangeAcoustid};int i=0;
    foreach(var pair in fields){string key=pair.Key;var label=new StudioLabel{Text=names[i],TextPixels=12,Font=StudioDrawing.Font(12),TextAlign=ContentAlignment.MiddleLeft,ForeColor=ModernTheme.Muted,BackColor=Color.Transparent,Tag="StudioExact"};labels.Add(key,label);card.Controls.Add(label);var box=new StudioPanel{Radius=7,Fill=StudioDrawing.Hex("#272537"),Gradient=false,Border=ModernTheme.Edge};box.Controls.Add(pair.Value);boxes.Add(key,box);card.Controls.Add(box);if(i<flags.Length){var flag=flags[i];pair.Value.TextChanged+=(s,e)=>{if(!loading)flag.Checked=true;};}i++;}
-   DirectoryName.ReadOnly=FolderName.ReadOnly=true;var menu=new ContextMenuStrip();menu.Items.Add("Track-Nummern-Assistent",null,(s,e)=>{if(TrackNumbersRequested!=null)TrackNumbersRequested();});var track=MainView.StudioButton("Track-Nummern-Assistent",()=>{if(TrackNumbersRequested!=null)TrackNumbersRequested();});track.Dock=DockStyle.Bottom;track.Height=38;card.Controls.Add(track);card.ContextMenuStrip=menu;Resize+=(s,e)=>Arrange();Arrange();
+   DirectoryName.ReadOnly=FolderName.ReadOnly=true;
+   var menu=new ContextMenuStrip{BackColor=ModernTheme.Silver,ForeColor=ModernTheme.Ink};
+   menu.Items.Add("Metadatenfelder auswählen …",null,(sender,e)=>ChooseFields());
+   ModernTheme.Apply(menu);
+   card.ContextMenuStrip=menu;
+   var choose=new StudioActionButton{Text="Felder auswählen",Width=136,Height=34};
+   choose.Click+=(sender,e)=>ChooseFields();
+   card.Controls.Add(choose);
+   Resize+=(sender,e)=>{Arrange();choose.SetBounds(Math.Max(8,Width-152),Math.Max(8,Height-46),136,34);};
+   Arrange();choose.SetBounds(Math.Max(8,Width-152),Math.Max(8,Height-46),136,34);
   }
-  public void ApplyFormat(){Arrange();}
+  void ChooseFields(){using(var dialog=new OutputFormatView(OutputFormatSettings.Pattern))if(dialog.ShowDialog(FindForm())==DialogResult.OK){OutputFormatSettings.Pattern=dialog.Pattern;ApplyFormat();}}\n  public void ApplyFormat(){Arrange();}
   void Arrange(){if(fields==null)return;float scale=1;
 #if NET8_0_OR_GREATER
    scale=DeviceDpi/96f;
