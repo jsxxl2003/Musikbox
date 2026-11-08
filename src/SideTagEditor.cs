@@ -16,7 +16,8 @@ namespace Musikbox {
    DirectoryName.ReadOnly=FolderName.ReadOnly=true;
    var menu=new ContextMenuStrip{BackColor=ModernTheme.Silver,ForeColor=ModernTheme.Ink};
    menu.Items.Add("Metadatenfelder auswählen …",null,(sender,e)=>ChooseFields());
-   menu.Renderer=new ToolStripProfessionalRenderer();
+   menu.ShowImageMargin=false;
+   ModernTheme.StyleMenu(menu);
    card.ContextMenuStrip=menu;
    TrackNumbers.Click+=(sender,e)=>TrackNumbersRequested?.Invoke();
    card.Controls.Add(TrackNumbers);

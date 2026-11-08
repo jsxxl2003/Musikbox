@@ -15,6 +15,7 @@ namespace Musikbox {
   public static void Apply(Control c){
    styled.GetValue(c,control=>{control.ControlAdded+=(s,e)=>Apply(e.Control);return new object();});
    StudioScrollbars.Attach(c);StudioHints.Attach(c);
+   if(c.ContextMenuStrip!=null)StyleMenu(c.ContextMenuStrip);
    if(c is TextBoxBase && c.ContextMenuStrip==null)StudioContextMenus.AttachText((TextBoxBase)c);
    if(c is ComboBox && ((ComboBox)c).DropDownStyle!=ComboBoxStyle.DropDownList && c.ContextMenuStrip==null)StudioContextMenus.AttachEditableCombo((ComboBox)c);
    if(c is StudioActionButton||c is StudioArt||c is StudioSlider)return;
@@ -31,13 +32,21 @@ namespace Musikbox {
    else if(c is Label){c.BackColor=Color.Transparent;}
    else if(c is SplitContainer)c.BackColor=Edge;
    else c.BackColor=c is Form?Background:Navy;
-   var strip=c as ToolStrip;if(strip!=null){strip.BackColor=ChromeDark;strip.Renderer=new ToolStripProfessionalRenderer(new StudioColors());foreach(ToolStripItem item in strip.Items)StyleItem(item);}
-   if(c.ContextMenuStrip!=null){c.ContextMenuStrip.Renderer=new ToolStripProfessionalRenderer(new StudioColors());foreach(ToolStripItem item in c.ContextMenuStrip.Items)StyleItem(item);}
+   var strip=c as ToolStrip;if(strip!=null){strip.BackColor=ChromeDark;strip.Renderer=new StudioMenuRenderer();foreach(ToolStripItem item in strip.Items)StyleItem(item);}
+   if(c.ContextMenuStrip!=null){c.ContextMenuStrip.Renderer=new StudioMenuRenderer();foreach(ToolStripItem item in c.ContextMenuStrip.Items)StyleItem(item);}
    var list=c as ListBox;if(list!=null&&list.DrawMode==DrawMode.Normal){list.DrawMode=DrawMode.OwnerDrawFixed;list.ItemHeight=Math.Max(24,list.Font.Height+8);list.DrawItem+=(s,e)=>{using(var brush=new SolidBrush((e.State&DrawItemState.Selected)!=0?Selection:Silver))e.Graphics.FillRectangle(brush,e.Bounds);if(e.Index>=0&&e.Index<list.Items.Count)TextRenderer.DrawText(e.Graphics,list.GetItemText(list.Items[e.Index]),list.Font,Rectangle.Inflate(e.Bounds,-4,0),Ink,TextFormatFlags.Left|TextFormatFlags.VerticalCenter|TextFormatFlags.EndEllipsis);};}
    var tabs=c as TabControl;if(tabs!=null){tabs.DrawMode=TabDrawMode.OwnerDrawFixed;if(!Object.Equals(tabs.Tag,"StyledTabs")){tabs.Tag="StyledTabs";tabs.DrawItem+=(s,e)=>{var r=tabs.GetTabRect(e.Index);using(var b=new SolidBrush(e.Index==tabs.SelectedIndex?Accent:Silver))e.Graphics.FillRectangle(b,r);TextRenderer.DrawText(e.Graphics,tabs.TabPages[e.Index].Text,tabs.Font,r,Ink,TextFormatFlags.HorizontalCenter|TextFormatFlags.VerticalCenter);};}}
    foreach(Control child in c.Controls.Cast<Control>().ToArray())Apply(child);
   }
-  static void StyleItem(ToolStripItem item){item.ForeColor=Ink;item.BackColor=Silver;var m=item as ToolStripDropDownItem;if(m!=null){StudioHints.Attach(m.DropDown);m.DropDown.Renderer=new ToolStripProfessionalRenderer(new StudioColors());foreach(ToolStripItem child in m.DropDownItems)StyleItem(child);}}
+  public static void StyleMenu(ContextMenuStrip menu){menu.BackColor=Silver;menu.ForeColor=Ink;menu.Renderer=new StudioMenuRenderer();foreach(ToolStripItem item in menu.Items)StyleItem(item);}
+  static void StyleItem(ToolStripItem item){item.ForeColor=Ink;item.BackColor=Silver;var m=item as ToolStripDropDownItem;if(m!=null){StudioHints.Attach(m.DropDown);m.DropDown.Renderer=new StudioMenuRenderer();foreach(ToolStripItem child in m.DropDownItems)StyleItem(child);}}
+  sealed class StudioMenuRenderer:ToolStripProfessionalRenderer {
+   public StudioMenuRenderer():base(new StudioColors()){RoundedEdges=false;}
+   protected override void OnRenderImageMargin(ToolStripRenderEventArgs e){using(var brush=new SolidBrush(Silver))e.Graphics.FillRectangle(brush,e.AffectedBounds);}
+   protected override void OnRenderMenuItemBackground(ToolStripItemRenderEventArgs e){using(var brush=new SolidBrush(e.Item.Enabled&&(e.Item.Selected||e.Item.Pressed)?Selection:Silver))e.Graphics.FillRectangle(brush,new Rectangle(Point.Empty,e.Item.Size));}
+   protected override void OnRenderItemText(ToolStripItemTextRenderEventArgs e){e.TextColor=e.Item.Enabled?Ink:Muted;base.OnRenderItemText(e);}
+   protected override void OnRenderItemCheck(ToolStripItemImageRenderEventArgs e){var r=e.ImageRectangle;TextRenderer.DrawText(e.Graphics,"✓",e.Item.Font,r,e.Item.Enabled?Ink:Muted,TextFormatFlags.HorizontalCenter|TextFormatFlags.VerticalCenter);}
+  }
   sealed class StudioColors:ProfessionalColorTable {public override Color ToolStripGradientBegin{get{return ChromeDark;}}public override Color ToolStripGradientMiddle{get{return ChromeDark;}}public override Color ToolStripGradientEnd{get{return ChromeDark;}}public override Color ToolStripDropDownBackground{get{return Silver;}}public override Color ImageMarginGradientBegin{get{return Silver;}}public override Color ImageMarginGradientMiddle{get{return Silver;}}public override Color ImageMarginGradientEnd{get{return Silver;}}public override Color MenuItemSelected{get{return Selection;}}public override Color MenuItemSelectedGradientBegin{get{return Selection;}}public override Color MenuItemSelectedGradientEnd{get{return Selection;}}public override Color MenuBorder{get{return Edge;}}}
  }
 }
