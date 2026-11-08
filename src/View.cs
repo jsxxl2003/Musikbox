@@ -131,13 +131,15 @@ namespace Musikbox {
    folderMenu.Items.Add(ContextCommand("Nach oben verschieben","↑"));folderMenu.Items.Add(ContextCommand("Nach unten verschieben","↓"));
    folderMenu.Items.Add(new ToolStripSeparator());folderMenu.Items.Add(ContextCommand("Ordner aus Projekt entfernen…","Entfernen"));
    folderMenu.Opening+=(s,e)=>{e.Cancel=!CanDrop();foreach(ToolStripItem item in folderMenu.Items)item.Enabled=item.Text=="Import"||Folders.SelectedIndex>=0;};
-   Folders.MouseDown+=(s,e)=>{if(e.Button!=MouseButtons.Right||!CanDrop())return;int index=Folders.IndexFromPoint(e.Location);Folders.SelectedIndex=index;};Folders.ContextMenuStrip=folderMenu;
-   var songMenu=new ContextMenuStrip();songMenu.Items.Add(ImportContextMenu());songMenu.Items.Add(new ToolStripSeparator());songMenu.Items.Add(ContextCommand("Im Player öffnen…","Im Player öffnen"));songMenu.Items.Add(ContextCommand("Abspielen","Abspielen"));songMenu.Items.Add(ContextCommand("Player pausieren","Pause"));songMenu.Items.Add(ContextCommand("Player stoppen","Stopp"));songMenu.Items.Add(new ToolStripSeparator());songMenu.Items.Add(ContextCommand("Cover online suchen…","Cover online suchen"));songMenu.Items.Add(ContextCommand("Mit Fingerabdruck erkennen…","Mit Fingerabdruck erkennen"));songMenu.Items.Add(ContextCommand("Mit ACRCloud erkennen…","Titel erkennen (ACRCloud)"));songMenu.Items.Add(new ToolStripSeparator());
-   var artist=new ToolStripMenuItem("Interpret bearbeiten");var title=new ToolStripMenuItem("Titel bearbeiten");
-   artist.Click+=(s,e)=>EditSelectedCell(0);title.Click+=(s,e)=>EditSelectedCell(1);songMenu.Items.Add(artist);songMenu.Items.Add(title);
-   songMenu.Items.Add(ContextCommand("Tags bearbeiten (auch Mehrfachauswahl)…","Tags bearbeiten"));
-   songMenu.Items.Add(new ToolStripSeparator());songMenu.Items.Add(ContextCommand("Ausgewählte Titel aus Projekt entfernen…","Titel entfernen"));
-   songMenu.Opening+=(s,e)=>{e.Cancel=!CanDrop();foreach(ToolStripItem item in songMenu.Items)item.Enabled=item.Text=="Import"||(Songs.CurrentRow!=null&&Songs.SelectedRows.Count>0);};
+   Folders.MouseDown+=(s,e)=>{if(e.Button!=MouseButtons.Right||!CanDrop())return;int index=Folders.IndexFromPoint(e.Location);Folders.SelectedIndex=index;};ModernTheme.Apply(folderMenu);Folders.ContextMenuStrip=folderMenu;
+   var songMenu=new ContextMenuStrip();
+   songMenu.Items.Add(ImportContextMenu());
+   songMenu.Items.Add(ContextCommand("Cover online suchen…","Cover online suchen"));
+   songMenu.Items.Add(new ToolStripSeparator());
+   songMenu.Items.Add(ContextCommand("Titel entfernen","Titel entfernen"));
+   songMenu.Items.Add(ContextCommand("Titel löschen (Datenträger)…","Titel löschen"));
+   songMenu.Opening+=(s,e)=>{e.Cancel=!CanDrop();foreach(ToolStripItem item in songMenu.Items)if(!(item is ToolStripSeparator))item.Enabled=item.Text=="Import"||Songs.SelectedRows.Count>0;};
+   ModernTheme.Apply(songMenu);
    Songs.MouseDown+=(s,e)=>{if(e.Button!=MouseButtons.Right||!CanDrop())return;var hit=Songs.HitTest(e.X,e.Y);if(hit.Type==DataGridViewHitTestType.ColumnHeader)return;if(hit.RowIndex<0){Songs.ClearSelection();return;}var selected=Songs.SelectedRows.Cast<DataGridViewRow>().ToList();bool keep=Songs.Rows[hit.RowIndex].Selected;if(!keep)Songs.ClearSelection();Songs.CurrentCell=Songs.Rows[hit.RowIndex].Cells[0];if(keep)foreach(var row in selected)row.Selected=true;Songs.Rows[hit.RowIndex].Selected=true;};Songs.ContextMenuStrip=songMenu;
   }
   void EditSelectedCell(int column){if(!CanDrop()||Songs.CurrentRow==null)return;Songs.CurrentCell=Songs.CurrentRow.Cells[column];Songs.BeginEdit(true);}
