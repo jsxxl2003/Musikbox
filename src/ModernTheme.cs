@@ -18,6 +18,8 @@ namespace Musikbox {
    if(c is StudioActionButton||c is StudioArt||c is StudioSlider)return;
    if(c is StudioPanel){foreach(Control child in c.Controls.Cast<Control>().ToArray())Apply(child);return;}
    if(Object.Equals(c.Tag,"StudioExact")){foreach(Control child in c.Controls.Cast<Control>().ToArray())Apply(child);return;}
+   if(c is TextBoxBase && c.ContextMenuStrip==null)StudioContextMenus.AttachText((TextBoxBase)c);
+   if(c is ComboBox && ((ComboBox)c).DropDownStyle!=ComboBoxStyle.DropDownList && c.ContextMenuStrip==null)StudioContextMenus.AttachEditableCombo((ComboBox)c);
    if(c is TextBoxBase&&((TextBoxBase)c).BorderStyle==BorderStyle.Fixed3D)((TextBoxBase)c).BorderStyle=BorderStyle.FixedSingle;if(c is ListView)((ListView)c).BorderStyle=BorderStyle.FixedSingle;if(c is ListBox)((ListBox)c).BorderStyle=BorderStyle.FixedSingle;
    c.ForeColor=Ink;if(c.Font.Size<9&&c.Font.Unit!=GraphicsUnit.Pixel)c.Font=FieldLabelFont;
    if(c is ColorSwatch)return;
