@@ -18,6 +18,10 @@ Der QS-Bericht vom 08.11. benannte zwei Timer-Handler, geteilte Sortierbedienung
 
 Metadaten-Feldauswahl auf Studio-Steuerelemente mit eigener Scrollanbindung umgestellt. Helle Tabellen-/Seiten-Initialfarben entfernt, Cover-Designer-Aktionen vereinheitlicht. Bereits im Ausgangscommit vorhandene Coversuch-/Dropdown-/Metadatenkorrekturen beibehalten.
 
+Die Windows-Prüfung reproduzierte zusätzlich eine Layout-/Zeichenrückkopplung beim Öffnen von Dropdowns. WM_PAINT löst jetzt keine Layoutberechnung mehr aus; feste Listenrahmen verwenden keine zusätzliche IntegralHeight-Rundung. Scrollbereiche werden nur bei geänderten Werten invalidiert. Die vollständige Dropdown-Zeichenfläche einschließlich Pfeil ersetzt die native Fläche, ohne sie nachträglich zu übermalen.
+
+Listenstände nach dem endgültigen Kategorienlayout wiederherstellen. Mindesthöhe für echte Titelzeilen unter langen Werkzeugleisten vorsehen; Werkzeugbereich bei Bedarf separat scrollbar. Laufende Suchaktualisierungen vor dem Schließen abbrechen und Layout während Freigabe verhindern. Windows-Prüfprogramme verwenden dieselbe echte Application.Run-Nachrichtenschleife wie die Anwendung; Prüfprogrammfehler sind keine Produktfehler.
+
 ## Prüfung und Übergabe
 
 Aktueller ausführlicher Nachweis: `PRUEFBERICHT-v0.64.md`, Protokolle unter `Dokumentation/Pruefprotokolle`. Frühere Berichte sind historische Nachweise. Windows-Steuerelementtests sind von echter Mikrofon-/Audiogeräteabnahme und sichtbarer Flackerfreiheit auf dem Ziel-PC zu unterscheiden.
