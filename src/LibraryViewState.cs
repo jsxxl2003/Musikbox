@@ -24,6 +24,8 @@ namespace Musikbox {
    if(p.Folders.Any(f=>f!=folder&&String.Equals(f.Name,newName,StringComparison.OrdinalIgnoreCase)))throw new InvalidOperationException("Dieser Ordnername ist bereits vorhanden.");
    if(p.Folders.Any(f=>f!=folder&&f.Name!=null&&f.Name.StartsWith(number+" ",StringComparison.OrdinalIgnoreCase)))throw new InvalidOperationException("Diese Ordnernummer ist bereits vergeben.");
    string source=folder.SourceDirectory,target=source;
+   if(!String.IsNullOrWhiteSpace(source)&&p.Folders.Any(f=>f!=folder&&String.Equals(f.SourceDirectory,source,StringComparison.OrdinalIgnoreCase)))
+    throw new InvalidOperationException("Dieser Quellordner wird von mehreren Musikbox-Ordnern verwendet und darf nicht automatisch umbenannt werden.");
    if(!String.IsNullOrWhiteSpace(source)&&Directory.Exists(source)){
     string parent=Path.GetDirectoryName(Path.GetFullPath(source).TrimEnd(Path.DirectorySeparatorChar));
     if(String.IsNullOrWhiteSpace(parent))throw new InvalidOperationException("Der Stammordner darf nicht umbenannt werden.");
