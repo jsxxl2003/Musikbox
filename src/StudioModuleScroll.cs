@@ -8,6 +8,6 @@ namespace Musikbox {
   public StudioModuleScroll(Control content){this.content=content;Radius=0;Fill=End=ModernTheme.Background;Border=Color.Transparent;Gradient=false;content.Dock=DockStyle.None;Controls.Add(content);}
   protected override void OnSizeChanged(EventArgs e){base.OnSizeChanged(e);Arrange();}
   protected override void OnLayout(LayoutEventArgs e){base.OnLayout(e);Arrange();}
-  void Arrange(){if(content==null||arranging)return;arranging=true;try{content.Width=Math.Max(1,ClientSize.Width-RailWidth);content.Height=Math.Max(ClientSize.Height,NaturalHeight);content.Left=0;ContentHeight=content.Height;content.Top=-ScrollOffset;}finally{arranging=false;}}
+  void Arrange(){if(IsDisposed||Disposing||content==null||content.IsDisposed||content.Disposing||arranging)return;arranging=true;try{content.Width=Math.Max(1,ClientSize.Width-RailWidth);content.Height=Math.Max(ClientSize.Height,NaturalHeight);content.Left=0;ContentHeight=content.Height;content.Top=-ScrollOffset;}finally{arranging=false;}}
  }
 }

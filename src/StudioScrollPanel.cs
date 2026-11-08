@@ -10,7 +10,7 @@ namespace Musikbox {
   public int ContentHeight{get{return contentHeight;}set{contentHeight=Math.Max(0,value);UpdateRange();}}
   public StudioScrollPanel(){base.AutoScroll=false;rail=new StudioScrollRail{Name="Studio-Bildlauf"};rail.ValueChanged+=(s,e)=>MoveContent(rail.Value);Controls.Add(rail);}
   void MoveContent(int next){int delta=offset-next;if(delta==0)return;offset=next;shifting=true;SuspendLayout();try{foreach(Control c in Controls)if(c!=rail)c.Top+=delta;}finally{ResumeLayout(false);shifting=false;}Invalidate();}
-  void UpdateRange(){if(rail==null||shifting)return;rail.SetRange(ClientSize.Height,contentHeight);rail.SetBounds(Math.Max(0,ClientSize.Width-RailWidth),0,RailWidth,Math.Max(0,ClientSize.Height));rail.Visible=rail.Maximum>0;rail.BringToFront();}
+  void UpdateRange(){if(IsDisposed||Disposing||rail==null||rail.IsDisposed||shifting)return;rail.SetRange(ClientSize.Height,contentHeight);rail.SetBounds(Math.Max(0,ClientSize.Width-RailWidth),0,RailWidth,Math.Max(0,ClientSize.Height));rail.Visible=rail.Maximum>0;rail.BringToFront();}
   public void ScrollTo(int position){rail.Value=position;}
   public void EnsureVisible(Control child){if(child.Parent!=this||child==rail)return;if(child.Top<0)ScrollTo(offset+child.Top);else if(child.Bottom>ClientSize.Height)ScrollTo(offset+child.Bottom-ClientSize.Height);}
   protected override void OnControlAdded(ControlEventArgs e){base.OnControlAdded(e);if(e.Control==rail||e.Control is StudioScrollRail)return;e.Control.Enter+=(s,a)=>EnsureVisible(e.Control);}

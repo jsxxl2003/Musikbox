@@ -105,7 +105,7 @@ namespace Musikbox {
    SearchBox.PlaceholderText=active?message:"Musik suchen ...";
 #endif
   }
-  public void RefreshStudioLibrary(){if(studioBatch||!studioInstalled||modeButtons.Count==0)return;RefreshSortButton();foreach(var pair in modeButtons){pair.Value.Active=pair.Key==LibraryMode;pair.Value.Invalidate();}LayoutStudio();}
+  public void RefreshStudioLibrary(){if(IsDisposed||Disposing||studioBatch||!studioInstalled||modeButtons.Count==0)return;RefreshSortButton();foreach(var pair in modeButtons){pair.Value.Active=pair.Key==LibraryMode;pair.Value.Invalidate();}LayoutStudio();}
   Song displayedSong;Image displayedArtwork;public Song DisplayedSong{get{return displayedSong;}}
   public void SetCurrentSong(Song song,Image artwork){displayedSong=song;displayedArtwork=artwork;RefreshStudioNow();}
   public void RefreshStudioNow(){if(studioBatch||IsDisposed||Disposing||nowTitle==null||nowTitle.IsDisposed)return;var song=displayedSong;nowTitle.Text=song==null?"Kein Titel":song.Title;nowArtist.Text=song==null?"Musikbox-Werkstatt":song.Artist;nowAlbum.Text=song==null?"":song.Album;nowArt.Initials=song==null?"♫":song.Artist;nowArt.Artwork=displayedArtwork;nowArt.PaletteIndex=song==null?0:song.StudioColorIndex;nowArt.Invalidate();studioTips.SetToolTip(nowTitle,nowTitle.Text);studioTips.SetToolTip(nowArtist,nowArtist.Text);studioTips.SetToolTip(nowAlbum,nowAlbum.Text);LayoutStudio();}
