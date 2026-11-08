@@ -22,7 +22,8 @@ namespace Musikbox {
    Resize+=(sender,e)=>{Arrange();choose.SetBounds(Math.Max(8,Width-152),Math.Max(8,Height-46),136,34);};
    Arrange();choose.SetBounds(Math.Max(8,Width-152),Math.Max(8,Height-46),136,34);
   }
-  void ChooseFields(){using(var dialog=new OutputFormatView(OutputFormatSettings.Pattern))if(dialog.ShowDialog(FindForm())==DialogResult.OK){OutputFormatSettings.Pattern=dialog.Pattern;ApplyFormat();}}\n  public void ApplyFormat(){Arrange();}
+  void ChooseFields(){using(var dialog=new OutputFormatView(OutputFormatSettings.Pattern))if(dialog.ShowDialog(FindForm())==DialogResult.OK){OutputFormatSettings.Pattern=dialog.Pattern;ApplyFormat();}}
+  public void ApplyFormat(){Arrange();}
   void Arrange(){if(fields==null)return;float scale=1;
 #if NET8_0_OR_GREATER
    scale=DeviceDpi/96f;
