@@ -21,7 +21,7 @@ namespace Musikbox {
   public Func<bool> CanDrop=()=>true;
   readonly System.Collections.Generic.HashSet<Control> dropControls=new System.Collections.Generic.HashSet<Control>();
   public ListBox Folders=new StudioListBox{Dock=DockStyle.Fill,SelectionMode=SelectionMode.One};
-  public DataGridView Songs=new StudioSongGrid{Dock=DockStyle.Fill,AllowUserToAddRows=false,AllowUserToDeleteRows=false,AutoSizeColumnsMode=DataGridViewAutoSizeColumnsMode.Fill,RowHeadersVisible=false,SelectionMode=DataGridViewSelectionMode.FullRowSelect,MultiSelect=true,BackgroundColor=Color.White,BorderStyle=BorderStyle.None};
+  public DataGridView Songs=new StudioSongGrid{Dock=DockStyle.Fill,AllowUserToAddRows=false,AllowUserToDeleteRows=false,AutoSizeColumnsMode=DataGridViewAutoSizeColumnsMode.Fill,RowHeadersVisible=true,SelectionMode=DataGridViewSelectionMode.FullRowSelect,MultiSelect=true,BackgroundColor=Color.White,BorderStyle=BorderStyle.None};
   public ToolStrip Tools=new ToolStrip{GripStyle=ToolStripGripStyle.Hidden,Padding=new Padding(8),LayoutStyle=ToolStripLayoutStyle.Flow,AutoSize=true};
   readonly System.Collections.Generic.Dictionary<string,ToolStripMenuItem> commands=new System.Collections.Generic.Dictionary<string,ToolStripMenuItem>();
   public Label Counts=new Label{Dock=DockStyle.Bottom,Height=22,Padding=new Padding(8,3,0,0),BackColor=Color.FromArgb(235,240,245)};
