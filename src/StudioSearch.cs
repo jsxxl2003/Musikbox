@@ -23,7 +23,7 @@ namespace Musikbox {public partial class Controller {
      }
      v.Songs.Rows.AddRange(rows.ToArray());foreach(var row in rows)row.Selected=selected.Contains((Song)row.Tag);await Task.Delay(1,token);
     }
-    TrackColumns.Load(v.Songs);if(selected.Count==0)v.Songs.ClearSelection();titleViewState.Restore(v.Songs,EditedPath);SyncSideTags(false);v.Counts.Text=entries.Length.ToString("N0")+" angezeigte Titel · "+p.Folders.Count+" Ordner · Gesamte Bibliothek";
+    TrackColumns.Load(v.Songs);if(selected.Count==0)v.Songs.ClearSelection();titleViewState.Restore(v.Songs,EditedPath);ApplySearchResultOrder();SyncSideTags(false);v.Counts.Text=entries.Length.ToString("N0")+" angezeigte Titel · "+p.Folders.Count+" Ordner · Gesamte Bibliothek";
    }finally{if(libraryRenderGeneration==generation){libraryRenderGeneration=-1;refresh=before;updatingLibrary=false;v.EndLibraryUpdate();}}
   }catch(OperationCanceledException){}catch(Exception ex){if(generation==librarySearchGeneration&&!v.IsDisposed)v.Status.Text="Suche: "+ex.Message;}finally{if(librarySearchCancel==source)librarySearchCancel=null;source.Dispose();}
  }

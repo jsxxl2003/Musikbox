@@ -20,7 +20,8 @@ namespace Musikbox {
   ToolStripMenuItem undoCommand,redoCommand;string projectFile;
   FolderImportMode folderImportMode=FolderImportMode.PreserveStructure;
   BoxFolder Current {get{if(v.LibraryMode=="Ordner"){var row=v.Groups.CurrentRow;var group=row!=null&&row.Selected?row.Tag as Tuple<string,string>:null;return group==null?null:p.Folders.FirstOrDefault(f=>f.Name==group.Item2);}return v.Folders.SelectedItem as BoxFolder;}}
-  public Controller(MainView view,string backupRoot=null,Playback player=null) {
+  public Controller(MainView view,string backupRoot=null,Playback player=null,VoiceService speech=null) {
+   voice=speech??new VoiceService();
    playback=player??new Playback();
    this.backupRoot=backupRoot;history.Reset(p,true);backups=new ProjectBackups(null,backupRoot);
    v=view;v.CanDrop=()=>!busy;v.PathsDropped+=ImportDropped;
@@ -85,13 +86,13 @@ namespace Musikbox {
   }
   void Run(Action action){if(busy)return;try{v.Songs.EndEdit();CommitSideTags();action();}catch(Exception e){AppMessage.Show(v,e.Message,"Vorgang nicht abgeschlossen",MessageBoxButtons.OK,MessageBoxIcon.Warning);}}
   int artworkGeneration;Song artworkSong;string artworkSource;bool reloadArtwork=true;
-  void InvalidateArtwork(){reloadArtwork=true;}
+  void InvalidateArtwork(){reloadArtwork=true;artworkGeneration++;}
   async void SyncSideTags(bool captureSelection=true){
    if(captureSelection&&v.LibraryMode=="Titel"&&!refresh){var selected=SelectedSongs();if(selected.Count>0){sideSelection=selected;var row=v.Songs.CurrentRow;editedSong=row!=null&&row.Selected&&row.Tag is Song?(Song)row.Tag:selected[0];}}
    sideSelection=sideSelection.Where(song=>AllSongs.Contains(song)).ToList();if(editedSong!=null&&!AllSongs.Contains(editedSong))editedSong=AllSongs.FirstOrDefault(song=>String.Equals(song.Source,editedSong.Source,StringComparison.OrdinalIgnoreCase));if(editedSong==null)editedSong=sideSelection.FirstOrDefault();
-   int generation=++artworkGeneration;var song=editedSong;v.TagEditor.ShowSelection(sideSelection,Current==null?"":Current.Theme);bool same=song!=null&&artworkSong==song&&artworkSource==song.Source;if(same&&!reloadArtwork&&v.TitleCover.Image!=null){v.SetCurrentSong(song,v.TitleCover.Image);return;}v.SetCurrentSong(song,same?v.TitleCover.Image:null);if(!same&&v.TitleCover.Image!=null){v.TitleCover.Image.Dispose();v.TitleCover.Image=null;}artworkSong=song;artworkSource=song?.Source;reloadArtwork=false;
+   int generation=++artworkGeneration;var song=editedSong;v.TagEditor.ShowSelection(sideSelection,Current==null?"":Current.Theme);bool same=song!=null&&artworkSong==song&&artworkSource==song.Source;if(same&&!reloadArtwork&&v.TitleCover.Image!=null){v.SetCurrentSong(song,v.TitleCover.Image);return;}v.SetCurrentSong(song,same?v.TitleCover.Image:null);if(!same&&v.TitleCover.Image!=null){v.TitleCover.Image.Dispose();v.TitleCover.Image=null;}artworkSong=song;artworkSource=song?.Source;
    if(song==null)return;string artwork=song.Artwork,source=song.Source;
-   try{await Task.Delay(100);if(generation!=artworkGeneration||v.IsDisposed)return;byte[] bytes=await Task.Run(()=>{if(!String.IsNullOrEmpty(artwork)&&File.Exists(artwork))return File.ReadAllBytes(artwork);return File.Exists(source)?MediaMetadata.Artwork(source):null;});if(generation!=artworkGeneration||v.IsDisposed||editedSong!=song||song.Source!=source)return;if(bytes==null){var previous=v.TitleCover.Image;v.TitleCover.Image=null;v.SetCurrentSong(song,null);previous?.Dispose();return;}var old=v.TitleCover.Image;using(var stream=new MemoryStream(bytes))using(var image=Image.FromStream(stream))v.TitleCover.Image=new Bitmap(image);v.SetCurrentSong(song,v.TitleCover.Image);old?.Dispose();}catch{if(generation==artworkGeneration&&!v.IsDisposed){reloadArtwork=true;v.SetCurrentSong(song,null);var failed=v.TitleCover.Image;v.TitleCover.Image=null;failed?.Dispose();}}
+   try{await Task.Delay(100);if(generation!=artworkGeneration||v.IsDisposed)return;byte[] bytes=await Task.Run(()=>{if(!String.IsNullOrEmpty(artwork)&&File.Exists(artwork))return File.ReadAllBytes(artwork);return File.Exists(source)?MediaMetadata.Artwork(source):null;});if(generation!=artworkGeneration||v.IsDisposed||editedSong!=song||song.Source!=source)return;reloadArtwork=false;if(bytes==null){var previous=v.TitleCover.Image;v.TitleCover.Image=null;v.SetCurrentSong(song,null);previous?.Dispose();return;}var old=v.TitleCover.Image;using(var stream=new MemoryStream(bytes))using(var image=Image.FromStream(stream))v.TitleCover.Image=new Bitmap(image);v.SetCurrentSong(song,v.TitleCover.Image);old?.Dispose();}catch{if(generation==artworkGeneration&&!v.IsDisposed){reloadArtwork=true;v.SetCurrentSong(song,null);var failed=v.TitleCover.Image;v.TitleCover.Image=null;failed?.Dispose();}}
   }
 
   void CommitSideTags(){if(sideCommitting||!v.TagEditor.Pending||sideSelection.Count==0)return;sideCommitting=true;try{
