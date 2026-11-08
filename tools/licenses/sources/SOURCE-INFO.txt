@@ -1,0 +1,3 @@
+TagLibSharp 2.3.0.0, original source tag mono/taglib-sharp, commit b5ae84f.
+Complete library/build sources included. Large test media in TaglibSharp.Tests/raw-samples and samples omitted.
+Original full source: https://github.com/mono/taglib-sharp/tree/TaglibSharp-2.3.0.0

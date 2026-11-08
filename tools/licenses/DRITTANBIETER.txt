@@ -1,0 +1,23 @@
+Mitgelieferte Komponenten (unveraenderte Originalbibliotheken/-werkzeuge):
+
+.NET 8 Windows Desktop Runtime: Microsoft, MIT und weitere Hinweise in den
+mitgelieferten Runtime-Dateien LICENSE.txt / ThirdPartyNotices.txt.
+TagLibSharp 2.3.0: LGPL-2.1-only, https://github.com/mono/taglib-sharp
+NAudio 2.2.1: Mark Heath und Mitwirkende, MIT.
+System.Speech / ProtectedData 8.0.0: Microsoft, MIT.
+Vosk 0.3.38: Alpha Cephei Inc, Apache-2.0.
+Deutsches und englisches Modell 0.15: Alpha Cephei Inc, Apache-2.0.
+MinGW-Laufzeitbibliotheken von Vosk: GCC Runtime Library Exception / LGPL;
+Originaldateien werden neben libvosk.dll unveraendert mitgeliefert.
+MP3Gain-Kommandozeile 1.4.6 aus dem stabilen Windows-Paket 1.2.5: LGPL;
+Lizenz und Quellarchiv unter tools/mp3gain.
+FFmpeg 9.0.2 Gyan essentials: GPLv3, Lizenz und Buildkonfiguration unter
+tools/ffmpeg. Quellarchiv des FFmpeg-Releases unter tools/ffmpeg/sources.
+Buildanbieter: https://www.gyan.dev/ffmpeg/builds/ (Konfiguration im README).
+fpcalc 1.6.2: Lizenzen, Versionsmanifest, Buildangaben und entsprechende
+mitgelieferte Quellen unter tools/fpcalc. Diese Hinweise sind unveraendert
+von der C#-Basis v0.19 uebernommen.
+
+TagLibSharp kann durch eine kompatible eigene DLL ersetzt werden.
+Werkzeugpfade fuer FFmpeg und MP3Gain koennen in den Audio-Einstellungen
+geaendert werden. Keine dieser Komponenten wird systemweit installiert.
