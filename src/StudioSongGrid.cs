@@ -31,7 +31,7 @@ namespace Musikbox {
     return;
    }
    var size=SystemInformation.DragSize;if(!new Rectangle(pressed.X-size.Width/2,pressed.Y-size.Height/2,size.Width,size.Height).Contains(e.Location))deferredClick=null;base.OnMouseMove(e);}
-  protected override void OnRowPostPaint(DataGridViewRowPostPaintEventArgs e){base.OnRowPostPaint(e);using(var brush=new SolidBrush(ModernTheme.Navy))e.Graphics.FillRectangle(brush,0,e.RowBounds.Top,RowHeadersWidth,e.RowBounds.Height);}
+  protected override void OnRowPostPaint(DataGridViewRowPostPaintEventArgs e){base.OnRowPostPaint(e);if(!RowHeadersVisible)return;using(var brush=new SolidBrush(ModernTheme.Navy))e.Graphics.FillRectangle(brush,0,e.RowBounds.Top,RowHeadersWidth,e.RowBounds.Height);}
   protected override void OnMouseUp(MouseEventArgs e){if(rubberSelecting){rubberSelecting=false;Capture=false;return;}base.OnMouseUp(e);var row=deferredClick;deferredClick=null;if(e.Button==MouseButtons.Left&&row!=null&&row.DataGridView==this){ClearSelection();row.Selected=true;}}
  }
 }
