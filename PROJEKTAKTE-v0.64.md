@@ -43,3 +43,5 @@ Nutzermeldung: Explorer-Fehler 0x80010135 beim Entpacken langer Paketpfade. Das 
 ## Kompakte Bereiche und feste Metadaten-Startansicht
 
 Grosse Bereichsueberschriften und Einleitungstexte entfallen zentral in Bibliothek und Werkzeugseiten. Bedienelemente ruecken nach oben; die Navigation bezeichnet den aktuellen Bereich. Der Track-Nummern-Assistent ist wieder als eigener Button im Metadatenbereich vorhanden. Bei jedem Programmstart gelten Interpret, Titel, Album, Genre, Track, Jahr und Ordner in dieser Reihenfolge. Die Feldauswahl kann fuer die laufende Sitzung geaendert werden; gespeicherte Dateinamen-/Tag-Ausgabeformate bleiben erhalten. Windows-QS prueft diese Startansicht auch bei abweichend gespeichertem Ausgabeformat, die Bedienbarkeit und ueberlappungsfreie Lage des Assistenten sowie die kompakten Bereichskoepfe. Nachweis fuer diesen neuen Stand: zugehoeriger Actions-Lauf und mitgelieferte aktuelle QS-Protokolle.
+
+Nutzerkorrektur: Der nicht angeforderte Button „Felder auswählen“ unter dem Track-Nummern-Assistenten ist entfernt; der reservierte Platz entfaellt ebenfalls. Die sieben Startfelder und der Assistent bleiben erhalten.

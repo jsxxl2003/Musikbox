@@ -6,7 +6,6 @@ namespace Musikbox {
   public readonly CheckBox ChangeArtist=Flag("Interpret"),ChangeTitle=Flag("Titel"),ChangeAlbum=Flag("Album"),ChangeYear=Flag("Jahr"),ChangeGenre=Flag("Genre"),ChangeComment=Flag("Kommentar"),ChangeTrack=Flag("Track"),ChangeAcoustid=Flag("AcoustID");
   readonly StudioPanel card=new StudioPanel();readonly Label heading;readonly StudioActionButton apply;readonly Dictionary<string,StudioPanel> boxes=new Dictionary<string,StudioPanel>();readonly Dictionary<string,Label> labels=new Dictionary<string,Label>();readonly Dictionary<string,TextBox> fields;bool loading;string displayPattern=DefaultFields;
   public const string DefaultFields="%artist% - %title% - %album% - %genre% - %track% - %year% - %ordner%";
-  readonly StudioActionButton choose=new StudioActionButton{Text="Felder auswählen"};
   public readonly StudioActionButton TrackNumbers=new StudioActionButton{Text="Track-Nummern-Assistent",Name="Track-Nummern-Assistent"};
   static TextBox Field(){return new StudioTextBox{BorderStyle=BorderStyle.None,Font=StudioDrawing.Font(12),BackColor=StudioDrawing.Hex("#272537"),ForeColor=Color.White,Tag="StudioExact"};}static CheckBox Flag(string s){return new CheckBox{Text=s,Visible=false};}
   public bool Pending{get{return new[]{ChangeArtist,ChangeTitle,ChangeAlbum,ChangeYear,ChangeGenre,ChangeComment,ChangeTrack,ChangeAcoustid}.Any(f=>f.Checked);}}
@@ -21,8 +20,6 @@ namespace Musikbox {
    card.ContextMenuStrip=menu;
    TrackNumbers.Click+=(sender,e)=>TrackNumbersRequested?.Invoke();
    card.Controls.Add(TrackNumbers);
-   choose.Click+=(sender,e)=>ChooseFields();
-   card.Controls.Add(choose);
    Resize+=(sender,e)=>Arrange();
    Arrange();
   }
@@ -32,7 +29,7 @@ namespace Musikbox {
 #if NET8_0_OR_GREATER
    scale=DeviceDpi/96f;
 #endif
-   Func<float,int> p=x=>(int)Math.Round(x*scale);heading.SetBounds(p(16),p(23),p(130),p(25));apply.SetBounds(Math.Max(p(154),Width-p(118)),p(16),p(102),p(42));foreach(var key in fields.Keys){boxes[key].Visible=false;labels[key].Visible=false;}int n=0;foreach(string key in OutputFormatSettings.Keys(displayPattern)){if(!fields.ContainsKey(key))continue;var box=boxes[key];var label=labels[key];label.Visible=box.Visible=true;label.SetBounds(p(16),p(66+n*44),p(82),p(36));box.SetBounds(p(102),p(66+n*44),Math.Max(p(70),Width-p(118)),p(36));var field=fields[key];field.Font=StudioDrawing.Font(12*scale);field.SetBounds(p(10),p(9),Math.Max(20,box.Width-p(20)),p(20));n++;}MinimumSize=new Size(0,p(Math.Max(180,162+n*44)));TrackNumbers.SetBounds(p(16),Math.Max(p(66+n*44),Height-p(86)),Math.Max(p(70),Width-p(32)),p(34));choose.SetBounds(Math.Max(p(16),Width-p(152)),Math.Max(p(108+n*44),Height-p(44)),p(136),p(34));}
+   Func<float,int> p=x=>(int)Math.Round(x*scale);heading.SetBounds(p(16),p(23),p(130),p(25));apply.SetBounds(Math.Max(p(154),Width-p(118)),p(16),p(102),p(42));foreach(var key in fields.Keys){boxes[key].Visible=false;labels[key].Visible=false;}int n=0;foreach(string key in OutputFormatSettings.Keys(displayPattern)){if(!fields.ContainsKey(key))continue;var box=boxes[key];var label=labels[key];label.Visible=box.Visible=true;label.SetBounds(p(16),p(66+n*44),p(82),p(36));box.SetBounds(p(102),p(66+n*44),Math.Max(p(70),Width-p(118)),p(36));var field=fields[key];field.Font=StudioDrawing.Font(12*scale);field.SetBounds(p(10),p(9),Math.Max(20,box.Width-p(20)),p(20));n++;}MinimumSize=new Size(0,p(Math.Max(180,120+n*44)));TrackNumbers.SetBounds(p(16),Math.Max(p(66+n*44),Height-p(44)),Math.Max(p(70),Width-p(32)),p(34));}
   public void ShowSelection(List<Song> songs,string theme){loading=true;try{heading.Text=songs.Count>1?"Metadaten ("+songs.Count+")":"Metadaten";Artist.Text=TagEditing.Common(songs,s=>s.Artist);Title.Text=TagEditing.Common(songs,s=>s.Title);Album.Text=TagEditing.Common(songs,s=>s.Album);Year.Text=TagEditing.Common(songs,s=>s.Year);Genre.Text=TagEditing.Common(songs,s=>s.Genre);Comment.Text=TagEditing.Common(songs,s=>s.Comment);Track.Text=TagEditing.Common(songs,s=>s.Track);Acoustid.Text=TagEditing.Common(songs,s=>s.AcoustidId);DirectoryName.Text=TagEditing.Common(songs,s=>TagSchema.Value(s,"_directory"));FolderName.Text=TagEditing.Common(songs,s=>s.FolderName);foreach(var flag in new[]{ChangeArtist,ChangeTitle,ChangeAlbum,ChangeYear,ChangeGenre,ChangeComment,ChangeTrack,ChangeAcoustid})flag.Checked=false;foreach(var field in fields.Values)field.ReadOnly=songs.Count==0||field==DirectoryName||field==FolderName;Arrange();}finally{loading=false;}}
  }
 }
