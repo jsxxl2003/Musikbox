@@ -27,3 +27,11 @@ Listenstände nach dem endgültigen Kategorienlayout wiederherstellen. Mindesth�
 Aktueller ausführlicher Nachweis: `PRUEFBERICHT-v0.64.md`, Protokolle unter `Dokumentation/Pruefprotokolle`. Frühere Berichte sind historische Nachweise. Windows-Steuerelementtests sind von echter Mikrofon-/Audiogeräteabnahme und sichtbarer Flackerfreiheit auf dem Ziel-PC zu unterscheiden.
 
 Jede Übergabe enthält künftig portable Anwendung, vollständigen aktuellen Quellcode, Werkzeuge, README, Projektakte und Prüfbericht in einem gemeinsamen Versionsordner/ZIP. Keine persönlichen Daten oder Testmedien mitliefern.
+
+## Nutzertest und Nachkorrektur: Cover / Suche / Mikrofon
+
+Nach Übergabe des ersten QS-Pakets meldete Jen: neues Titelcover nur im Player, oben rechts weiterhin altes Cover; „Neon Moon“ trotz genauer Eingabe nicht erster Treffer; Mikrofon ohne sichtbare Reaktion.
+
+Ursachen: Die Cover-Neuladung wurde bereits vor Abschluss des asynchronen Lesens als erledigt markiert; ein weiterer Aufruf konnte die neue Ladegeneration verwerfen und das alte Bild verwenden. Die gespeicherte Spaltensortierung überschrieb die Suchrelevanz. Mikrofonstatus wurde nur in ausgeblendeten Anzeigen beziehungsweise als Platzhalter im bereits gefüllten Suchfeld gesetzt; der Button war während eines möglicherweise blockierten Gerätestarts deaktiviert.
+
+Korrektur: Ladeflag erst bei abgeschlossenem Einlesen zurücksetzen; alte Generation beim Invalidieren verwerfen. Suchrelevanz nach Wiederherstellung des Listenstands anwenden, genaue Titel bevorzugen und neue Suche oben beginnen; bisherige Sortierung bei leerer Suche erhalten. Sichtbare Statuszeile, abbrechbarer Gerätestart, zehn Sekunden Startzeitlimit. Neue Windows-Regressionen prüfen Coverwechsel unter mehrfacher Aktualisierung, exakten Treffer bei alter Ordnersortierung, Mikrofonsteuerung bei gefüllter Suche, wiederholte Erkennung sowie X und Neustart. Hardwareaussagen bleiben ausdrücklich offen.

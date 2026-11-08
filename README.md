@@ -1,10 +1,17 @@
-# Musikbox-Werkstatt Studio v0.64 – Qualitätssicherung 08.11.2026
+# Musikbox-Werkstatt Studio v0.64 – Cover, Suche und Mikrofon
 
 C# / .NET 8 / Windows Forms, portable Windows x64. Grundlage: GitHub `jsxxl2003/Musikbox`, `main`, Ausgangscommit `0e4bff9`. Das bestehende Anthrazit-Lila-Studio und die gemeinsame Titelliste bleiben erhalten.
 
 ## Start und Paket
 
 Das gesamte ZIP in einen neuen Ordner entpacken. `Musikbox-Werkstatt-Studio.exe` im Hauptordner starten. `Programm`, `Werkzeuge`, `Daten`, `Dokumentation` und `Quellcode` gehören zusammen. Bisherige Einstellungen bei geschlossenem Programm über den bisherigen Ordner `Daten` übernehmen. Originaldateien enthalten weiterhin ihre gespeicherten Tags und Cover.
+
+## Nachkorrektur vom 08.11.2026
+
+- Nach dem Coverwechsel bleibt eine ausstehende Neuladung als solche markiert. Mehrere unmittelbar aufeinanderfolgende Anzeigeaktualisierungen können dadurch nicht das alte Cover aus dem Cache zurückholen. Titelkarte und Player laden das neue Cover getrennt und passend zum jeweiligen Titel.
+- Neue Suchergebnisse erscheinen nach Trefferqualität. Eine genaue Titelübereinstimmung wie „Neon Moon“ steht vor unscharfen Treffern, auch wenn zuvor nach Ordner sortiert war. Die neue Ergebnisliste startet oben; beim Leeren der Suche wird die vorherige Sortierung wiederhergestellt.
+- Der Mikrofonstatus steht sichtbar unter dem Suchfeld, auch wenn dort bereits Text steht. Der Mikrofonbutton bleibt während des Gerätestarts bedienbar. X und ein erneuter Klick beenden die Sprachsitzung; der Suchtext bleibt erhalten. Ein nicht reagierender Gerätestart endet nach zehn Sekunden mit einer konkreten Fehlermeldung.
+- Physisches Mikrofon und tatsächliche Whisper-Erkennung auf Jens Rechner sind weiterhin nicht hier abgenommen. Die automatisierten Windows-Tests verwenden ein austauschbares Aufnahmegerät und prüfen den echten Controller-/Oberflächenablauf.
 
 ## Korrekturen dieses Prüfstands
 
