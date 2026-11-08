@@ -74,7 +74,7 @@ namespace Musikbox {
   string GroupColumnsPath{get{return Path.Combine(PortablePaths.Data,"Spalten-Ordner.tsv");}}
   void ConfigureGroupColumns(){
    groupColumnsLoading=true;Groups.AutoSizeColumnsMode=DataGridViewAutoSizeColumnsMode.None;
-   Groups.Columns.Add("Name","Ordner");Groups.Columns.Add("Anzahl","Titel");Groups.Columns.Add("Info","Pfad");Groups.Columns["Anzahl"].ValueType=typeof(int);
+   Groups.RowHeadersVisible=false;Groups.DefaultCellStyle.Padding=new Padding(8,0,4,0);Groups.Columns.Add("Name","Ordner");Groups.Columns.Add("Anzahl","Titel");Groups.Columns.Add("Info","Pfad");Groups.Columns["Anzahl"].ValueType=typeof(int);
    int[] widths={250,90,450};int n=0;foreach(DataGridViewColumn column in Groups.Columns){column.Width=widths[n++];column.MinimumWidth=50;column.SortMode=DataGridViewColumnSortMode.Automatic;}
    try{if(File.Exists(GroupColumnsPath))foreach(string line in File.ReadAllLines(GroupColumnsPath)){var a=line.Split('\t');if(a.Length!=4||!Groups.Columns.Contains(a[0]))continue;var column=Groups.Columns[a[0]];int index,width;bool visible;if(Int32.TryParse(a[1],out index))column.DisplayIndex=Math.Max(0,Math.Min(2,index));if(Int32.TryParse(a[2],out width))column.Width=Math.Max(50,Math.Min(1500,width));if(Boolean.TryParse(a[3],out visible))column.Visible=visible;}}catch{}
    if(!Groups.Columns.Cast<DataGridViewColumn>().Any(c=>c.Visible))Groups.Columns[0].Visible=true;
