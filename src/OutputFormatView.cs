@@ -1,28 +1,79 @@
-using System;using System.Drawing;using System.Linq;using System.Text.RegularExpressions;using System.Windows.Forms;
-namespace Musikbox {public class OutputFormatView:ModernForm {
- readonly CheckedListBox tokens=new StudioCheckedListBox{Dock=DockStyle.Fill,CheckOnClick=true,BackColor=ModernTheme.Navy,ForeColor=ModernTheme.Ink,BorderStyle=BorderStyle.None};readonly TextBox text=new StudioTextBox{Dock=DockStyle.Fill};bool changing;
- public string Pattern{get{return text.Text;}}
- public OutputFormatView(string pattern){Text="Ausgabeformat und Metadatenfelder";Width=640;Height=520;StartPosition=FormStartPosition.CenterParent;var bar=new FlowLayoutPanel{Dock=DockStyle.Bottom,Height=50};var row=new Panel{Dock=DockStyle.Top,Height=64,Padding=new Padding(8)};row.Controls.Add(text);text.Text=pattern;Controls.Add(tokens);Controls.Add(row);Controls.Add(bar);var keys=OutputFormatSettings.Keys(pattern).Concat(OutputFormatSettings.Available).Distinct().ToArray();foreach(var key in keys)tokens.Items.Add("%"+key+"%",OutputFormatSettings.Keys(pattern).Contains(key));
- tokens.ItemCheck+=(s,e)=>{if(changing)return;string token=(string)tokens.Items[e.Index];if(e.NewValue==CheckState.Checked){if(!text.Text.Contains(token))text.Text+=(text.Text.Length>0?" - ":"")+token;}else text.Text=text.Text.Replace(token,"");};
- text.TextChanged+=(s,e)=>{if(changing)return;changing=true;try{var selected=OutputFormatSettings.Keys(text.Text);for(int j=0;j<tokens.Items.Count;j++)tokens.SetItemChecked(j,selected.Contains(((string)tokens.Items[j]).Trim('%')));}finally{changing=false;}};
- Action<int> move=delta=>{int index=tokens.SelectedIndex,next=index+delta;if(index<0||next<0||next>=tokens.Items.Count)return;string a=(string)tokens.Items[index],b=(string)tokens.Items[next];bool ac=tokens.GetItemChecked(index),bc=tokens.GetItemChecked(next);changing=true;try{tokens.Items[index]=b;tokens.Items[next]=a;tokens.SetItemChecked(index,bc);tokens.SetItemChecked(next,ac);tokens.SelectedIndex=next;string marker="\u0001";if(text.Text.Contains(a)&&text.Text.Contains(b))text.Text=text.Text.Replace(a,marker).Replace(b,a).Replace(marker,b);}finally{changing=false;}};
- bar.Padding=new Padding(10,7,10,7);bar.Height=62;bar.BackColor=ModernTheme.Navy;
- var up=new Button{Text="Nach oben",Width=126,Height=38};
- var down=new Button{Text="Nach unten",Width=126,Height=38};
- var save=new Button{Text="Speichern",Width=126,Height=38,Tag="Primary"};
- var cancel=new Button{Text="Abbrechen",Width=126,Height=38};
- up.Click+=(s,e)=>move(-1);down.Click+=(s,e)=>move(1);
- save.Click+=(s,e)=>DialogResult=DialogResult.OK;
- cancel.Click+=(s,e)=>DialogResult=DialogResult.Cancel;
- bar.Controls.AddRange(new Control[]{up,down,save,cancel});
- AcceptButton=save;CancelButton=cancel;
- ModernTheme.Apply(this);
- text.BackColor=ModernTheme.Silver;text.ForeColor=ModernTheme.Ink;text.BorderStyle=BorderStyle.FixedSingle;
- foreach(var button in new[]{up,down,save,cancel}){
-  button.UseVisualStyleBackColor=false;button.FlatStyle=FlatStyle.Flat;
-  button.FlatAppearance.BorderColor=ModernTheme.Edge;
-  button.BackColor=button==save?ModernTheme.Accent:ModernTheme.Silver;
-  button.ForeColor=ModernTheme.Ink;
+using System;
+using System.Drawing;
+using System.Linq;
+using System.Windows.Forms;
+namespace Musikbox {
+ public class OutputFormatView : ModernForm {
+  readonly CheckedListBox tokens = new CheckedListBox {
+   Dock=DockStyle.Fill, CheckOnClick=true, BorderStyle=BorderStyle.None,
+   BackColor=ModernTheme.Navy, ForeColor=ModernTheme.Ink,
+   DrawMode=DrawMode.Normal, IntegralHeight=false
+  };
+  readonly TextBox text = new TextBox {
+   Dock=DockStyle.Fill, BorderStyle=BorderStyle.FixedSingle,
+   BackColor=ModernTheme.Silver, ForeColor=ModernTheme.Ink
+  };
+  bool changing;
+  public string Pattern { get { return text.Text; } }
+  public OutputFormatView(string pattern) {
+   Text="Ausgabeformat und Metadatenfelder"; Width=640; Height=520;
+   StartPosition=FormStartPosition.CenterParent;
+   BackColor=ModernTheme.Background; ForeColor=ModernTheme.Ink;
+   var row=new Panel { Dock=DockStyle.Top, Height=60, Padding=new Padding(12),BackColor=ModernTheme.Background };
+   var bar=new FlowLayoutPanel { Dock=DockStyle.Bottom, Height=66, Padding=new Padding(10,10,8,8),BackColor=ModernTheme.Background,WrapContents=false };
+   row.Controls.Add(text);
+   Controls.Add(tokens);Controls.Add(row);Controls.Add(bar);
+   text.Text=pattern??"";
+   var selected=OutputFormatSettings.Keys(text.Text);
+   foreach(var key in selected.Concat(OutputFormatSettings.Available).Distinct())
+    tokens.Items.Add("%"+key+"%",selected.Contains(key));
+   tokens.ItemCheck+=(sender,e)=>{
+    if(changing)return;
+    BeginInvoke((Action)(()=>RebuildPattern()));
+   };
+   text.TextChanged+=(sender,e)=>{
+    if(changing)return;
+    changing=true;
+    try {
+     var keys=OutputFormatSettings.Keys(text.Text);
+     for(int i=0;i<tokens.Items.Count;i++)
+      tokens.SetItemChecked(i,keys.Contains(((string)tokens.Items[i]).Trim('%')));
+    } finally { changing=false; }
+   };
+   Action<int> move=delta=>{
+    int index=tokens.SelectedIndex,next=index+delta;
+    if(index<0||next<0||next>=tokens.Items.Count)return;
+    string a=(string)tokens.Items[index],b=(string)tokens.Items[next];
+    bool ac=tokens.GetItemChecked(index),bc=tokens.GetItemChecked(next);
+    changing=true;
+    try {
+     tokens.Items[index]=b;tokens.Items[next]=a;
+     tokens.SetItemChecked(index,bc);tokens.SetItemChecked(next,ac);
+     tokens.SelectedIndex=next;
+    } finally { changing=false; }
+    RebuildPattern();
+   };
+   var up=new StudioActionButton{Text="Nach oben",Width=128,Height=40};
+   var down=new StudioActionButton{Text="Nach unten",Width=128,Height=40};
+   var save=new StudioActionButton{Text="Speichern",Primary=true,Width=128,Height=40};
+   var cancel=new StudioActionButton{Text="Abbrechen",Width=128,Height=40};
+   up.Click+=(sender,e)=>move(-1);
+   down.Click+=(sender,e)=>move(1);
+   save.Click+=(sender,e)=>{RebuildPattern();DialogResult=DialogResult.OK;Close();};
+   cancel.Click+=(sender,e)=>{DialogResult=DialogResult.Cancel;Close();};
+   bar.Controls.AddRange(new Control[]{up,down,save,cancel});
+   AcceptButton=save;CancelButton=cancel;
+   ModernTheme.Apply(this);
+   // Native text box and custom-painted studio buttons: no white Windows theme surfaces.
+   text.BackColor=ModernTheme.Silver;text.ForeColor=ModernTheme.Ink;
+   tokens.BackColor=ModernTheme.Navy;tokens.ForeColor=ModernTheme.Ink;
+  }
+  void RebuildPattern() {
+   if(changing)return;
+   changing=true;
+   try {
+    text.Text=String.Join(" - ",tokens.CheckedItems.Cast<string>());
+   } finally { changing=false; }
+  }
  }
- }
-}}
+}
