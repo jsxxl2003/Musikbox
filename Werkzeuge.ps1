@@ -5,7 +5,9 @@ $temp=Join-Path ([IO.Path]::GetTempPath()) ('mw-tools-'+[Guid]::NewGuid().ToStri
 New-Item -ItemType Directory -Force $Ziel,$temp | Out-Null
 function Download($url,$path,$sha='') {
  New-Item -ItemType Directory -Force (Split-Path $path) | Out-Null
- Invoke-WebRequest -Uri $url -OutFile $path -MaximumRetryCount 3
+ Write-Host "Download: $url"
+ curl.exe --fail --location --retry 2 --retry-all-errors --connect-timeout 20 --max-time 240 --silent --show-error --output $path $url
+ if($LASTEXITCODE){throw "Download fehlgeschlagen: $url (curl $LASTEXITCODE)"}
  if($sha -and (Get-FileHash $path -Algorithm SHA256).Hash -ne $sha){throw "Falsche SHA256-Pruefsumme: $url"}
 }
 function Unzip($url,$name,$sha='') {
@@ -20,7 +22,7 @@ try {
   $file=@(Get-ChildItem $ff -Recurse -File -Filter $name); if($file.Count -ne 1){throw "FFmpeg-Datei fehlt: $name"}
   Copy-Item $file[0].FullName "$Ziel/ffmpeg/$name"
  }
- Download 'https://ffmpeg.org/releases/ffmpeg-9.0.2.tar.xz' "$Ziel/ffmpeg/sources/ffmpeg-9.0.2.tar.xz"
+ Download 'https://codeload.github.com/FFmpeg/FFmpeg/tar.gz/refs/tags/n9.0.2' "$Ziel/ffmpeg/sources/ffmpeg-9.0.2.tar.gz"
  $freac=Unzip 'https://github.com/enzo1982/freac/releases/download/v1.1.7/freac-1.1.7-windows-x64.zip' 'freac'
  $cmd=@(Get-ChildItem $freac -Recurse -File -Filter freaccmd.exe); if($cmd.Count -ne 1){throw 'freaccmd.exe fehlt.'}
  New-Item -ItemType Directory -Force "$Ziel/freac" | Out-Null
