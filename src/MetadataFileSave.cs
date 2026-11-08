@@ -20,6 +20,10 @@ namespace Musikbox {
    var texts=fields.Select(x=>x.Text).ToArray();var checkedFields=flags.Select(x=>x.Checked).ToArray();string[] names={"artist","title","album","year","genre","comment"};
    var edits=new Dictionary<string,string>();for(int i=0;i<names.Length;i++)if(checkedFields[i])edits[names[i]]=texts[i];if(v.TagEditor.ChangeTrack.Checked)edits["track"]=v.TagEditor.Track.Text;if(v.TagEditor.ChangeAcoustid.Checked)edits["acoustid_id"]=v.TagEditor.Acoustid.Text;
    if(edits.Any(x=>(x.Key=="artist"||x.Key=="title"||x.Key=="album")&&String.IsNullOrWhiteSpace(x.Value))&&AppMessage.Show(v,"Ein geändertes Feld ist leer. Dieses Feld bei den ausgewählten Dateien leeren?","Tags leeren",MessageBoxButtons.YesNo)!=DialogResult.Yes)return;
+   // The button must not silently claim a successful file write when no tag was changed.
+   if(edits.Count==0&&!selected.Any(song=>song.PendingTags!=null&&song.PendingTags.Count>0)){
+    v.Status.Text="Keine Metadatenänderungen zum Speichern.";return;
+   }
    bool started=false,saved=false;int written=0;
    try{
     var plan=MetadataFilePlan.Create(selected,edits);written=plan.Count;string backupRoot=Path.Combine(PortablePaths.Data,"Datei-Rueckgaengig");
