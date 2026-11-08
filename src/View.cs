@@ -124,21 +124,35 @@ namespace Musikbox {
   ToolStripMenuItem ImportContextMenu(){var menu=new ToolStripMenuItem("Import");menu.DropDownItems.Add(ContextCommand("Ordner laden…","Ordner laden"));menu.DropDownItems.Add(ContextCommand("Titel hinzufügen…","Titel hinzufügen"));menu.DropDownItems.Add(ContextCommand("Titel suchen…","Titel hinzufügen"));return menu;}
   public void ConfigureContextMenus(){
    var folderMenu=new ContextMenuStrip();
-   folderMenu.Items.Add(ContextCommand("Ordner bearbeiten…","Ordner bearbeiten"));
    folderMenu.Items.Add(ImportContextMenu());
-   folderMenu.Items.Add(ContextCommand("Cover auswählen…","Cover"));folderMenu.Items.Add(ContextCommand("Cover gestalten…","Cover gestalten"));folderMenu.Items.Add(ContextCommand("Cover-Serie…","Cover-Serie"));
+   folderMenu.Items.Add(ContextCommand("Cover online suchen…","Cover online suchen"));
    folderMenu.Items.Add(new ToolStripSeparator());
-   folderMenu.Items.Add(ContextCommand("Nach oben verschieben","↑"));folderMenu.Items.Add(ContextCommand("Nach unten verschieben","↓"));
-   folderMenu.Items.Add(new ToolStripSeparator());folderMenu.Items.Add(ContextCommand("Ordner aus Projekt entfernen…","Entfernen"));
-   folderMenu.Opening+=(s,e)=>{e.Cancel=!CanDrop();foreach(ToolStripItem item in folderMenu.Items)item.Enabled=item.Text=="Import"||Folders.SelectedIndex>=0;};
-   Folders.MouseDown+=(s,e)=>{if(e.Button!=MouseButtons.Right||!CanDrop())return;int index=Folders.IndexFromPoint(e.Location);Folders.SelectedIndex=index;};ModernTheme.Apply(folderMenu);Folders.ContextMenuStrip=folderMenu;
+   folderMenu.Items.Add(ContextCommand("Titel entfernen","Entfernen"));
+   var folderDelete=folderMenu.Items.Add("Titel löschen (Datenträger)…");folderDelete.Enabled=false;
+   StudioContextMenus.AppendEditingCommands(folderMenu);
+   folderMenu.Opening+=(sender,e)=>{
+    e.Cancel=!CanDrop();
+    foreach(ToolStripItem item in folderMenu.Items){
+     if(item.Text=="Import")item.Enabled=true;
+     else if(item.Text=="Cover online suchen…"||item.Text=="Titel entfernen")item.Enabled=Folders.SelectedIndex>=0;
+     else if(item.Text=="Titel löschen (Datenträger)…")item.Enabled=false;
+    }
+   };
+   Folders.MouseDown+=(sender,e)=>{if(e.Button!=MouseButtons.Right||!CanDrop())return;int index=Folders.IndexFromPoint(e.Location);if(index>=0)Folders.SelectedIndex=index;};
+   ModernTheme.Apply(folderMenu);Folders.ContextMenuStrip=folderMenu;
    var songMenu=new ContextMenuStrip();
    songMenu.Items.Add(ImportContextMenu());
    songMenu.Items.Add(ContextCommand("Cover online suchen…","Cover online suchen"));
    songMenu.Items.Add(new ToolStripSeparator());
    songMenu.Items.Add(ContextCommand("Titel entfernen","Titel entfernen"));
    songMenu.Items.Add(ContextCommand("Titel löschen (Datenträger)…","Titel löschen"));
-   songMenu.Opening+=(s,e)=>{e.Cancel=!CanDrop();foreach(ToolStripItem item in songMenu.Items)if(!(item is ToolStripSeparator))item.Enabled=item.Text=="Import"||Songs.SelectedRows.Count>0;};
+   StudioContextMenus.AppendEditingCommands(songMenu);
+   songMenu.Opening+=(sender,e)=>{
+    e.Cancel=!CanDrop();
+    foreach(ToolStripItem item in songMenu.Items)
+     if(item.Text=="Import")item.Enabled=true;
+     else if(item.Text=="Cover online suchen…"||item.Text=="Titel entfernen"||item.Text=="Titel löschen (Datenträger)…")item.Enabled=Songs.SelectedRows.Count>0;
+   };
    ModernTheme.Apply(songMenu);
    Songs.MouseDown+=(s,e)=>{if(e.Button!=MouseButtons.Right||!CanDrop())return;var hit=Songs.HitTest(e.X,e.Y);if(hit.Type==DataGridViewHitTestType.ColumnHeader)return;if(hit.RowIndex<0){Songs.ClearSelection();return;}var selected=Songs.SelectedRows.Cast<DataGridViewRow>().ToList();bool keep=Songs.Rows[hit.RowIndex].Selected;if(!keep)Songs.ClearSelection();Songs.CurrentCell=Songs.Rows[hit.RowIndex].Cells[0];if(keep)foreach(var row in selected)row.Selected=true;Songs.Rows[hit.RowIndex].Selected=true;};Songs.ContextMenuStrip=songMenu;
   }
