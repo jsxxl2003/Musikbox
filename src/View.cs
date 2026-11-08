@@ -21,7 +21,7 @@ namespace Musikbox {
   public Func<bool> CanDrop=()=>true;
   readonly System.Collections.Generic.HashSet<Control> dropControls=new System.Collections.Generic.HashSet<Control>();
   public ListBox Folders=new StudioListBox{Dock=DockStyle.Fill,SelectionMode=SelectionMode.One};
-  public DataGridView Songs=new StudioSongGrid{Dock=DockStyle.Fill,AllowUserToAddRows=false,AllowUserToDeleteRows=false,AutoSizeColumnsMode=DataGridViewAutoSizeColumnsMode.Fill,RowHeadersVisible=true,SelectionMode=DataGridViewSelectionMode.FullRowSelect,MultiSelect=true,BackgroundColor=Color.White,BorderStyle=BorderStyle.None};
+  public DataGridView Songs=new StudioSongGrid{Dock=DockStyle.Fill,AllowUserToAddRows=false,AllowUserToDeleteRows=false,AutoSizeColumnsMode=DataGridViewAutoSizeColumnsMode.Fill,RowHeadersVisible=true,SelectionMode=DataGridViewSelectionMode.FullRowSelect,MultiSelect=true,BackgroundColor=ModernTheme.Navy,BorderStyle=BorderStyle.None};
   public ToolStrip Tools=new ToolStrip{GripStyle=ToolStripGripStyle.Hidden,Padding=new Padding(8),LayoutStyle=ToolStripLayoutStyle.Flow,AutoSize=true};
   readonly System.Collections.Generic.Dictionary<string,ToolStripMenuItem> commands=new System.Collections.Generic.Dictionary<string,ToolStripMenuItem>();
   public Label Counts=new Label{Dock=DockStyle.Bottom,Height=22,Padding=new Padding(8,3,0,0),BackColor=Color.FromArgb(235,240,245)};
@@ -42,9 +42,9 @@ namespace Musikbox {
    this.layoutFile=layoutFile??Path.Combine(PortablePaths.Data,"Fensterlayout.json");
    Text=AppIdentity.WindowTitle;Width=1250;Height=780;MinimumSize=new Size(960,600);StartPosition=FormStartPosition.CenterScreen;Font=new Font("Segoe UI",10);
    Songs.EnableHeadersVisualStyles=false;Songs.ColumnHeadersDefaultCellStyle.BackColor=Color.FromArgb(235,240,245);Songs.ColumnHeadersDefaultCellStyle.ForeColor=Color.FromArgb(40,55,70);Songs.DefaultCellStyle.SelectionBackColor=Color.FromArgb(217,238,239);Songs.DefaultCellStyle.SelectionForeColor=Color.FromArgb(20,55,65);Songs.AlternatingRowsDefaultCellStyle.BackColor=Color.FromArgb(248,250,252);Songs.GridColor=Color.FromArgb(235,239,244);Songs.RowTemplate.Height=28;
-   BackColor=Color.FromArgb(241,244,248);
+   BackColor=ModernTheme.Navy;
    Magnets=new WindowMagnet(this);var split=WorkspaceSplit;
-   var sidebar=new StudioAutoScrollPanel{Dock=DockStyle.Fill,AutoScroll=true,BackColor=Color.FromArgb(241,244,248),Padding=new Padding(8)};
+   var sidebar=new StudioAutoScrollPanel{Dock=DockStyle.Fill,AutoScroll=true,BackColor=ModernTheme.Navy,Padding=new Padding(8)};
    Folders.Dock=DockStyle.Fill;Folders.BorderStyle=BorderStyle.None;Cover.Dock=DockStyle.Fill;
    var folderImage=new TabPage("Ordnercover");var titleImage=new TabPage("Titelcover");coverLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));coverLayout.RowStyles.Add(new RowStyle(SizeType.Percent,100));coverLayout.RowStyles.Add(new RowStyle(SizeType.Absolute,36));Cover.Margin=new Padding(0);CoverStatus.Margin=new Padding(0);CoverStatus.Dock=DockStyle.Fill;coverLayout.Controls.Add(Cover,0,0);coverLayout.Controls.Add(CoverStatus,0,1);folderImage.Controls.Add(coverLayout);titleImage.Controls.Add(TitleCover);CoverTabs.TabPages.Add(folderImage);CoverTabs.TabPages.Add(titleImage);
    var songsArea=new Panel{Dock=DockStyle.Fill};songsArea.Controls.Add(Songs);songsArea.Controls.Add(Details);

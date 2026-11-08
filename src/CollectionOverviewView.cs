@@ -8,7 +8,7 @@ namespace Musikbox {
   readonly CollectionSummary summary;
   readonly DataGridView issues=Grid();
   readonly ComboBox filter=new StudioComboBox{DropDownStyle=ComboBoxStyle.DropDownList,Width=285};
-  static DataGridView Grid(){return new StudioSongGrid{Dock=DockStyle.Fill,ReadOnly=true,AllowUserToAddRows=false,AllowUserToDeleteRows=false,AutoSizeColumnsMode=DataGridViewAutoSizeColumnsMode.Fill,RowHeadersVisible=false,SelectionMode=DataGridViewSelectionMode.FullRowSelect,MultiSelect=false,BackgroundColor=Color.White,BorderStyle=BorderStyle.None};}
+  static DataGridView Grid(){return new StudioSongGrid{Dock=DockStyle.Fill,ReadOnly=true,AllowUserToAddRows=false,AllowUserToDeleteRows=false,AutoSizeColumnsMode=DataGridViewAutoSizeColumnsMode.Fill,RowHeadersVisible=false,SelectionMode=DataGridViewSelectionMode.FullRowSelect,MultiSelect=false,BackgroundColor=ModernTheme.Navy,BorderStyle=BorderStyle.None};}
   public CollectionOverviewView(CollectionSummary data){
    summary=data;Text="Sammlungsübersicht";Width=1120;Height=720;MinimumSize=new Size(900,550);StartPosition=FormStartPosition.CenterParent;Font=new Font("Segoe UI",10);
    var header=new Label{Dock=DockStyle.Top,Height=65,Padding=new Padding(16,12,10,0),BackColor=Color.FromArgb(29,43,61),ForeColor=Color.White,Font=new Font("Segoe UI",12),Text=data.FolderCount+" / 99 Ordner     ·     "+data.SongCount.ToString("N0")+" Titel     ·     "+data.FreeFolders+" freie Ordnerplätze\r\n"+data.FreeInExistingFolders.ToString("N0")+" freie Titelplätze in vorhandenen Ordnern"};
