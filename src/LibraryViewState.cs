@@ -6,7 +6,7 @@ namespace Musikbox {
   public static LibraryViewState Capture(DataGridView grid,LibraryViewState previous=null){if(grid.Rows.Count==0||(!grid.Visible&&previous?.First!=null))return previous??new LibraryViewState();var state=new LibraryViewState{First=previous?.First,FirstIndex=previous?.FirstIndex??0,Horizontal=grid.HorizontalScrollingOffset,SortColumn=grid.SortedColumn?.Name??previous?.SortColumn,Descending=grid.SortedColumn==null?previous?.Descending??false:grid.SortOrder==SortOrder.Descending,Column=grid.CurrentCell?.OwningColumn.Name??previous?.Column};foreach(DataGridViewRow row in grid.SelectedRows){string key=Key(row);if(key!=null)state.Selected.Add(key);}state.Current=grid.CurrentRow!=null&&grid.CurrentRow.Selected?Key(grid.CurrentRow):previous?.Current;int first=grid.FirstDisplayedScrollingRowIndex;if(first>=0&&first<grid.Rows.Count){state.First=Key(grid.Rows[first]);state.FirstIndex=first;}return state;}
   public void Restore(DataGridView grid,string anchor=null,bool ensureAnchor=true){if(grid.Rows.Count==0)return;if(SortColumn!=null&&grid.Columns.Contains(SortColumn)&&grid.Columns[SortColumn].SortMode!=DataGridViewColumnSortMode.NotSortable)grid.Sort(grid.Columns[SortColumn],Descending?ListSortDirection.Descending:ListSortDirection.Ascending);
    var rows=grid.Rows.Cast<DataGridViewRow>().Where(r=>!r.IsNewRow).ToArray();var current=rows.FirstOrDefault(r=>String.Equals(Key(r),anchor??Current,StringComparison.OrdinalIgnoreCase));var column=Column!=null&&grid.Columns.Contains(Column)&&grid.Columns[Column].Visible?grid.Columns[Column]:grid.Columns.Cast<DataGridViewColumn>().Where(c=>c.Visible).OrderBy(c=>c.DisplayIndex).FirstOrDefault();if(current!=null&&column!=null)grid.CurrentCell=current.Cells[column.Index];grid.ClearSelection();foreach(var row in rows)row.Selected=Selected.Contains(Key(row)??"");if(current!=null&&ensureAnchor)current.Selected=true;
-   var first=rows.FirstOrDefault(r=>String.Equals(Key(r),First,StringComparison.OrdinalIgnoreCase));int index=first?.Index??Math.Min(Math.Max(0,FirstIndex),rows.Length-1);try{if(index>=0&&!grid.Rows[index].Frozen&&grid.Rows[index].Visible)grid.FirstDisplayedScrollingRowIndex=index;grid.HorizontalScrollingOffset=Horizontal;if(current!=null&&ensureAnchor&&grid.Visible&&!current.Displayed&&!current.Frozen)grid.FirstDisplayedScrollingRowIndex=current.Index;}catch(InvalidOperationException){}catch(ArgumentOutOfRangeException){}
+   var first=rows.FirstOrDefault(r=>String.Equals(Key(r),First,StringComparison.OrdinalIgnoreCase));int index=first?.Index??Math.Min(Math.Max(0,FirstIndex),rows.Length-1);try{if(index>=0&&!grid.Rows[index].Frozen&&grid.Rows[index].Visible)grid.FirstDisplayedScrollingRowIndex=index;grid.HorizontalScrollingOffset=grid.Columns.Contains("Name")&&grid.Columns.Contains("Anzahl")?0:Math.Max(0,Horizontal);if(current!=null&&ensureAnchor&&grid.Visible&&!current.Displayed&&!current.Frozen)grid.FirstDisplayedScrollingRowIndex=current.Index;}catch(InvalidOperationException){}catch(ArgumentOutOfRangeException){}
   }
  }
  public partial class Controller {
@@ -63,6 +63,24 @@ namespace Musikbox {
   void SwitchLibraryMode(string mode){if(busy)return;v.Songs.EndEdit();CommitSideTags();recentImportPaths=null;libraryFolder=null;groupField=groupValue=null;v.LibraryMode=mode=="Alle"?"Titel":mode;PopulateLibrary();}
   void SelectGroupFolder(){if(refresh||v.LibraryMode!="Ordner"||v.Groups.CurrentRow==null)return;var row=v.Groups.CurrentRow;if(!row.Selected)return;var entry=row.Tag as Tuple<string,string>;if(entry==null||entry.Item1!="folder")return;int index=p.Folders.FindIndex(f=>f.Name==entry.Item2);if(index<0)return;bool before=refresh;refresh=true;try{v.Folders.SelectedIndex=index;}finally{refresh=before;}if(Current!=null)ShowFolderArtwork(Current);}
   void CaptureLibraryViews(){titleViewState=LibraryViewState.Capture(v.Songs,titleViewState);if(renderedGroupMode!=null){groupViewStates.TryGetValue(renderedGroupMode,out var previous);groupViewStates[renderedGroupMode]=LibraryViewState.Capture(v.Groups,previous);}}
+  void PreserveEditedSongInLibrary(Song song){
+   if(song==null||v.LibraryMode!="Titel")return;
+   if(!v.Songs.Rows.Cast<DataGridViewRow>().Any(r=>Object.ReferenceEquals(r.Tag,song))){
+    if(recentImportPaths!=null&&(!String.IsNullOrWhiteSpace(song.Source))&&!recentImportPaths.Contains(Path.GetFullPath(song.Source)))recentImportPaths=null;
+    if(libraryFolder!=null&&!libraryFolder.Songs.Contains(song))libraryFolder=null;
+    if(groupField!=null&&(groupField=="album"?song.Album:song.Artist)!=groupValue){groupField=null;groupValue=null;}
+    PopulateLibrary();
+   }
+   var row=v.Songs.Rows.Cast<DataGridViewRow>().FirstOrDefault(r=>Object.ReferenceEquals(r.Tag,song));
+   if(row==null)return;
+   bool before=refresh;refresh=true;try{
+    v.Songs.ClearSelection();row.Selected=true;
+    var column=v.Songs.Columns.Cast<DataGridViewColumn>().Where(x=>x.Visible).OrderBy(x=>x.DisplayIndex).FirstOrDefault();
+    if(column!=null)v.Songs.CurrentCell=row.Cells[column.Index];
+    if(v.Songs.Visible&&!row.Displayed)try{v.Songs.FirstDisplayedScrollingRowIndex=row.Index;}catch(InvalidOperationException){}
+    titleViewState=LibraryViewState.Capture(v.Songs,titleViewState);
+   }finally{refresh=before;}
+  }
   void RestoreActiveLibraryView(){bool before=refresh;refresh=true;try{if(v.LibraryMode=="Titel")titleViewState.Restore(v.Songs,EditedPath);else if(groupViewStates.TryGetValue(v.LibraryMode,out var state))state.Restore(v.Groups,null,false);else v.RestoreGroupSort();}finally{refresh=before;}}
   string EditedPath{get{return editedSong==null?null:Path.GetFullPath(editedSong.Source);}}
  }
