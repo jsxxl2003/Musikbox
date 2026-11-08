@@ -51,7 +51,7 @@ namespace Musikbox {
    v.Songs.DataError+=(s,e)=>{e.ThrowException=false;};
    v.FormClosing+=(s,e)=>{voice.Stop();if(busy){AppMessage.Show(v,"Bitte zuerst den laufenden Vorgang abbrechen und dessen Ende abwarten.");e.Cancel=true;}else if(!CanDiscard())e.Cancel=true;else try{FlushBackup();}catch(Exception ex){e.Cancel=AppMessage.Show(v,"Die Projektsicherung ist fehlgeschlagen:\r\n"+ex.Message+"\r\nTrotzdem schließen?","Projektsicherung",MessageBoxButtons.YesNo,MessageBoxIcon.Warning)!=DialogResult.Yes;}};
    v.FormClosed+=(s,e)=>{backupTimer.Dispose();backupDelay.Dispose();playerTimer.Dispose();playback.Dispose();};
-   v.Player.StartRequested+=()=>RunPlayback(StartPlayer);v.Player.PauseRequested+=()=>RunPlayback(()=>{playback.Pause();UpdatePlayer();});v.Player.StopRequested+=()=>RunPlayback(StopPlayer);v.Player.SeekRequested+=fraction=>RunPlayback(()=>{playback.Seek(fraction);UpdatePlayer();});v.Player.CloseRequested+=()=>RunPlayback(()=>{ResetPlayer();v.PlayerPane.HidePane();});playerTimer.Tick+=(s,e)=>{try{UpdatePlayer();}catch(Exception ex){PlayerError(ex.Message);}};
+   v.Player.StartRequested+=()=>RunPlayback(StartPlayer);v.Player.PauseRequested+=()=>RunPlayback(()=>{playback.Pause();UpdatePlayer();});v.Player.StopRequested+=()=>RunPlayback(StopPlayer);v.Player.SeekRequested+=fraction=>RunPlayback(()=>{playback.Seek(fraction);UpdatePlayer();});v.Player.CloseRequested+=()=>RunPlayback(()=>{ResetPlayer();v.PlayerPane.HidePane();});playerTimer.Tick+=(s,e)=>{try{var state=playback.Read();if(state.Mode==PlaybackMode.Finished){PlayFollowingSong();}else UpdatePlayer();}catch(Exception ex){PlayerError(ex.Message);}};
    backupTimer.Tick+=(s,e)=>{if(dirty)backupPending=true;StartBackup();};backupDelay.Tick+=(s,e)=>{backupDelay.Stop();StartBackup();};backupTimer.Start();
    InitializeStudio();RefreshFolders(0);
   }
@@ -154,6 +154,17 @@ namespace Musikbox {
   void OpenPlayer(){var song=SelectedSong;if(song==null)return;LoadPlayer(song);}
   void PlaySong(){var song=SelectedSong;if(song==null)return;LoadPlayer(song);StartPlayer();}
   void StartPlayer(){if(playerSong==null){if(busy)return;OpenPlayer();}if(playerSong==null)return;var before=playback.Read();bool fresh=before.Mode!=PlaybackMode.Playing&&before.Mode!=PlaybackMode.Paused;playback.Play(playerFile);playerTimer.Start();UpdatePlayer();if(fresh&&!busy&&v.OnlineCover.Checked&&p.Folders.Any(f=>f.Songs.Contains(playerSong)))ChooseTitleCover(playerSong);}
+  void PlayFollowingSong(){
+   // Follow the current visible/sorted title order, never replay the finished title.
+   var rows=v.Songs.Rows.Cast<DataGridViewRow>().Where(row=>!row.IsNewRow&&row.Visible).ToList();
+   int index=rows.FindIndex(row=>Object.ReferenceEquals(row.Tag,playerSong));
+   Song next=index>=0&&index+1<rows.Count?rows[index+1].Tag as Song:null;
+   if(next==null){playerTimer.Stop();UpdatePlayer();return;}
+   foreach(DataGridViewRow row in v.Songs.SelectedRows)row.Selected=false;
+   var nextRow=rows[index+1];nextRow.Selected=true;
+   if(nextRow.Cells.Count>0)v.Songs.CurrentCell=nextRow.Cells.Cast<DataGridViewCell>().FirstOrDefault(cell=>cell.Visible);
+   LoadPlayer(next);StartPlayer();
+  }
   void StopPlayer(){playback.Stop();playerTimer.Stop();UpdatePlayer();}
   void ResetPlayer(){string error=null;try{playback.Clear();}catch(Exception ex){error=ex.Message;}playerTimer.Stop();playerSong=null;playerFile=null;RefreshPlayerArtwork();UpdatePlayer();if(error!=null)v.Player.ShowError(error);}
   void UpdatePlayer(){v.Player.ShowState(playback.Read(),PlayerCaption,playerSong!=null);}
