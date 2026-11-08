@@ -15,7 +15,7 @@ namespace Musikbox {
   // Prevent Windows from adding a native scrollbar before it could be painted.
   internal sealed class NativeStyleGate:NativeWindow {
    readonly Control owner;public NativeStyleGate(Control owner){this.owner=owner;owner.HandleCreated+=(s,e)=>AssignHandle(owner.Handle);owner.HandleDestroyed+=(s,e)=>ReleaseHandle();owner.Disposed+=(s,e)=>ReleaseHandle();if(owner.IsHandleCreated)AssignHandle(owner.Handle);}
-   protected override void WndProc(ref Message m){if(m.Msg==0x7C&&unchecked((int)m.WParam.ToInt64())==-16&&m.LParam!=IntPtr.Zero){var change=Marshal.PtrToStructure<StyleChange>(m.LParam);change.NewStyle&=~NativeStyles;Marshal.StructureToPtr(change,m.LParam,false);}base.WndProc(ref m);if((m.Msg==0xF||m.Msg==0x5||m.Msg==0x114||m.Msg==0x115||m.Msg==0x100)&&owner.Parent is StudioScrollFrame frame)frame.RefreshRange();}
+   protected override void WndProc(ref Message m){if(m.Msg==0x7C&&unchecked((int)m.WParam.ToInt64())==-16&&m.LParam!=IntPtr.Zero){var change=Marshal.PtrToStructure<StyleChange>(m.LParam);change.NewStyle&=~NativeStyles;Marshal.StructureToPtr(change,m.LParam,false);}base.WndProc(ref m);if((m.Msg==0x5||m.Msg==0x180||m.Msg==0x181||m.Msg==0x182||m.Msg==0x184||m.Msg==0x197||m.Msg==0x114||m.Msg==0x115||m.Msg==0x100)&&owner.Parent is StudioScrollFrame frame)frame.RefreshRange();}
   }
  }
  public sealed class StudioScrollFrame:Panel,IMessageFilter {

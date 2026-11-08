@@ -1,20 +1,25 @@
 # Projektakte – Musikbox-Werkstatt Studio v0.64
 
-Stand: 06.11.2026. Gebautes portables Korrekturpaket auf Basis der vollständigen v0.63; reale Ziel-PC-Abnahme offen.
+Stand: 08.11.2026. Maßgeblich ist der aktuelle Quellcode im bestehenden GitHub-Repository `jsxxl2003/Musikbox`, Branch `main`. Ausgangspunkt dieses Auftrags: `0e4bff9`. Kein neues Projekt und kein neuer Entwicklungszweig.
 
-## Verbindlich
-C# / .NET 8 / Windows Forms, portable x64. Anthrazit-Lila-Studio, gemeinsame zentrale Liste, Metadaten rechts, Player unten. Keine sichtbaren hellen Windows-Standardscrollleisten. Die bisherige Übermalung ist ausdrücklich abgelöst: eigene Scrollsteuerelemente einschließlich Eckbereich verwenden.
+## Verbindliche Entscheidungen
 
-## Nutzertest v0.63
-Bestätigt: Coverspeicherung in Originaldateien und Tastatursuche funktionieren. Fehler: Titel/Cover/Metadaten passen nach Titel-/Ordnerwechsel nicht zusammen; Titelliste springt wieder an den Anfang; weiße Scrollleisten blitzen programmweit auf; Mikrofon hängt in der Erkennung und X reagiert nicht.
+C# / .NET 8 / Windows Forms, portable Windows x64. Anthrazit-Lila-Studio, Navigation links, gemeinsame zentrale Titel-/Ordnerliste, Metadaten rechts, Player unten. Keine weißen Windows-Standardflächen, keine Scrollleisten-Übermalung. Bestehende Coverspeicherung und schriftliche Suche wurden vom Nutzer bestätigt und müssen erhalten bleiben. Drag-and-drop in beide Richtungen schützen.
 
-## Auftrag vom 06.11.2026
-Der zuletzt bearbeitete Titel bleibt oben rechts mit seinen Metadaten und zugehörigem Cover; der Player ist unabhängig. Zurück in der Titelliste muss dieser Titel markiert und sichtbar sein. Sortierung, Auswahl und Scrollposition bewahren. Zwei Buttons „Titel“/„Ordner“ direkt an der gemeinsamen Listenüberschrift, in allen Cover-Studio- und Audio-Unterkategorien. Beide Listen mit Sortierung, Spaltenbewegung, Breiten und Sichtbarkeit. Entfernte separate Bearbeitungsfelder im Cover-Studio bleiben entfernt. Ordnercover müssen über die Ordneransicht erreichbar sein. Scrollleisten vollständig neu, kein weiteres Übermalen. Mikrofonabbruch und erneute Aufnahme verlässlich machen; Suchtext bei X erhalten.
+Der zuletzt ausgewählte/bearbeitete Titel behält seine passende Cover-/Metadatenzuordnung, unabhängig vom Player. Titel-/Ordneransicht bewahrt Auswahl, Sortierung, Spalten und Position. Gemeinsame Titel-/Ordner-Schalter in Cover- und Audio-Unterkategorien. Keine separaten Metadatenfelder im Cover-Studio. Mikrofon wiederholbar, X beendet Aufnahme/Erkennung und bewahrt den Suchtext.
 
-## Stand v0.64
-Explizite Bearbeitungsreferenz, konsistente Bildzuordnung mit Generationsprüfung, getrennte Listenstände, gemeinsame Umschalter, korrekte Ordneraktionen, neue eigene Scrollrahmen für Listen/Text/Dateidialoge sowie eigene Dropdown-Auswahllisten. Sprachsitzungen neu organisiert mit abbrechbarem Prozess, Zeitlimit, asynchroner Gerätefreigabe und Schutz vor verspäteten Antworten. Bestehende Datei-/Coverlogik, Suche und Audio-Werkzeuge erhalten.
+## Arbeitsauftrag vom 08.11.2026
 
-Regulärer Release-Build ohne Fehler; 121 Logik-, Datei- und Prozessprüfungen bestanden. Das Windows-UI-Prüfprogramm wurde kompiliert und nicht ausgeführt. Physisches Mikrofon, reale Darstellung/Flackerfreiheit und Geräte-/Playerbedienung am Ziel-PC bleiben offen. Die neue Programmausführung nicht aus den bestandenen Logiktests ableiten.
+Weiße Bedienelemente insbesondere in der Coversuche ursächlich beseitigen; Dropdown-Flackern beheben; überflüssige Leerflächen entfernen; Titelliste direkt unter Werkzeugen; Player-Weiterschaltung/Sortierung/Markierung; Metadaten-Feldauswahl/Reihenfolge/Persistenz/Dateischreiben; Tastatur-/Mikrofonsuche und X; Titel-/Ordnernavigation; Regressionstests; vollständiger Windows-Build; ein gemeinsames Auslieferungspaket. Als behoben nur ausweisen, was implementiert und erfolgreich überprüft wurde.
 
-## Weiterführung
-Als Ausgangspunkt das vollständige v0.64-Paket verwenden. Zuerst die aktuell gemeldeten Sicht-/Umschaltfehler und Mikrofon/X am Ziel-PC prüfen. Bestätigte Coverspeicherung und schriftliche Suche schützen. Neue Befunde sammeln; keine alte Codebasis oder alte Scroll-Painter-Lösung wieder einführen. README und Prüfbericht dieses Pakets sind maßgeblich; frühere Versionsberichte bleiben historische Nachweise.
+## Befunde und Änderungen
+
+Der QS-Bericht vom 08.11. benannte zwei Timer-Handler, geteilte Sortierbedienungsvariablen, unsichtbare Audio-Protokolle und falsche Pfad-/Buttonreihenfolge. Diese Ursachen sind im Code korrigiert. Zusätzlich waren Test-Projektverweise um eine Verzeichnisebene verschoben; das Prüfskript verwies auf nicht vorhandene `Tests`-Unterordner. Auch der alte Paketbau passte nicht zum tatsächlich veröffentlichten Single-File-Paket. Projektverweise, Skripte und portable Veröffentlichung wurden angepasst.
+
+Metadaten-Feldauswahl auf Studio-Steuerelemente mit eigener Scrollanbindung umgestellt. Helle Tabellen-/Seiten-Initialfarben entfernt, Cover-Designer-Aktionen vereinheitlicht. Bereits im Ausgangscommit vorhandene Coversuch-/Dropdown-/Metadatenkorrekturen beibehalten.
+
+## Prüfung und Übergabe
+
+Aktueller ausführlicher Nachweis: `PRUEFBERICHT-v0.64.md`, Protokolle unter `Dokumentation/Pruefprotokolle`. Frühere Berichte sind historische Nachweise. Windows-Steuerelementtests sind von echter Mikrofon-/Audiogeräteabnahme und sichtbarer Flackerfreiheit auf dem Ziel-PC zu unterscheiden.
+
+Jede Übergabe enthält künftig portable Anwendung, vollständigen aktuellen Quellcode, Werkzeuge, README, Projektakte und Prüfbericht in einem gemeinsamen Versionsordner/ZIP. Keine persönlichen Daten oder Testmedien mitliefern.

@@ -13,20 +13,8 @@ foreach($name in @('ffmpeg/ffmpeg.exe','ffmpeg/ffprobe.exe','mp3gain/mp3gain.exe
 $packageName='Musikbox-Werkstatt-Studio-v0.64-QS-2026-11-08'
 $package=Join-Path $Ausgabeordner $packageName
 if(Test-Path $package){throw 'Ausgabeordner existiert bereits. Bitte einen neuen Ausgabeordner verwenden.'}
-$program=Join-Path $package 'Programm'
-dotnet publish MusikboxWerkstatt.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=false -p:NuGetAudit=false -p:ToolsRoot=__Werkzeuge_separat__ -o $program
+dotnet publish MusikboxWerkstatt.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=false -p:NuGetAudit=false -p:ToolsRoot=__Werkzeuge_separat__ -o $package
 if($LASTEXITCODE){throw 'Windows-Publish fehlgeschlagen.'}
-# The apphost reserves 1024 bytes for its relative managed entry point.
-$inner=Join-Path $program 'Musikbox-Werkstatt-Studio.exe'
-$bytes=[IO.File]::ReadAllBytes($inner)
-$binding='Musikbox-Werkstatt-Studio.dll'
-$offset=[Text.Encoding]::ASCII.GetString($bytes).IndexOf($binding+[char]0,[StringComparison]::Ordinal)
-if($offset -lt 0 -or $offset+1024 -gt $bytes.Length){throw 'Apphost-Bindung nicht gefunden.'}
-[Array]::Clear($bytes,$offset,1024)
-$target=[Text.Encoding]::UTF8.GetBytes('Programm/Musikbox-Werkstatt-Studio.dll')
-[Array]::Copy($target,0,$bytes,$offset,$target.Length)
-[IO.File]::WriteAllBytes((Join-Path $package 'Musikbox-Werkstatt-Studio.exe'),$bytes)
-Remove-Item $inner
 Copy-Item $WerkzeugePfad (Join-Path $package 'Werkzeuge') -Recurse
 foreach($dir in @('Daten','Dokumentation','Quellcode')){New-Item -ItemType Directory (Join-Path $package $dir) -Force | Out-Null}
 $source=Join-Path $package 'Quellcode'

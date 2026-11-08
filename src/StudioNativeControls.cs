@@ -5,7 +5,7 @@ namespace Musikbox {
   readonly StudioScrollbars.NativeStyleGate gate;
   protected override CreateParams CreateParams{get{var p=base.CreateParams;p.Style&=~StudioScrollbars.NativeStyles;return p;}}
   protected override void OnParentChanged(EventArgs e){base.OnParentChanged(e);StudioScrollbars.EnsureFrame(this);}
-  public StudioListBox(){gate=new StudioScrollbars.NativeStyleGate(this);BackColor=ModernTheme.Silver;ForeColor=ModernTheme.Ink;BorderStyle=BorderStyle.FixedSingle;DrawMode=DrawMode.OwnerDrawFixed;ItemHeight=24;}
+  public StudioListBox(){IntegralHeight=false;gate=new StudioScrollbars.NativeStyleGate(this);BackColor=ModernTheme.Silver;ForeColor=ModernTheme.Ink;BorderStyle=BorderStyle.FixedSingle;DrawMode=DrawMode.OwnerDrawFixed;ItemHeight=24;}
   protected override void OnDrawItem(DrawItemEventArgs e){using(var b=new SolidBrush((e.State&DrawItemState.Selected)!=0?ModernTheme.Selection:BackColor))e.Graphics.FillRectangle(b,e.Bounds);if(e.Index>=0&&e.Index<Items.Count){var state=e.Graphics.Save();try{e.Graphics.SetClip(e.Bounds,System.Drawing.Drawing2D.CombineMode.Intersect);var text=Rectangle.Inflate(e.Bounds,-4,0);text.X-=horizontalOffset;text.Width+=horizontalOffset;TextRenderer.DrawText(e.Graphics,GetItemText(Items[e.Index]),Font,text,ForeColor,TextFormatFlags.Left|TextFormatFlags.VerticalCenter|TextFormatFlags.SingleLine|TextFormatFlags.NoPrefix|TextFormatFlags.PreserveGraphicsClipping|(HorizontalScrollbar?0:TextFormatFlags.EndEllipsis));}finally{e.Graphics.Restore(state);}}}
  }
  public class StudioProgressBar:ProgressBar {
