@@ -8,7 +8,7 @@ namespace Musikbox {
  public static class Gain {
   public static void Validate(Project p) {
    if(!p.Normalize)return;
-   if(String.IsNullOrWhiteSpace(p.GainExecutable)||!File.Exists(p.GainExecutable))throw new Exception("Bitte über 'Lautstärke' zuerst das Kommandozeilenprogramm mp3gain.exe auswählen.");
+   if(String.IsNullOrWhiteSpace(p.GainExecutable)||!File.Exists(p.GainExecutable))throw new Exception("Bitte über 'Audio-Einstellungen' zuerst das Kommandozeilenprogramm mp3gain.exe auswählen.");
    if(Double.IsNaN(p.TargetDb)||Double.IsInfinity(p.TargetDb)||p.TargetDb<80||p.TargetDb>95)throw new Exception("Der MP3Gain-Zielpegel muss zwischen 80 und 95 dB liegen.");
   }
   public static string Arguments(double target) {return "-r -k -o -s r -d "+(target-89).ToString("0.0",CultureInfo.InvariantCulture)+" input.mp3";}

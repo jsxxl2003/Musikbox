@@ -10,7 +10,7 @@ using System.Runtime.Serialization.Json;
 using System.Threading.Tasks;
 namespace Musikbox {
  public static class Ffmpeg {
-  public static readonly string[] Extensions={".mp3",".flac",".wav",".m4a",".aac",".ogg",".opus",".wma",".aif",".aiff"};
+  public static readonly string[] Extensions={".mp3",".flac",".wav",".m4a",".aac",".ogg",".opus",".wma",".aif",".aiff",".mp4",".mkv",".mov",".avi",".webm",".mpg",".mpeg",".ts",".m2ts"};
   public static bool IsMp3(string path){return Path.GetExtension(path).Equals(".mp3",StringComparison.OrdinalIgnoreCase);}
   public static bool NeedsEncoding(Project p,Song song){return !IsMp3(song.Source)||p.FfmpegLoudness||p.ReencodeMp3;}
   public static readonly int[] Bitrates={128,160,192,224,256,320};
@@ -33,7 +33,7 @@ namespace Musikbox {
    b.Append('\\',slash*2);return b.Append('"').ToString();
   }
   public static string Run(string exe,string args,Action checkCancel,out string stderr) {
-   checkCancel();var start=new ProcessStartInfo{FileName=Path.GetFullPath(exe),Arguments=args,UseShellExecute=false,CreateNoWindow=true,RedirectStandardOutput=true,RedirectStandardError=true,RedirectStandardInput=true,StandardOutputEncoding=Encoding.UTF8,StandardErrorEncoding=Encoding.UTF8};
+   checkCancel();var start=new ProcessStartInfo{FileName=Path.GetFullPath(exe),Arguments=args,WorkingDirectory=Path.GetDirectoryName(Path.GetFullPath(exe)),UseShellExecute=false,CreateNoWindow=true,RedirectStandardOutput=true,RedirectStandardError=true,RedirectStandardInput=true,StandardOutputEncoding=Encoding.UTF8,StandardErrorEncoding=Encoding.UTF8};
    using(var process=new Process{StartInfo=start}) {
     process.Start();process.StandardInput.Close();var stdout=process.StandardOutput.ReadToEndAsync();var err=process.StandardError.ReadToEndAsync();var clock=Stopwatch.StartNew();
     try{while(!process.WaitForExit(100)){checkCancel();if(clock.Elapsed.TotalMinutes>20)throw new Exception("FFmpeg-Zeitlimit pro Verarbeitungsschritt überschritten.");}checkCancel();}
@@ -52,15 +52,9 @@ namespace Musikbox {
   static T Json<T>(string json){using(var s=new MemoryStream(Encoding.UTF8.GetBytes(json)))return (T)new DataContractJsonSerializer(typeof(T),new DataContractJsonSerializerSettings{UseSimpleDictionaryFormat=true}).ReadObject(s);}
   static string Tag(Dictionary<string,string> tags,string key){if(tags==null)return "";foreach(var pair in tags)if(pair.Key.Equals(key,StringComparison.OrdinalIgnoreCase))return pair.Value??"";return "";}
   public static Song ReadSong(string path,Project p,Action checkCancel) {
-   if(IsMp3(path)){var t=Tags.Read(path);return new Song{Source=path,Artist=t.Artist,Title=t.Title,Album=t.Album};}
-   Validate(p,true);string err;
-   string json=Run(ProbePath(p),"-v error -select_streams a:0 -show_entries stream=codec_type:stream_tags=artist,title,album:format_tags=artist,title,album -of json "+Quote(Path.GetFullPath(path)),checkCancel,out err);
-   var d=Json<ProbeDocument>(json);if(d.Streams==null||!d.Streams.Any(s=>s.Type=="audio"))throw new Exception("Keine lesbare Audiospur vorhanden.");
-   var combined=new Dictionary<string,string>(StringComparer.OrdinalIgnoreCase);
-   if(d.Streams[0].Tags!=null)foreach(var pair in d.Streams[0].Tags)combined[pair.Key]=pair.Value;
-   if(d.Format!=null&&d.Format.Tags!=null)foreach(var pair in d.Format.Tags)combined[pair.Key]=pair.Value;
-   return new Song{Source=path,Artist=Tag(combined,"artist"),Title=Tag(combined,"title"),Album=Tag(combined,"album")};
+   checkCancel();if(MediaProbe57.Extensions.Contains(Path.GetExtension(path).ToLowerInvariant()))return MediaProbe57.Read(path,p.FfmpegExecutable,checkCancel);var song=MediaMetadata.Read(path);if(new[]{".wav",".aif",".aiff",".wma"}.Contains(Path.GetExtension(path).ToLowerInvariant())&&!String.IsNullOrEmpty(p.FfmpegExecutable)){string folder=Path.GetDirectoryName(Path.GetFullPath(p.FfmpegExecutable)),probe=Path.Combine(folder,"ffprobe.exe");if(!File.Exists(probe))probe=Path.Combine(folder,"ffprobe");if(File.Exists(probe))try{string error;var doc=Json<ProbeDocument>(Run(probe,"-v error -show_entries format_tags:stream_tags -of json "+Quote(Path.GetFullPath(path)),checkCancel,out error));var tags=doc.Format==null?null:doc.Format.Tags;Action<string,Action<string>> use=(key,set)=>{string value=Tag(tags,key);if(value.Length==0)foreach(var stream in doc.Streams??new ProbeStream[0]){value=Tag(stream.Tags,key);if(value.Length>0)break;}if(value.Length>0)set(value);};use("artist",value=>song.Artist=value);use("title",value=>song.Title=value);use("album",value=>song.Album=value);use("genre",value=>song.Genre=value);use("date",value=>song.Year=value.Length>=4?value.Substring(0,4):value);use("comment",value=>song.Comment=value);}catch(OperationCanceledException){throw;}catch{} }return song;
   }
+
   static string Number(double n){return n.ToString("0.00",CultureInfo.InvariantCulture);}
   public static Dictionary<string,string> Measurement(string log) {
    int start=log.LastIndexOf('{'),end=log.LastIndexOf('}');if(start<0||end<=start)throw new Exception("FFmpeg hat keine Lautheitsmessung geliefert.");
@@ -83,7 +77,7 @@ namespace Musikbox {
     if(p.FfmpegLoudness)log+="\r\n\r\nVerarbeitung:\r\n"+err.Substring(err.LastIndexOf('{'));
     Song output=song.Copy();output.Source=converted;
     var frames=IsMp3(song.Source)?Tags.Read(song.Source).Other:null;
-    Tags.WriteCopy(output,album,target,checkCancel,frames);
+    Tags.WriteCopy(output,album,target,checkCancel,frames);MediaMetadata.PreserveArtwork(song.Source,target,song);
     return "MP3: "+EncodingLabel(p)+", 44,1 kHz, Stereo.\r\n"+log;
    }finally{foreach(string file in Directory.GetFiles(work))File.Delete(file);Directory.Delete(work);}
   }

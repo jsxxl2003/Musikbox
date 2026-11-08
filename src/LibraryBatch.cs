@@ -1,0 +1,6 @@
+using System;using System.IO;using System.Linq;using System.Collections.Generic;
+namespace Musikbox {public static class LibraryBatch {
+ public static Project Merge(Project current,Project batch,out HashSet<string> added){added=new HashSet<string>(StringComparer.OrdinalIgnoreCase);var known=new HashSet<string>(current.Folders.SelectMany(f=>f.Songs).Select(s=>Path.GetFullPath(s.Source)),StringComparer.OrdinalIgnoreCase);var result=current.WithFolders(current.Folders.ToList());int number=current.Folders.Select(f=>{int n;return Int32.TryParse((f.Name??"").Split(' ')[0],out n)?n:-1;}).DefaultIfEmpty(-1).Max()+1;
+ foreach(var folder in batch.Folders){var songs=folder.Songs.Where(s=>known.Add(Path.GetFullPath(s.Source))).ToList();if(songs.Count==0)continue;if(result.Folders.Count>=99||number>999)throw new ArgumentException("Import würde die verfügbaren Musikbox-Ordner überschreiten. Die bisherige Bibliothek bleibt erhalten.");foreach(var song in songs)added.Add(Path.GetFullPath(song.Source));result.Folders.Add(new BoxFolder{Name=(number++).ToString("D3")+" "+Rules.Theme(folder.Name),Theme=folder.Theme,SourceDirectory=folder.SourceDirectory,Cover=folder.Cover,CoverDesign=folder.CoverDesign,Songs=songs});}return result;
+ }
+}}

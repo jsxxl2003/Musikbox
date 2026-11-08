@@ -1,0 +1,10 @@
+using System;using System.IO;using System.Linq;using System.Drawing;using System.Windows.Forms;
+namespace Musikbox {public partial class Controller {
+ void OpenCoverSubmodule(string page){var panel=ModulePage(page,"Die aktuelle Titelauswahl bleibt in der gemeinsamen Liste verfügbar.");var buttons=ModuleButtons(panel);if(page=="Coversuche")buttons.Controls.Add(MainView.StudioButton("Titelcover suchen / auswählen",()=>Run(SearchCover),true));
+  if(page=="Coverbearbeitung"){buttons.Controls.Add(MainView.StudioButton("Ordnercover bearbeiten",()=>Run(DesignCover),true));buttons.Controls.Add(MainView.StudioButton("Titelcover ersetzen",()=>Run(SearchCover)));}
+  if(page=="Covergestaltung"){buttons.Controls.Add(MainView.StudioButton("Ordnercover gestalten",()=>Run(DesignCover),true));buttons.Controls.Add(MainView.StudioButton("Cover-Serie",()=>Run(CoverSeries)));}
+  if(page=="Cover zuweisen / exportieren"){buttons.Controls.Add(MainView.StudioButton("Ordnercover zuweisen",()=>Run(SetCover),true));buttons.Controls.Add(MainView.StudioButton("Titelcover zuweisen",()=>Run(SearchCover)));buttons.Controls.Add(MainView.StudioButton("Cover als Bild exportieren",()=>Run(ExportCoverImage)));}
+  v.ShowModule(panel,paths=>SelectWorkingPaths(paths));
+ }
+ void ExportCoverImage(){var song=v.LibraryMode=="Ordner"?null:SelectedSong;byte[] bytes=null;if(song!=null){if(!String.IsNullOrEmpty(song.Artwork)&&File.Exists(song.Artwork))bytes=File.ReadAllBytes(song.Artwork);else if(File.Exists(song.Source))bytes=MediaMetadata.Artwork(song.Source);}if(bytes==null&&Current!=null&&!String.IsNullOrEmpty(Current.Cover)&&File.Exists(Current.Cover))bytes=File.ReadAllBytes(Current.Cover);if(bytes==null)throw new Exception("Die Auswahl enthält kein Cover.");using(var d=new AppSaveFileDialog{Filter="JPEG-Bild|*.jpg|PNG-Bild|*.png",FileName="Cover.jpg"})if(d.ShowDialog(v)==DialogResult.OK)using(var stream=new MemoryStream(bytes))using(var image=Image.FromStream(stream))image.Save(d.FileName,Path.GetExtension(d.FileName).Equals(".png",StringComparison.OrdinalIgnoreCase)?System.Drawing.Imaging.ImageFormat.Png:System.Drawing.Imaging.ImageFormat.Jpeg);}
+}}

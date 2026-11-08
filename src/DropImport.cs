@@ -3,14 +3,19 @@ using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 namespace Musikbox {
+ public enum FolderImportMode { PreserveStructure, ByAlbumTags }
+ public class DropImportException:Exception {
+  public readonly string Report;
+  public DropImportException(string message,string report):base(message){Report=message+"\r\n\r\n"+report;}
+ }
  public class DropResult {
   public Project Project;
+  public string Report;
   public int FilesAdded,FoldersAdded,Skipped;
   public int SelectedIndex;
   public List<string> Warnings=new List<string>();
  }
  public static class DropImport {
-  static BoxFolder Copy(BoxFolder f){return new BoxFolder{Name=f.Name,Theme=f.Theme,Group=f.Group,SourceDirectory=f.SourceDirectory,Cover=f.Cover,Songs=f.Songs.Select(s=>s.Copy()).ToList()};}
   static string ThemeKey(string value){return (value??"").Trim().Normalize();}
   static bool AddByTags(Project candidate,Song song,BoxFolder fallback,BoxFolder sourceFolder) {
    string theme=ThemeKey(song.Album);bool hasAlbum=theme.Length>0;if(!hasAlbum)theme=fallback==null?"Neue Musik":fallback.Theme;
@@ -29,9 +34,30 @@ namespace Musikbox {
    if(String.IsNullOrEmpty(destination.Cover)&&sourceFolder!=null)destination.Cover=sourceFolder.Cover;
    song.Album=destination.Theme;destination.Songs.Add(song);return true;
   }
-  public static DropResult Read(Project original,string[] paths,int targetIndex,Action checkCancel) {
+  static string Describe(Project original,Project candidate,string[] paths,FolderImportMode mode,DropResult result) {
+   var b=new System.Text.StringBuilder("Importbericht · Studio "+AppIdentity.Version+"\r\n");
+   b.AppendLine("Modus: "+(mode==FolderImportMode.PreserveStructure?"Ordnerstruktur übernehmen":"Nach Album-Tags neu ordnen"));
+   b.AppendLine("Ausgewählte Einträge: "+paths.Length);
+   b.AppendLine("Bisherige Bibliothek bleibt erhalten: "+original.Folders.Count+" Ordner");
+   b.AppendLine("Neu eingelesen: "+candidate.Folders.Count+" Ordner / "+result.FilesAdded+" Titel");
+   int needed=ImportPacking.Prepare(candidate,()=>{}).Folders.Count;
+   b.AppendLine("Benötigte neue Ordner nach themengetrenntem Auffüllen: "+needed);
+   b.AppendLine("Importbestand: "+needed+" von maximal 99 Ordnern");
+   b.AppendLine("Doppelte/überlappende Auswahl übersprungen: "+result.Skipped);
+   b.AppendLine("Hinweise beim Lesen: "+result.Warnings.Count);
+   b.AppendLine();b.AppendLine("Titel | Einzelbedarf vor Zusammenfassung | Quellordner / Thema");
+   foreach(var f in candidate.Folders){
+    b.AppendLine(f.Songs.Count+" | "+Math.Max(1,(f.Songs.Count+98)/99)+" | "+f.Name);
+    b.AppendLine("  Quelle: "+(f.SourceDirectory??"Einzeldateien nach Album-Tags"));
+    b.AppendLine("  Formate: "+String.Join(", ",f.Songs.GroupBy(x=>Path.GetExtension(x.Source).ToLowerInvariant()).Select(g=>g.Key+": "+g.Count())));
+   }
+   if(result.Warnings.Count>0){b.AppendLine();b.AppendLine("LESEHINWEISE");foreach(string w in result.Warnings)b.AppendLine(w);}
+   return b.ToString();
+  }
+  public static DropResult Read(Project original,string[] paths,int targetIndex,Action checkCancel,FolderImportMode mode=FolderImportMode.PreserveStructure,Action<int,int> progress=null,bool recursive=true,Action<Song> songRead=null) {
    var result=new DropResult();var candidate=original.WithFolders(new List<BoxFolder>());
-   BoxFolder target=targetIndex>=0&&targetIndex<original.Folders.Count?original.Folders[targetIndex]:null;
+   // A new batch never inherits an old folder or its numbering.
+   BoxFolder target=null;
    var importedDirectories=new HashSet<string>(StringComparer.OrdinalIgnoreCase);
    var unique=new HashSet<string>(StringComparer.OrdinalIgnoreCase);var loose=new List<string>();var coveredFiles=new HashSet<string>(StringComparer.OrdinalIgnoreCase);
    string firstAdded=null;
@@ -42,34 +68,41 @@ namespace Musikbox {
     if(Directory.Exists(path)) {
      if(importedDirectories.Contains(path.TrimEnd(new char[]{Path.DirectorySeparatorChar}))){result.Skipped++;continue;}
      List<BoxFolder> imported;
-     try{imported=Importer.Read(path,result.Warnings,candidate,checkCancel);}catch(OperationCanceledException){throw;}catch(Exception e){result.Warnings.Add(path+": "+e.Message);continue;}
+     try{imported=Importer.Read(path,result.Warnings,candidate,checkCancel,progress==null?(Action<int,int>)null:(folders,songs)=>progress(importedDirectories.Count+folders,result.FilesAdded+songs),recursive,songRead);}catch(OperationCanceledException){throw;}catch(Exception e){result.Warnings.Add(path+": "+e.Message);continue;}
      foreach(var folder in imported) {
       if(!importedDirectories.Add(Path.GetFullPath(folder.SourceDirectory).TrimEnd(new char[]{Path.DirectorySeparatorChar}))){result.Skipped++;continue;}
-      foreach(var song in folder.Songs){checkCancel();coveredFiles.Add(song.Source);if(AddByTags(candidate,song,folder,folder)){result.FilesAdded++;if(firstAdded==null)firstAdded=song.Source;}else result.Skipped++;}
+      if(mode==FolderImportMode.PreserveStructure) {
+       if(folder.Songs.Count==0)continue;
+       folder.Group="";candidate.Folders.Add(folder);
+       foreach(var song in folder.Songs){checkCancel();coveredFiles.Add(song.Source);result.FilesAdded++;if(firstAdded==null)firstAdded=song.Source;}
+      }else foreach(var song in folder.Songs){checkCancel();coveredFiles.Add(song.Source);if(AddByTags(candidate,song,folder,folder)){result.FilesAdded++;if(firstAdded==null)firstAdded=song.Source;}else result.Skipped++;}
      }
     }else if(File.Exists(path)&&Ffmpeg.Extensions.Contains(Path.GetExtension(path).ToLowerInvariant()))loose.Add(path);
     else result.Warnings.Add(Path.GetFileName(path)+": keine unterstützte Audiodatei oder kein erreichbarer Ordner. ZIP-Dateien bitte zuerst entpacken.");
    }
+   var looseCandidate=mode==FolderImportMode.PreserveStructure?original.WithFolders(new List<BoxFolder>()):candidate;
    foreach(string file in loose) {
     checkCancel();if(coveredFiles.Contains(file)){result.Skipped++;continue;}
     Song song;
     try{song=Ffmpeg.ReadSong(file,candidate,checkCancel);}catch(OperationCanceledException){throw;}catch(Exception e){result.Warnings.Add(Path.GetFileName(file)+": "+e.Message);continue;}
-    if(AddByTags(candidate,song,target,null)){result.FilesAdded++;if(firstAdded==null)firstAdded=song.Source;}else result.Skipped++;
+    if(AddByTags(looseCandidate,song,target,null)){if(songRead!=null)songRead(song);result.FilesAdded++;if(firstAdded==null)firstAdded=song.Source;}else result.Skipped++;
    }
+   if(mode==FolderImportMode.PreserveStructure)candidate.Folders.AddRange(looseCandidate.Folders);
+   if(progress!=null)progress(candidate.Folders.Count,result.FilesAdded);
+   result.Report=Describe(original,candidate,paths,mode,result);
    if(result.FilesAdded==0){result.Project=original;result.SelectedIndex=targetIndex;return result;}
    checkCancel();
-   // Nur die neu importierte Sammlung sortieren und aufteilen. Bestehende
-   // Ordner und Nummern sind vollständig außerhalb dieser Verarbeitung.
-   foreach(var folder in candidate.Folders)folder.Name=Rules.SafeName(Rules.Theme(folder.Name));
+   // Build the replacement in isolation; the current collection is untouched
+   // until the entire batch (including audio preparation) succeeds.
+   if(mode==FolderImportMode.ByAlbumTags)foreach(var folder in candidate.Folders)folder.Name=Rules.SafeName(Rules.Theme(folder.Name));
+   else candidate.Folders=candidate.Folders.OrderBy(f=>f.Name,StringComparer.OrdinalIgnoreCase).ToList();
    string targetSource=firstAdded;
-   var sorted=Rules.Sorted(candidate);checkCancel();
-   if(original.Folders.Count+sorted.Folders.Count>99)throw new Exception("Für diesen Import werden "+sorted.Folders.Count+" neue Ordner benötigt. Zusammen mit den vorhandenen Ordnern wären es mehr als 99. Es wurde nichts übernommen.");
-   int last=-1;
-   foreach(var folder in original.Folders){var m=System.Text.RegularExpressions.Regex.Match(folder.Name??"",@"^(\d{3})\s");if(m.Success)last=Math.Max(last,Int32.Parse(m.Groups[1].Value));}
-   if(last+sorted.Folders.Count>999)throw new Exception("Keine fortlaufenden dreistelligen Nummern hinter den vorhandenen Ordnern verfügbar. Es wurde nichts übernommen.");
-   foreach(var folder in sorted.Folders)folder.Name=(++last).ToString("D3")+" "+Rules.Theme(folder.Name);
-   result.Project=original.WithFolders(original.Folders.Select(Copy).Concat(sorted.Folders).ToList());result.FoldersAdded=sorted.Folders.Count;
-   result.SelectedIndex=targetSource==null?original.Folders.Count:result.Project.Folders.FindIndex(f=>f.Songs.Any(s=>s.Source==targetSource)&&result.Project.Folders.IndexOf(f)>=original.Folders.Count);
+   Project sorted;
+   try{sorted=Rules.Sorted(ImportPacking.Prepare(candidate,checkCancel));}catch(OperationCanceledException){throw;}catch(Exception e){throw new DropImportException(e.Message,result.Report);}
+   checkCancel();
+   if(sorted.Folders.Count>99)throw new DropImportException("Für diesen Import werden mehr als 99 Ordner benötigt. Es wurde nichts übernommen.",result.Report);
+   result.Project=sorted;result.FoldersAdded=sorted.Folders.Count;
+   result.SelectedIndex=targetSource==null?0:sorted.Folders.FindIndex(f=>f.Songs.Any(song=>song.Source==targetSource));
    return result;
   }
  }

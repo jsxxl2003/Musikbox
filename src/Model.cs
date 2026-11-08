@@ -11,7 +11,19 @@ namespace Musikbox {
   [DataMember] public string Artist;
   [DataMember] public string Title;
   [DataMember] public string Album;
-  public Song Copy() { return (Song)MemberwiseClone(); }
+  [DataMember] public bool AlbumOverride;
+  [DataMember] public string Artwork;
+  [DataMember] public string Year="",Genre="",Comment="";
+  [DataMember] public string Track;
+  [DataMember] public string AcoustidId="",FolderName="";
+  [DataMember] public double Duration;
+  [DataMember] public int Bitrate;
+  [DataMember] public string TagType;
+  [DataMember] public string PreparedSource;
+  [DataMember] public string PreparedProfile;
+  [DataMember] public Dictionary<string,string> PendingTags;
+  public int StudioColorIndex;
+  public Song Copy() { var copy=(Song)MemberwiseClone();if(PendingTags!=null)copy.PendingTags=new Dictionary<string,string>(PendingTags,StringComparer.OrdinalIgnoreCase);return copy; }
  }
  [DataContract] public class BoxFolder {
   [DataMember] public string Name;
@@ -19,6 +31,7 @@ namespace Musikbox {
   [DataMember] public string Group;
   [DataMember] public string SourceDirectory;
   [DataMember] public string Cover;
+  [DataMember] public CoverDesign CoverDesign;
   [DataMember] public List<Song> Songs = new List<Song>();
   public override string ToString() { return Name + "   [" + Songs.Count + "/99]"; }
  }
@@ -55,6 +68,7 @@ namespace Musikbox {
    string an=a.Name.Substring(0,3),bn=b.Name.Substring(0,3);a.Name=bn+a.Name.Substring(3);b.Name=an+b.Name.Substring(3);
    p.Folders.RemoveAt(i);p.Folders.Insert(j,a);
   }
+  public static string AlbumFor(Song song,BoxFolder folder){return song.AlbumOverride?(song.Album??""):(folder.Theme??"");}
   public static int Compare(Song a, Song b) {
    int n=German.Compare(a.Artist,b.Artist,CompareOptions.IgnoreCase);
    if(n==0)n=German.Compare(a.Title,b.Title,CompareOptions.IgnoreCase);
@@ -63,7 +77,7 @@ namespace Musikbox {
   }
   public static Project Sorted(Project p) {
    var result=p.WithFolders(new List<BoxFolder>());
-   foreach(var f in p.Folders) result.Folders.Add(new BoxFolder {Name=f.Name,Theme=f.Theme,Group=f.Group,SourceDirectory=f.SourceDirectory,Cover=f.Cover,Songs=f.Songs.Select(s=>s.Copy()).ToList()});
+   foreach(var f in p.Folders) result.Folders.Add(new BoxFolder {Name=f.Name,Theme=f.Theme,Group=f.Group,SourceDirectory=f.SourceDirectory,Cover=f.Cover,CoverDesign=f.CoverDesign,Songs=f.Songs.Select(s=>s.Copy()).ToList()});
    var processed=new HashSet<string>();
    foreach(var f in result.Folders.ToList()) {
     string group=(f.Group??"").Trim();
@@ -78,11 +92,11 @@ namespace Musikbox {
      if(group.Length==0){group="Thema: "+f.Theme+" ("+Guid.NewGuid().ToString("N").Substring(0,6)+")";foreach(var folder in folders)folder.Group=group;processed.Add(group.ToUpperInvariant());}
      int insert=result.Folders.IndexOf(folders.Last())+1;
      for(int j=0;j<extra;j++) {
-      var added=new BoxFolder{Name=f.Theme,Theme=f.Theme,Group=group,Cover=f.Cover,SourceDirectory=f.SourceDirectory};
+      var added=new BoxFolder{Name=f.Theme,Theme=f.Theme,Group=group,Cover=f.Cover,CoverDesign=f.CoverDesign,SourceDirectory=f.SourceDirectory};
       result.Folders.Insert(insert+j,added);folders.Add(added);
      }
     }
-    for(int i=0;i<folders.Count;i++) {folders[i].Songs=songs.Skip(i*99).Take(99).ToList();foreach(var song in folders[i].Songs)song.Album=folders[i].Theme;}
+    for(int i=0;i<folders.Count;i++) {folders[i].Songs=songs.Skip(i*99).Take(99).ToList();foreach(var song in folders[i].Songs)if(!song.AlbumOverride)song.Album=folders[i].Theme;}
    }
    int previous=-1;
    foreach(var folder in result.Folders) {
@@ -109,6 +123,7 @@ namespace Musikbox {
     if(f.Songs.Count>99)errors.Add(f.Name+": mehr als 99 Titel.");
     if(!String.IsNullOrEmpty(f.Cover)&&!File.Exists(f.Cover))errors.Add("Cover fehlt: "+f.Cover);
     foreach(var s in f.Songs) {
+     if(!String.IsNullOrEmpty(s.Artwork)&&!File.Exists(s.Artwork))errors.Add("Titelcover fehlt: "+s.Artwork);
      if(!File.Exists(s.Source))errors.Add("Quelldatei fehlt: "+s.Source);
      if(String.IsNullOrWhiteSpace(s.Artist)||String.IsNullOrWhiteSpace(s.Title))errors.Add("Interpret oder Titel fehlt: "+Path.GetFileName(s.Source));
     }
