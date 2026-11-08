@@ -5,7 +5,7 @@
 **Geprüfter Korrekturstand:** `783f4ad5eda882d8954fd0ddfa138d442a248432`.
 **Erfolgreicher Windows-Build und Prüfungen:** https://github.com/jsxxl2003/Musikbox/actions/runs/42508800111
 
-Die EXE und der Programmordner im Paket stammen bytegenau aus diesem erfolgreichen Windows-Publish. Programmversion bleibt 0.64.0.0; das neue Paket ist durch „Cover-Suche-Mikrofon“ im Namen eindeutig vom vorherigen Stand unterschieden.
+Der oben genannte Lauf belegt den bisherigen Korrekturstand. Neue Actions-Pakete enthalten das Publish-Ergebnis ihres eigenen Laufs; Commit und aktuelle Paketpruefung stehen in `Paket.txt`. Programmversion bleibt 0.64.0.0.
 
 ## Neue Nutzermeldungen und Korrekturen
 
@@ -45,3 +45,7 @@ Vollständige Protokolle unter `Dokumentation/Pruefprotokolle`. Ältere Logs sin
 | Auslieferung | Ein gemeinsamer Versionsordner mit Anwendung, Werkzeugen, Datenordner, vollständigen aktuellen C#-Quellen, README, Projektakte und Prüfbericht. Dateiprüfsummen enthalten. |
 
 Das Paket ist ein implementierter und automatisiert geprüfter Korrekturstand. Die ausdrücklich offenen Hardware- und manuellen Abnahmen werden nicht als bestanden ausgegeben.
+
+## Paketkorrektur nach Fehler 0x80010135
+
+Neuer Paketbau: kurzes Actions-Artefakt `MW-064`, vollstaendige Werkzeuge und Quellen, maximal 120 Zeichen pro Archivpfad, ZIP-Erstellung und Entpacken in einen langen Zielpfad. Die erfolgreiche Ausfuehrung wird vom ausliefernden Actions-Lauf nachgewiesen; bei Fehlern wird kein Komplettpaket hochgeladen. Diese Paketpruefung ersetzt keine Abnahme auf Jens Rechner.

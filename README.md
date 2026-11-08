@@ -4,7 +4,7 @@ C# / .NET 8 / Windows Forms, portable Windows x64. Grundlage: GitHub `jsxxl2003/
 
 ## Start und Paket
 
-Das gesamte ZIP in einen neuen Ordner entpacken. `Musikbox-Werkstatt-Studio.exe` im Hauptordner starten. `Programm`, `Werkzeuge`, `Daten`, `Dokumentation` und `Quellcode` gehören zusammen. Bisherige Einstellungen bei geschlossenem Programm über den bisherigen Ordner `Daten` übernehmen. Originaldateien enthalten weiterhin ihre gespeicherten Tags und Cover.
+Das GitHub-Actions-Artefakt `MW-064` (Download `MW-064.zip`) vollstaendig in einen neuen Ordner entpacken. Die ZIP-Datei enthaelt Anwendung, Werkzeuge, Quellcode und Pruefbericht gemeinsam, ohne ein zweites ZIP im ZIP. `Musikbox-Werkstatt-Studio.exe` im Hauptordner starten. `Programm`, `Werkzeuge`, `Daten`, `Dokumentation` und `Quellcode` gehören zusammen. Bisherige Einstellungen bei geschlossenem Programm über den bisherigen Ordner `Daten` übernehmen. Originaldateien enthalten weiterhin ihre gespeicherten Tags und Cover.
 
 ## Nachkorrektur vom 08.11.2026
 
@@ -32,3 +32,9 @@ Windows mit .NET SDK 8: `Quellcode/Neu-bauen.cmd` oder `Quellcode/Bauen.ps1`. Di
 `Pruefen.ps1 -QS` prüft Logik, Sprachsitzungen und Windows-Steuerelemente. `-Oberflaeche` prüft die Windows-Ansichten; `-Sprache` verwendet ein austauschbares Aufnahmegerät. Dateiprüfungen über `-Dateitags -Testmusikordner <eigener Testordner>` benötigen eigene MP3-/Bilddateien gemäß Skripthinweis. Keine Originalsammlung als Testdaten verwenden.
 
 Die tatsächlichen Ergebnisse und offenen Abnahmen stehen in `Dokumentation/PRUEFBERICHT-v0.64.md`. Physisches Mikrofon, hörbare Wiedergabe und zeitliches Flackern auf Jens Ziel-PC sind durch simulierte Geräte und automatische Steuerelementprüfungen nicht nachgewiesen. Es wurden keine Testvideos erzeugt.
+
+## GitHub Actions: vollstaendiges Paket
+
+Der Workflow baut und prueft unter Windows. `Werkzeuge.ps1` stellt die festgelegten Werkzeugversionen inklusive Whisper-Basismodell bereit; ein Actions-Cache vermeidet wiederholte Downloads und Werkzeug-Builds. Kleine originale MP3Gain-Dateien sind samt LGPL-Quellen versioniert.
+
+`Bauen.ps1` uebernimmt das vorhandene Publish-Ergebnis, alle versionierten Quelldateien und die aktuellen Pruefprotokolle. ZIP-Innenpfade duerfen hoechstens 120 Zeichen haben; das Archiv wird in einen langen Testpfad entpackt. Ein Fehler verhindert die Auslieferung. Die Datei `Dokumentation/Paket.txt` nennt Commit und Pfadpruefung.

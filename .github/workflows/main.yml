@@ -9,7 +9,7 @@ concurrency:
 jobs:
   build:
     runs-on: windows-latest
-    timeout-minutes: 15
+    timeout-minutes: 35
     env:
       MUSIKBOX_QS_OUTPUT: ${{ github.workspace }}/qs-output
     steps:
@@ -43,12 +43,32 @@ jobs:
         run: |
           dotnet publish MusikboxWerkstatt.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=false -p:NuGetAudit=false -o build-output
           if ($LASTEXITCODE) { exit $LASTEXITCODE }
-      - name: Build und Pruefprotokolle
-        if: always()
+      - name: Werkzeug-Cache
+        id: tools
+        uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/MW-Werkzeuge
+          key: mw-tools-win64-${{ hashFiles('Werkzeuge.ps1', 'tools/**') }}
+      - name: Portable Werkzeuge bereitstellen
+        if: steps.tools.outputs.cache-hit != 'true'
+        shell: pwsh
+        run: ./Werkzeuge.ps1 -Ziel "$env:RUNNER_TEMP/MW-Werkzeuge"
+      - name: Vollstaendiges Paket und Entpackpruefung
+        shell: pwsh
+        run: ./Bauen.ps1 -WerkzeugePfad "$env:RUNNER_TEMP/MW-Werkzeuge" -PublishOrdner "$env:GITHUB_WORKSPACE/build-output" -Pruefprotokolle "$env:GITHUB_WORKSPACE/qs-output" -Ausgabeordner "$env:RUNNER_TEMP/Paket"
+      - name: Komplettpaket MW-064
         uses: actions/upload-artifact@v4
         with:
-          name: Musikbox-Werkstatt-Windows-QS
-          path: |
-            build-output/
-            qs-output/
+          name: MW-064
+          path: ${{ runner.temp }}/Paket/MW/
+          include-hidden-files: true
+          compression-level: 6
           if-no-files-found: error
+      - name: Fehlerprotokolle
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: MW-Fehlerprotokolle
+          path: |
+            qs-output/
+          if-no-files-found: warn
