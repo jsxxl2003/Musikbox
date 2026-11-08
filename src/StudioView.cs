@@ -106,8 +106,18 @@ namespace Musikbox {
    SearchBox.PlaceholderText=active?message:"Musik suchen ...";
 #endif
   }
-  public void RefreshStudioLibrary(){if(LibraryMode=="Ordner"&&Groups.SelectedRows.Count>0){var row=Groups.SelectedRows.Cast<DataGridViewRow>().FirstOrDefault();if(row!=null){selectedFolderName=Convert.ToString(row.Cells["Name"].Value);selectedFolderPath=Convert.ToString(row.Cells["Info"].Value);}}RefreshStudioNow();if(IsDisposed||Disposing||studioBatch||!studioInstalled||modeButtons.Count==0)return;RefreshSortButton();foreach(var pair in modeButtons){pair.Value.Active=pair.Key==LibraryMode;pair.Value.Invalidate();}LayoutStudio();}
-  string selectedFolderName,selectedFolderPath;Image selectedFolderArtwork;public void SetCurrentFolder(string name,string path,Image artwork=null){selectedFolderName=name;selectedFolderPath=path;selectedFolderArtwork=artwork;RefreshStudioNow();}
+  public void RefreshStudioLibrary(){if(LibraryMode=="Ordner"&&Groups.SelectedRows.Count>0){var row=Groups.SelectedRows.Cast<DataGridViewRow>().FirstOrDefault();if(row!=null){string folderPath=Convert.ToString(row.Cells["Info"].Value);RefreshFolderArtwork(folderPath);selectedFolderName=Convert.ToString(row.Cells["Name"].Value);selectedFolderPath=folderPath;}}RefreshStudioNow();if(IsDisposed||Disposing||studioBatch||!studioInstalled||modeButtons.Count==0)return;RefreshSortButton();foreach(var pair in modeButtons){pair.Value.Active=pair.Key==LibraryMode;pair.Value.Invalidate();}LayoutStudio();}
+  string selectedFolderName,selectedFolderPath;Image selectedFolderArtwork;
+  void RefreshFolderArtwork(string path){
+   if(String.Equals(selectedFolderPath,path,StringComparison.OrdinalIgnoreCase))return;
+   selectedFolderArtwork?.Dispose();selectedFolderArtwork=null;
+   if(String.IsNullOrWhiteSpace(path)||!Directory.Exists(path))return;
+   foreach(string file in new[]{"folder.jpg","folder.png","cover.jpg","cover.png","front.jpg","front.png"}){
+    string candidate=Path.Combine(path,file);if(!File.Exists(candidate))continue;
+    try{using(var source=Image.FromFile(candidate))selectedFolderArtwork=new Bitmap(source);break;}catch(IOException){}catch(ArgumentException){}
+   }
+  }
+  public void SetCurrentFolder(string name,string path,Image artwork=null){RefreshFolderArtwork(path);selectedFolderName=name;selectedFolderPath=path;if(artwork!=null){selectedFolderArtwork?.Dispose();selectedFolderArtwork=new Bitmap(artwork);}RefreshStudioNow();}
   Song displayedSong;Image displayedArtwork;public Song DisplayedSong{get{return displayedSong;}}
   public void SetCurrentSong(Song song,Image artwork){displayedSong=song;displayedArtwork=artwork;RefreshStudioNow();}
   public void RefreshStudioNow(){if(studioBatch||IsDisposed||Disposing||nowTitle==null||nowTitle.IsDisposed)return;var song=displayedSong;if(LibraryMode=="Ordner"){nowCard.Controls["NowHeading"].Text="Aktueller Ordner";nowTitle.Text=selectedFolderName??"Kein Ordner";nowArtist.Text=selectedFolderPath??"";nowAlbum.Text="";nowArt.Initials="▤";nowArt.Artwork=selectedFolderArtwork;nowArt.PaletteIndex=0;nowArt.Invalidate();LayoutStudio();return;}nowCard.Controls["NowHeading"].Text="Aktueller Titel";nowTitle.Text=song==null?"Kein Titel":song.Title;nowArtist.Text=song==null?"Musikbox-Werkstatt":song.Artist;nowAlbum.Text=song==null?"":song.Album;nowArt.Initials=song==null?"♫":song.Artist;nowArt.Artwork=displayedArtwork;nowArt.PaletteIndex=song==null?0:song.StudioColorIndex;nowArt.Invalidate();studioTips.SetToolTip(nowTitle,nowTitle.Text);studioTips.SetToolTip(nowArtist,nowArtist.Text);studioTips.SetToolTip(nowAlbum,nowAlbum.Text);LayoutStudio();}
