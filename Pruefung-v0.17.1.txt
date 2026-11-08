@@ -1,0 +1,30 @@
+﻿Portable Windows-x64-Testversion 0.17.1 — Prüfung am 17.10.2026
+
+Gezielte Prüfungen:
+ModernUiTests: 23
+WorkspaceUiTests: 18
+FolderCoverUiTests: 13
+Gesamt: 54 Prüfungen unter Linux/Mono bestanden.
+
+Modultitel verkleinert: Segoe UI 8 pt, Kopfzeilen 22 statt 28 Pixel
+(bei 100 % Skalierung), vertikal zentriert und bei Bedarf mit Auslassung.
+Feldbeschriftungen 8,5 pt, kleinere Fenster-/Andocken-Schaltflächen.
+Screenshot der kompakten Module einschließlich Ziehgriff visuell geprüft.
+
+Untere Informationsleiste zeigt nur „Ordner: … · Titel: …“ zum tatsächlichen
+Projektbestand. Laufende Einlese- und Audioarbeit überschreibt diese Zahlen
+nicht mehr. Bearbeitungsstatus, Sicherungsstatus und Fortschrittsbalken unten
+ausgeblendet. Zählung bei Projektwechsel und leerem Projekt geprüft.
+Verbundene Fenster, Menü-Häkchen, Album-Bearbeitung, Ordnerauswahl und
+Covervorschau einschließlich Mindestgröße mitbetrachtet.
+
+Hauptprogramm gegen .NET-Framework-4.8-Referenzassemblies gebaut.
+Windows-PE, Versionskennung 0.17.1.0, ZIP-CRC, EXE/.config und die unveränderten
+fpcalc-Paketdateien samt Quellen und Lizenzen anhand der Prüfsummen validiert.
+Vorherige vollständige Verarbeitungstests siehe Pruefung-v0.16.txt;
+vorherige breitere UI-Prüfungen siehe Pruefung-v0.17.txt. Diese wurden für die
+vorliegende Typografie-/Informationsleistenänderung nicht vollständig wiederholt.
+
+Grenzen: keine native Windows-Ausführung. Schrift und Skalierung auf dem
+Windows-PC, Windows-Audio, fpcalc.exe und Export an die Musikbox bleiben
+praktisch zu prüfen. Keine Live-Abfragen von Erkennungsdiensten.

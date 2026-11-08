@@ -1,0 +1,68 @@
+﻿Portable Windows-x64-Testversion 0.16 — Prüfung am 17.10.2026
+
+Prüfungen der aktuellen Änderungen und der bisherigen Verarbeitungsfunktionen:
+CoreTests: 80
+DropTests: 15
+TagDropTests: 15
+StructureDropTests: 23
+ImportPackingTests: 9
+OverviewTests: 19
+TagEditingTests: 7
+ImportAudioTests: 20
+CoverTests: 23
+CoverNameTests: 29
+FingerprintTests: 23
+ProjectSafetyTests: 48
+PlaybackTests: 26
+UiSmokeTests: 59
+CoverUiTests: 13
+FolderCoverUiTests: 13
+BundledFpcalcTests: 7
+SelectionUiTests: 10
+AlbumEditingTests: 16
+AlbumUiTests: 11
+WorkspaceUiTests: 14
+ModularUiTests: 15
+Gesamt: 495 Prüfungen unter Linux/Mono bestanden.
+
+Die vollständige vorhandene Verarbeitungssuite wurde für die Albumänderungen
+erneut ausgeführt; nach Einführung der Arbeitsfenster zusätzlich die betroffenen
+Oberflächen- und Auswahlprüfungen auf dem abschließenden Stand.
+
+Windows-GUI-Hauptprogramm erneut gegen .NET-Framework-4.8-Referenzassemblies
+gebaut. Die offizielle unveränderte Windows-x86-64-fpcalc.exe 1.6.2 liegt im
+Unterordner tools/fpcalc, inklusive vollständiger Quellen und Lizenztexte.
+SHA-256 für Downloadarchiv, EXE und Quellen festgehalten; Paketdateien geprüft.
+PE-x64 geprüft. Laut PE-Importtabelle nur Windows-Systembibliotheken nötig
+(bcrypt, KERNEL32, msvcrt, SHELL32, USER32), keine separaten Decoder-DLLs.
+
+Prüfungen umfassen automatischen relativen Pfad, Vorrang vor veralteten Pfaden,
+Umzug des portablen Ordners, abweichendes Arbeitsverzeichnis, Fehler bei
+fehlendem Werkzeug und Bedienung ohne Download-/Dateiauswahlschaltflächen.
+Titelmenü mit Alle auswählen, Markierung umkehren und Markierung aufheben:
+volle/leere/teilweise Auswahl, aktive Zelle und vorherige Tag-Eingabe geprüft.
+Individuelle Alben bleiben nach Speichern, Sortieren, Themenänderung und Export
+erhalten. MP3-Kopie, Audio-Arbeitskopie und echte FFmpeg-Konvertierung geprüft.
+Ältere Projekte verwenden ohne individuelle Änderung weiter das Themenalbum.
+Fünf Arbeitsmodule (Ordner, Titel, Tags, Cover, Player) sind abtrennbar und
+einzeln ein-/ausblendbar. Auswahl und Daten bleiben verbunden. X blendet aus;
+Andocken geschieht ausdrücklich. Ruhige Ordner-/Titelansicht, Anordnung
+speichern/laden und Standardansicht geprüft. Player spielt ausgeblendet weiter.
+Verlorene Bildschirme werden abgefangen, beschädigte Layoutdateien führen
+zur Standardansicht. Die Fensterdatei enthält keine Quellen oder Schlüssel.
+
+Fingerabdruck-Berechnung erneut mit echtem Linux-fpcalc 1.6.2 auf generiertem
+Audio geprüft; Originaldateien bleiben unverändert. AcoustID-Antworten mit
+Offline-Fixtures geprüft; eigener Client-Schlüssel wird nicht mitgeliefert.
+
+Grenzen: Die enthaltene Windows-fpcalc.exe ist hier NICHT ausgeführt worden.
+PowerShell-Vorbereitungsskript und Windows-DPAPI nicht nativ ausgeführt.
+Kein Live-AcoustID-Abgleich mit eigenem Zugang, kein echter Windows-Audio-
+oder Musikbox-Exporttest. Der tatsächliche Windows-Aufruf bleibt zu prüfen.
+
+Das ZIP enthält fpcalc und ist nach vollständigem Entpacken ohne zusätzlichen
+fpcalc-Download nutzbar. Bei einem Neubau aus Git stellt Prepare-Fpcalc.ps1 die
+fest versionierten Dateien mit Prüfsummen wieder her. Die Hauptanwendung
+erlaubt den Austausch des separaten fpcalc.exe ohne eigene Neukompilierung.
+MP3Gain und die separate ffmpeg.exe für Audioexport bleiben externe Optionen.
+Keine privaten Musikdateien, Sammlungsprojekte oder Zugangsschlüssel enthalten.

@@ -1,0 +1,2 @@
+using System;using System.IO;using System.Linq;using Musikbox;
+class GainUndo{static void Main(string[] a){string parent=a[2];Directory.CreateDirectory(parent);var s=MediaMetadata.Read(a[0]);string gained=BatchGain.WriteCopies(new[]{s},a[1],parent,"Track",89,()=>{});var g=MediaMetadata.Read(Directory.GetFiles(gained,"*.mp3").Single());string undone=BatchGain.WriteCopies(new[]{g},a[1],parent,"Undo",89,()=>{});Console.WriteLine(Directory.GetFiles(undone,"*.mp3").Single());}}

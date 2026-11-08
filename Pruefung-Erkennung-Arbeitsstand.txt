@@ -1,0 +1,44 @@
+Arbeitsstand Fingerabdruck-Erkennung – 16.10.2026 UTC
+
+Auf Nutzerwunsch keine neue Testversion und kein neues ZIP bereitgestellt.
+Die weitere Umsetzung ist bis zum Abschluss der Wunschliste pausiert.
+
+Implementiert: optionale AcoustID-/Chromaprint-Erkennung genau eines gewählten
+Titels auf ausdrücklichen Aufruf. Einrichtung mit eigenem Anwendungsschlüssel,
+Windows-DPAPI-Speicherung, POST an öffentlichen AcoustID-Lookup-Endpunkt,
+Abbruch, Trefferauswahl ohne automatische Übernahme. Nur Interpret und Titel
+ändern sich im Projekt. Themenalbum und Musikquellen bleiben erhalten.
+Kein Massenscan und keine Erkennung beim Import oder Abspielen.
+
+Intern gegen explizite .NET-Framework-4.8-Referenzassemblies kompiliert.
+Bestanden unter Linux/Mono:
+- CoreTests: 80
+- DropTests: 15
+- TagDropTests: 15
+- StructureDropTests: 21 (unter anderem 88 Ordner / 8.098 synthetische Titel)
+- OverviewTests: 19
+- TagEditingTests: 7
+- ImportAudioTests: 20 (echtes FFmpeg, MP3Gain-Testprogramm)
+- CoverTests: 18 (Online-Dienste über Offline-Antworten)
+- FingerprintTests: 23 (echtes Chromaprint/fpcalc 1.6.2 mit generiertem Signal)
+- UiSmokeTests: 15 (Linux/Mono/Xvfb)
+Insgesamt 233 Prüfungen.
+
+Fingerabdruck geprüft mit Leerzeichen und Umlauten im Dateipfad, falschem
+Dateinamen, falschen Tags und 150-Sekunden-Datei. Fingerabdruck identisch,
+Gesamtdauer korrekt, Original bytegleich. Fehlerhafte Antworten, ungültiger
+Schlüssel als Offline-Antwort, fehlende Werkzeuge, beschädigtes Audio, Abbruch
+vor Werkzeugstart und mehrdeutige Trefferauswahl ebenfalls geprüft.
+
+Grenzen:
+- Keine echte erfolgreiche AcoustID-Online-Erkennung: eigener Anwendungsschlüssel
+  fehlt. Netzwerkfehler, Abbruch während echter Online-Anfrage und Windows-DPAPI
+  sind noch nicht im Zielsystem geprüft.
+- Kein Windows-Test und kein Test an der tatsächlichen Musikbox; Export bleibt
+  wie vom Nutzer gewünscht für später vorgesehen.
+- Öffentlicher AcoustID-Dienst nur im Rahmen seiner Anbieterbedingungen;
+  nichtkommerzielle Bedingungen und Kneipen-Einsatz separat klären. GEMA-Status
+  ist keine Freigabe für die API. Ein gewerblicher Dienst kann eine andere
+  Schnittstelle benötigen, die hier nicht implementiert ist.
+- fpcalc.exe wird nicht mitgeliefert. Einrichtung über offizielle Download- und
+  Registrierungslinks; keine Installation und keine Zugangsdaten im Repository.

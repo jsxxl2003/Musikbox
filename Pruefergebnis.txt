@@ -1,0 +1,81 @@
+OK Alle Beispieldateien lesbar
+OK Fünf Beispielordner erkannt
+OK 15 Titel erkannt
+OK Country über Ordnergrenzen sortiert
+OK Projekt speichern, überschreiben und laden
+OK 15 MP3-Kopien exportiert
+OK Album korrekt: Vengaboys
+OK Audio unverändert: Vengaboys
+OK Weitere ID3-Frames erhalten: Vengaboys
+OK Album korrekt: Whitney Houston & Enrique Iglesias
+OK Audio unverändert: Whitney Houston & Enrique Iglesias
+OK Weitere ID3-Frames erhalten: Whitney Houston & Enrique Iglesias
+OK Album korrekt: Zlatko
+OK Audio unverändert: Zlatko
+OK Weitere ID3-Frames erhalten: Zlatko
+OK Album korrekt: Afroman
+OK Audio unverändert: Afroman
+OK Weitere ID3-Frames erhalten: Afroman
+OK Album korrekt: Alcazar
+OK Audio unverändert: Alcazar
+OK Weitere ID3-Frames erhalten: Alcazar
+OK Album korrekt: Alicia Keys
+OK Audio unverändert: Alicia Keys
+OK Weitere ID3-Frames erhalten: Alicia Keys
+OK Album korrekt: AC-DC
+OK Audio unverändert: AC-DC
+OK Weitere ID3-Frames erhalten: AC-DC
+OK Album korrekt: Alan Parsons Project
+OK Audio unverändert: Alan Parsons Project
+OK Weitere ID3-Frames erhalten: Alan Parsons Project
+OK Album korrekt: Alice Cooper
+OK Audio unverändert: Alice Cooper
+OK Weitere ID3-Frames erhalten: Alice Cooper
+OK Album korrekt: Danny Vera
+OK Audio unverändert: Danny Vera
+OK Weitere ID3-Frames erhalten: Danny Vera
+OK Album korrekt: Darryl Worley
+OK Audio unverändert: Darryl Worley
+OK Weitere ID3-Frames erhalten: Darryl Worley
+OK Album korrekt: Dasha
+OK Audio unverändert: Dasha
+OK Weitere ID3-Frames erhalten: Dasha
+OK Album korrekt: David Allan Coe
+OK Audio unverändert: David Allan Coe
+OK Weitere ID3-Frames erhalten: David Allan Coe
+OK Album korrekt: David Allan Coe
+OK Audio unverändert: David Allan Coe
+OK Weitere ID3-Frames erhalten: David Allan Coe
+OK Album korrekt: Deana Carter
+OK Audio unverändert: Deana Carter
+OK Weitere ID3-Frames erhalten: Deana Carter
+OK Alle Originaldateien bytegleich
+OK Unicode bleibt in ID3v2.3 erhalten
+OK 198 Titel auf zweimal 99 verteilt
+OK Alphabetische Fortsetzung bei Titel 100
+OK 199 Titel erzeugen automatisch dritten Ordner
+OK 100 Ordner blockiert
+OK Windows-Dateinamen bereinigt
+OK Ordner verschieben tauscht Nummern und Reihenfolge
+OK Doppelte Ordnernummer erkannt
+OK Nicht unterstütztes Tag-Format sicher blockiert
+OK Abbruch hinterlässt keinen fertigen oder unvollständigen Export
+OK Export in Musikquelle blockiert
+OK 472 Titel auf 99/99/99/99/76 verteilt
+OK Fortlaufende Nummern, bestehender Folgeordner verschoben
+OK Thema, Album, Gruppe und Cover einheitlich
+OK Alphabetische Reihenfolge über alle fünf Ordner
+OK Aufteilung verändert Eingangsprojekt nicht
+OK Wiederholte Aufteilung erzeugt keine zusätzlichen Ordner
+OK Ordner ohne Nummer werden automatisch nummeriert
+OK Automatische Grenze: 0 Titel
+OK Automatische Grenze: 1 Titel
+OK Automatische Grenze: 99 Titel
+OK Automatische Grenze: 100 Titel
+OK Automatische Grenze: 198 Titel
+OK Automatische Grenze: 199 Titel
+OK Automatische Grenze: 472 Titel
+OK Automatische Grenze: 9801 Titel
+OK 9802 Titel sicher abgelehnt, Eingabe erhalten
+OK Zusätzlicher Folgeordner bei 99 belegten Ordnerplätzen blockiert
+BESTANDEN: 80 Prüfungen

@@ -1,0 +1,21 @@
+OK Standard 192 kbit/s CBR; keine automatische MP3-Neucodierung
+OK Alte Projektdateien erhalten neue Standardwerte
+OK CBR-Ausgabe tatsächlich 128 kbit/s
+OK CBR-Ausgabe tatsächlich 160 kbit/s
+OK CBR-Ausgabe tatsächlich 192 kbit/s
+OK CBR-Ausgabe tatsächlich 224 kbit/s
+OK CBR-Ausgabe tatsächlich 256 kbit/s
+OK CBR-Ausgabe tatsächlich 320 kbit/s
+OK VBR V0: wechselnde MP3-Framegrößen bestätigt
+OK VBR V1: wechselnde MP3-Framegrößen bestätigt
+OK VBR V2: wechselnde MP3-Framegrößen bestätigt
+OK VBR V3: wechselnde MP3-Framegrößen bestätigt
+OK VBR V4: wechselnde MP3-Framegrößen bestätigt
+OK VBR V5: wechselnde MP3-Framegrößen bestätigt
+OK Alle Kodierungseinstellungen gespeichert und geladen
+OK Kodierungseinstellungen bei automatischer Sortierung erhalten
+OK Vorhandene MP3 ohne ausdrückliche Auswahl nicht neu kodiert
+OK Ausdrückliche Auswahl aktiviert MP3-Neucodierung
+OK Ungültige CBR-Bitrate abgefangen
+OK Ungültige VBR-Qualität abgefangen
+BESTANDEN: 20 Bitraten-Prüfungen (Linux-Programme)

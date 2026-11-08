@@ -1,0 +1,36 @@
+﻿Portable Windows-x64-Testversion 0.17.2 — Prüfung am 17.10.2026
+
+Gezielte Prüfungen:
+PaneDragUiTests: 21
+ModernUiTests: 23
+WorkspaceUiTests: 18
+Gesamt: 62 Prüfungen unter Linux/Mono bestanden.
+
+Fenster-/Zeigen-Schaltflächen aus den Modulkopfzeilen entfernt.
+Die ganze Kopfzeile (Beschriftung und freie Fläche) reagiert auf Linkszug.
+Die normale Windows-Ziehschwelle verhindert das Lösen bei einfachem Klick.
+Ein angedocktes Modul löst sich bei gedrückt gehaltener linker Maustaste;
+der laufende Zug wird auf das freie Fenster übertragen. Alle fünf Module
+getestet: Abtrennen, Weiterziehen ohne erneuten Klick, Loslassen beendet Zug.
+Rechtsziehen und Verlust der Mauserfassung lösen kein Modul. Offene
+Tag-Eingabe wird übernommen, Andocken verwendet dieselben Controls.
+Kopfzeilenpanel und Text-/Freifläche als Greifbereiche angesprochen.
+
+Beschriftungen nochmals etwa 15 Prozent kleiner: Modultitel 6,8 statt 8 pt,
+Feldbeschriftungen 7,25 statt 8,5 pt, Kopfzeilen 19 statt 22 Pixel
+(100 % Skalierung). Screenshot der Module visuell geprüft.
+Magnet-, Ziehgriff-, Bestandszählungs- und bisherige Arbeitsfensterprüfungen
+erneut bestanden. Untere Leiste enthält weiterhin nur Ordner- und Titelanzahl.
+
+Hauptprogramm gegen .NET-Framework-4.8-Referenzassemblies gebaut.
+Windows-PE, Versionskennung 0.17.2.0, ZIP-CRC, EXE/.config und die unveränderten
+fpcalc-Paketdateien samt Quellen und Lizenzen anhand der Prüfsummen validiert.
+Vorherige vollständige Verarbeitungstests siehe Pruefung-v0.16.txt;
+breitere frühere UI-Prüfungen siehe Pruefung-v0.17.txt und Pruefung-v0.17.1.txt.
+Diese wurden für die vorliegende Änderung nicht vollständig wiederholt.
+
+Grenzen: keine native Windows-Ausführung. Mausereignisse und Mauserfassung
+gezielt unter Mono/Xvfb geprüft. Tatsächliche Windows-Mausbedienung, DPI-
+Skalierung und Mehrmonitorbetrieb bleiben praktisch zu testen. Windows-Audio,
+fpcalc.exe und Export an die Musikbox hier nicht ausgeführt; keine Live-
+Abfragen der Erkennungsdienste.

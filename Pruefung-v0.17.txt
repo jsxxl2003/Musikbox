@@ -1,0 +1,41 @@
+﻿Portable Windows-x64-Testversion 0.17 — Prüfung am 17.10.2026
+
+Gezielte Prüfungen der Oberfläche und modularen Fenster:
+UiSmokeTests: 59
+CoverUiTests: 13
+FolderCoverUiTests: 13
+SelectionUiTests: 10
+AlbumUiTests: 11
+WorkspaceUiTests: 14
+ModularUiTests: 15
+ModernUiTests: 23
+Gesamt: 158 Prüfungen unter Linux/Mono bestanden.
+
+Neue ModernUiTests: dunkelblaue Titelliste mit heller Schrift, Menü Ansicht
+mit fünf Fenster-Häkchen, Umschalten durch Klick und Alt+5, Synchronisierung
+beim Ausblenden am Modul, Magnet-Geometrie und Bildschirmrand, gemeinsames
+Verschieben verbundener Fenster, getrennte Fenster bleiben stehen, Umschalt
+löst einen Baustein, abschaltbare Magnetfunktion, Speichern und Laden dieser
+Einstellung. Sichtbarer schraffierter Ziehgriff unten rechts, diagonaler
+Größenmauszeiger, gleichzeitige Änderung von Breite und Höhe, Mindestgröße,
+keine weitere Größenänderung nach Loslassen. UI-Screenshot visuell geprüft.
+
+Bisherige UI-Prüfungen für Player, Cover, Auswahl, Album und Fenster erneut
+ausgeführt. Ausblenden unterbricht keine Wiedergabe. Die Verarbeitungslogik
+wurde in 0.17 nicht verändert; die vollständige Verarbeitungssuite ist zuletzt
+für 0.16 ausgeführt worden (siehe Pruefung-v0.16.txt). Ihre 495 Prüfungen
+werden hier nicht als neu ausgeführte 0.17-Prüfungen gezählt.
+
+Hauptprogramm gegen explizite .NET-Framework-4.8-Referenzassemblies gebaut;
+Windows-PE und eingebettete Versionsnummer geprüft. Paket-CRC, EXE, .config,
+fpcalc 1.6.2 (offizielle unveränderte Windows-x64-Datei), Lizenzdateien und
+vollständige Quellen mit SHA-256 aus dem vorhandenen Manifest validiert.
+Keine privaten Musikdateien, Projekte oder Zugangsdaten enthalten.
+
+Grenzen: kein nativer Windows-Test. Mausbewegung über echte Windows-Rahmen,
+Fenstergruppen bei mehreren Monitoren/DPI-Stufen, Windows-Audio, fpcalc.exe
+und PowerShell-Neubau bleiben auf Windows zu prüfen. Kein Live-AcoustID-
+oder ACRCloud-Test, kein Exporttest auf der Musikbox in dieser Version.
+Magnet- und Ziehgrifftests rufen Mausereignisse unter Mono gezielt auf.
+Die silberblaue Gestaltung ist eigenständig implementiert; keine Übernahme
+von Winamp-Code oder Winamp-Skins.

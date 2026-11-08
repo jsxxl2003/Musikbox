@@ -1,0 +1,62 @@
+﻿Portable Windows-x64-Testversion 0.18 — Prüfung am 17.10.2026
+
+Gezielte Prüfungen:
+UiSmokeTests: 59
+CoverUiTests: 13
+FolderCoverUiTests: 13
+SelectionUiTests: 10
+AlbumUiTests: 11
+WorkspaceUiTests: 18
+ModularUiTests: 15
+ModernUiTests: 23
+PaneDragUiTests: 21
+AppThemeUiTests: 28
+AppPickerUiTests: 32
+Gesamt: 243 Prüfungen unter Linux/Mono bestanden.
+
+Gemeinsame Design-Fensterklasse für Hauptfenster und eigene Dialoge.
+Rahmen, Titelaktualisierung, Schließknopf mit FormClosing-Abbruch, Windows-
+Reihenfolge der Fensterknöpfe, Lage der Befehls-/Bestandsleiste und absolute
+Eingabefelder unter der Titelleiste geprüft. Feste Dialoge bleiben fest.
+Rahmen für Einstellungen, Tag-Editor, Cover-Designer, Coversuche,
+Fingerabdruck-Konfiguration und Sicherungen geprüft; Passwortschutz bleibt.
+Registerkarten, Listen einschließlich Spaltenköpfen und Kontextmenüs gestaltet.
+
+Eigene Hinweis-/Bestätigungsfenster: Ja, Nein, Abbrechen und Kreuz geprüft;
+Schließen einer Ja/Nein-Frage stimmt keiner Änderung zu.
+Eigene Datei-/Speicher-/Ordnerauswahl: Filter, Groß-/Kleinschreibung,
+Mehrfachauswahl per Listeneinträgen und quotierten Namen mit Leerzeichen,
+Navigation, nicht erreichbare Pfade, Projektendung, Abbrechen, Windows-
+Reservierungsnamen, neues Verzeichnis und Ablehnung von Pfadtraversierung.
+Ersetzen bestehender Dateien nur nach Bestätigung. Auswahldialoge schreiben
+selbst keine ausgewählten Dateien. Synthetische Quellen unverändert.
+Farbwahl: RGBA, Palette, RGB-/ARGB-Hexwerte und ungültige Eingabe.
+Schriftwahl: Familie, Punktgröße, Fett, Vorschau und ungültige Familie.
+Schriftwahl übernimmt den Fettdruck jetzt auch in den Covertext.
+Screenshots von Hauptfenster/Einstellungen, Datei-, Farb- und Schriftwahl
+visuell geprüft. Windows-Systemdialoge nur innerhalb der App durch eigene
+Auswahlfenster ersetzt; keine Änderung der Windows-Oberfläche anderer Programme.
+
+Bisherige UI-, Player-, Cover-, Album-, Auswahl-, Layout-, Magnet- und
+Ziehgriffprüfungen erneut ausgeführt. Nach der Auswahldialog-Erweiterung
+betroffene Dialog-/Cover-/Albumprüfungen und nach Gestaltung der Listenköpfe
+die beiden neuen Design-/Auswahlsuiten erneut geprüft.
+
+Hauptprogramm gegen explizite .NET-Framework-4.8-Referenzassemblies gebaut.
+Windows-PE, Versionskennung 0.18.0.0, ZIP-CRC, EXE/.config und unveränderte
+fpcalc-Paketdateien samt Quellen/Lizenzen anhand des SHA-256-Manifests geprüft.
+Frühere vollständige Verarbeitungstests siehe Pruefung-v0.16.txt. Diese wurden
+für die vorliegende Oberflächen- und Auswahldialogänderung nicht vollständig
+wiederholt. Keine privaten Musiksammlungen oder Zugangsdaten im Paket.
+
+Grenzen: keine native Windows-Ausführung. Tatsächliche Fensterknöpfe,
+Maus-/DPI-/Mehrmonitorbedienung, Windows-Laufwerke/UNC/USB und installierte
+Windows-Schriften bleiben auf dem Zielsystem zu prüfen. Die Dateiauswahl
+ist ein app-eigener Dateibrowser; virtuelle Windows-Shell-Orte/Cloud-Provider
+werden nicht als Shell-Oberfläche nachgebildet. Direkte zugängliche Pfade
+und Laufwerke sind vorgesehen. Windows-Audio/fpcalc.exe und Musikbox-Export
+hier nicht ausgeführt; keine Live-Abfragen der Erkennungsdienste.
+
+Suchwunsch für Bilder/Cover und spätere Titel-/Künstlersuche dokumentiert.
+Es wurde kein Winamp-Code übernommen und kein identischer Suchalgorithmus
+zugesichert oder implementiert. Bestehende Online-Dienste bleiben erhalten.

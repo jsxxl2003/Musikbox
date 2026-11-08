@@ -1,0 +1,57 @@
+Arbeitsstand Projektschutz und Cover-Auswahl – 17.10.2026 (Europe/Berlin)
+
+Keine neue Testversion, kein neues ZIP und kein Release bereitgestellt.
+Nutzerwünsche werden weiter gesammelt. Änderungen auf Branch entwicklung.
+
+Funktionen:
+- Projekt-Rückgängig und Wiederholen, gespeicherter Vergleichsstand, getrennte
+  Verläufe bei Projektwechsel, verschachtelte Coverentwürfe in eigenen Snapshots.
+- Automatische Sicherungen nach übernommenen Änderungen und jede Minute;
+  maximal 20 Stände je Projekt, atomisches Schreiben, Wiederherstellungsdialog,
+  sichtbare Schreibfehler. Musik, Bilder und Erkennungszugänge nicht mitkopiert.
+- Fehlende Quellen/Cover über alten und neuen Stammordner wiederverbinden;
+  Vorschau, Erreichbarkeitsprüfung, Abbruch ohne Teiländerung, rückgängig.
+- Einstellungsübersicht für Audio, Erkennung, Covergestaltung/-suche und Schutz.
+- Explizite Coverwahl nach Annahme eines Erkennungsvorschlags: Themenordnercover
+  zuerst, optional gefundenes Single-Cover oder bisheriges Cover behalten.
+  Ordnerbild und andere Titel bleiben erhalten. Kein Online-Treffer wird
+  automatisch zum Titelcover.
+
+Kompilierung ausschließlich gegen explizite .NET-Framework-4.8-Referenzen.
+Prüfungen unter Linux/Mono:
+CoreTests 80; DropTests 15; TagDropTests 15; StructureDropTests 21;
+OverviewTests 19; TagEditingTests 7; ImportAudioTests 20; CoverTests 23;
+FingerprintTests 23; ProjectSafetyTests 48; UiSmokeTests 35.
+Gesamt: 306 Prüfungen.
+
+Projektschutz: gespeicherter Stand und Wiederholen; neue Änderung nach Undo;
+Schritt-/Speichergrenzen; Ordner und verschachtelte Cover; Sicherungsrotation;
+Schreibfehler, beschädigte Daten und veraltete Hintergrundrevision; getrennte
+Projekte und Sitzungen; temporäre Dateien; Laufwerks-/UNC-Zuordnung als reine
+Pfadlogik; Prefix-Grenzen, fehlende Dateien und Medienentfernung vor Übernahme;
+Abbruch ohne Teiländerung; Cover-/Audio-Arbeitskopien; 88 Ordner / 8.098 Titel
+für Undo/Redo und vollständiges Laden der Sicherung.
+
+UI: tatsächliche Menü-Aktionen und Strg+Z; ausstehende Seitenleisten-Eingabe;
+Sicherung über laufenden WinForms-Timer; Wiederherstellungsauswahl; Dialoge
+für Zuordnung und Einstellungen; Themen-/Single-Cover-Vorschau ohne Vorgabe;
+explizite Auswahl; unverändertes Ordnerbild; rückgängig gemachte Titelcover-Wahl;
+fehlende Cover und Schließen. Dialoge zusätzlich intern bildlich geprüft.
+
+Coverdaten: bewusst gewähltes Themenbild exakt als APIC in eine synthetische
+MP3-Exportkopie geschrieben, Musikquelle bytegleich. Dies ist kein vollständiger
+Exporttest auf der tatsächlichen Musikbox.
+
+Grenzen:
+- Kein Windows-Test, keine Prüfung von Windows-DPI, echten Windows-Laufwerken
+  oder SMB-Freigaben; Pfadfälle unter Linux zusätzlich rein logisch geprüft.
+- Kein echter Absturz-/Stromausfallversuch und kein Test mehrerer gleichzeitig
+  schreibender Windows-App-Instanzen. Atomare Dateiumbenennung und temporäre
+  Dateien werden durch die Speicherlogik behandelt.
+- Sicherungen enthalten nur übernommene Projektstände und Verweise. Medien
+  separat aufbewahren; unbestätigte Texteingaben vor einem Absturz können fehlen.
+- Keine erfolgreiche Live-Erkennung ohne eigenen Anwendungsschlüssel und kein
+  neuer Live-Coverabruf in diesen Tests. Antworten mit Offline-Fixtures, fpcalc
+  mit echtem generiertem Audiosignal. Keine fremden Schlüssel verwendet.
+- MP3Gain-Aufrufe mit Testprogramm; Audioimport mit echtem FFmpeg unter Linux.
+- Vorhandene Musikbox-Exportprüfung bleibt für später vorgesehen.

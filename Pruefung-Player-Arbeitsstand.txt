@@ -1,0 +1,42 @@
+Arbeitsstand integrierter Player – 17.10.2026
+
+Kein neues ZIP, Release oder öffentlich bereitgestelltes Testpaket.
+Arbeitsstand auf entwicklung; bestehende Testversion 0.13 bleibt unverändert.
+
+Umgesetzt:
+- Kleiner eingeblendeter Player unter der Titelliste; Zugang per Titel-Rechtsklick
+  und Schnellzugriff Player. Öffnen ohne automatisches Abspielen.
+- Start/Weiter, Pause, Stopp, Positionsregler, aktuelle Zeit/Gesamtdauer,
+  natürlicher Titelabschluss und Neustart. Geladener Titel unabhängig vom Fokus.
+- Player-Stopp getrennt vom Abbrechen eines laufenden Programmvorgangs;
+  bedienbar auch während Verarbeitung. Schließen gibt Wiedergabegerät frei.
+- Passende Arbeitskopie oder Originalquelle, keine Änderungen an Medien.
+- Bewusste Coverwahl beim frischen Start, falls Option aktiviert; immer mit
+  korrektem geladenem Titel/Themenordner statt zufällig aktuellem Listenfokus.
+- Projektwechsel/Rückgängig bleibt auch bei Geräte-Schließfehler konsistent.
+
+Interner Build gegen explizite .NET-Framework-4.8-Referenzassemblies.
+Gezielte Prüfungen bestanden: 26 PlaybackTests + 55 UiSmokeTests = 81.
+Diese Zahl enthält die bisherigen 35 UI-Prüfungen und 20 neue Player-UI-Fälle.
+Die 306 Prüfungen des vorherigen Projektschutzstands sind separat dokumentiert
+und wurden für diese kleine Player-Erweiterung nicht alle erneut ausgeführt.
+
+PlaybackTests: simulierte Windows-MCI-Antworten; Start, Pause und Fortsetzen,
+Seek während Wiedergabe/Pause, Ende/Neustart, Stopp/Freigabe, Titelwechsel,
+fehlende/ungültige Datei, ungültige Zeitantwort, Initialisierungsfehler,
+Dispose, Unicode/Leerzeichen/Platzhalter im Pfad, bytegleiche Quellen.
+
+UI: Menü-/Button-Aktionen, geladenen Titel beim Fokuswechsel behalten,
+unabhängiger Stopp während simuliertem Verarbeitungsvorgang, Positionsregler,
+Ende und Neustart, korrekte Coverzuordnung, Rückgängig bei Gerätefehler,
+App-Schließen und Mindestfenstergröße. Internes Rendering zusätzlich geprüft.
+
+Grenzen: Linux/Mono/Xvfb mit simuliertem Audiogerät, kein realer Windows-Ton,
+keine echten Codec-, Soundkarten-, Treiber- oder Dateisperrentests. Kein
+Musikbox-Test und kein neuer Live-Coverabruf. Windows-Nativaufrufe erst auf dem
+Zielrechner prüfen. Bestehendes MCI wurde erweitert, nicht durch einen
+zusätzlichen Fremdplayer ersetzt.
+
+Offizielle Referenzen zum verwendeten vorhandenen MCI-Backend:
+https://learn.microsoft.com/en-us/windows/win32/multimedia/changing-the-playback-state
+https://learn.microsoft.com/en-us/windows/win32/multimedia/seek

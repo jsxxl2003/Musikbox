@@ -1,0 +1,28 @@
+Version 0.10 – Ordnerstruktur bei Drag-and-drop übernehmen
+
+Build: Mono C# 6.8, ausschließlich explizite .NET-Framework-4.8-Referenzen
+(-noconfig -nostdlib+). Windows-EXE und vier Testprogramme erfolgreich kompiliert.
+
+Neue Strukturimport-Prüfungen: 18 bestanden.
+- 88 Quellordner mit insgesamt 8.098 synthetischen MP3-Tag-Dateien.
+- Unterschiedliche Album-Tags erzeugen im Strukturmodus keine Zusatzordner.
+- Gleiche Themen bleiben getrennte Ordner; Nummern und Cover bleiben erhalten.
+- Überlappende Auswahl, Abbruch und bestehende Projektordner geprüft.
+- 472 Titel erzeugen 99/99/99/99/76 mit fortlaufenden Nummern.
+- Tatsächliche Überschreitung (12 bestehende + 88 neue Ordner) wird abgelehnt.
+
+Regressionsprüfungen auf synthetischen Referenzdateien:
+- DropTests: 15 bestanden (optionaler Album-Modus).
+- TagDropTests: 15 bestanden (optionaler Album-Modus).
+- CoreTests: 80 bestanden (unter anderem Export, Tags und Aufteilung).
+Gesamt: 128 bestandene Verarbeitungsprüfungen.
+
+Die Testdateien enthalten synthetische Tags und Platzhalter-Audiobytes.
+Diese Prüfungen belegen Import-/Exportlogik und Quellschutz, keine Audioqualität.
+Es wurden weder die echte 8.098-Titel-Sammlung des Nutzers noch die Windows-
+Oberfläche oder die Musikbox hier getestet. Audioverfahren wurden nicht geändert.
+
+Windows-Nachprüfung:
+ZIP vollständig in neuen Ordner entpacken; vorhandenes Projekt vorher speichern.
+Mit leerem Projekt und voreingestelltem Ordnerimport: Struktur übernehmen
+88 echte Ordner hineinziehen. Titelanzahl, Nummern, Cover und Themen prüfen.

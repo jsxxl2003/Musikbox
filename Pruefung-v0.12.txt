@@ -1,0 +1,18 @@
+Version 0.12 – Sammlungsübersicht
+
+Windows-EXE und fünf Testprogramme mit expliziten .NET-Framework-4.8-
+Referenzassemblies (-noconfig -nostdlib+) erfolgreich kompiliert.
+
+150 Verarbeitungsprüfungen bestanden (Mono):
+- OverviewTests: 19 (Zählwerte, Leerprojekt, Dubletten über Ordnergrenzen,
+  leere Tags, Groß-/Kleinschreibung, Unicode, Coverstatus, freie Plätze,
+  stabile Ordner-/Titelindizes, 9801 Titel, Eingangsprojekt unverändert).
+- StructureDropTests: 21 (inkl. 88 Ordner mit 8098 synthetischen Tag-Dateien).
+- DropTests: 15.
+- TagDropTests: 15.
+- CoreTests: 80.
+
+Testdaten sind synthetisch; Dubletten beziehen sich auf Interpret/Titel,
+nicht auf geprüfte Audioidentität. Coverstatus beruht auf ausgewählter Datei,
+nicht auf eingebetteten Bildern. Kein Windows-Oberflächen-/Navigationstest
+und kein Test an der Musikbox hier durchgeführt. Exporttest bleibt offen.

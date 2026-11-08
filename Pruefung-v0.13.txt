@@ -1,0 +1,49 @@
+Version 0.13 – gesamter Wunschstand vom 16.10.2026
+
+Build: Windows-EXE erfolgreich gegen explizite .NET-Framework-4.8-
+Referenzassemblies kompiliert (-noconfig -nostdlib+). Keine Mono-only-APIs.
+
+204 bestandene Prüfungen:
+- CoreTests: 80 (Tags, Exportkopien, Quellschutz, Aufteilung und Grenzen).
+- DropTests: 15, TagDropTests: 15, StructureDropTests: 21.
+- OverviewTests: 19.
+- ImportAudioTests: 20. Reales FFmpeg unter Linux: Hintergrund-Vorbereitung,
+  Original unverändert, Profilwechsel, persistierte Cacheverweise, Abbruch,
+  Fehler nach erstem Titel und unveränderte vorbereitete Audiodaten im Export.
+  MP3Gain wird in den neuen Tests mit einem Testprogramm auf Argumentübergabe,
+  Zielpegel und Fehlerbehandlung geprüft, nicht akustisch gemessen.
+- TagEditingTests: 7 (einzelne/mehrere Titel, gewählte Felder, Quellschutz).
+- CoverTests: 18 (Bildrendering, bearbeitbare Vorlagen, Serien-Platzhalter,
+  Projekt-Speicherung, eingebettetes APIC ohne Duplikate, Suchantworten,
+  signierte Erkennungsanfrage und Fehlerfälle mit Offline-Antwortfixtures).
+- UiSmokeTests: 9 unter Mono/Xvfb. Hauptfenster, Auswahlwechsel mit Tags,
+  korrekte Zielzuordnung, Rechtsklick-Menüs, Mindestgröße, Cover-Designer,
+  Mehrfach-Tag-Editor und Coversuche-Fenster. Hauptfenster/Designer/Tag-Dialog
+  wurden als interne Screenshots visuell geprüft. Ein zu schmaler Tag-Bereich
+  bei Mindestgröße wurde dabei korrigiert.
+
+Grenzen:
+- Linux/Mono/Xvfb ist kein Test der echten Windows-Oberfläche oder Audioausgabe.
+- Windows-MCI-Wiedergabe und Windows-DPAPI-Zugangsspeicherung sind hier nicht
+  praktisch getestet. Diese verwenden Windows-Bordfunktionen.
+- Musikbox-Exporttest an der echten Hardware bleibt wie besprochen offen.
+- Referenz-Musikdateien der Regressionstests sind synthetische Tag-Dateien;
+  der FFmpeg-Audiotest verwendet eigens erzeugtes Audiomaterial.
+- MusicBrainz/Cover Art Archive: Implementierung gemäß offizieller API;
+  Suchantworten, IDs und Fehlerbehandlung mit Fixtures geprüft. Ein Liveabruf
+  war aus dieser Umgebung nicht als gültige JSON-Antwort auswertbar. Die
+  tatsächliche Online-Suche muss mit Internet auf Windows geprüft werden.
+- ACRCloud: Protokoll/SHA1-HMAC und Antwortauswertung mit Fixtures geprüft.
+  Kein echter Anbieterzugang vorhanden, daher kein Live-Erkennungstest und
+  keine kostenpflichtige Anfrage erfolgt. Eigener Account erforderlich.
+- JPEG-/PNG-Titelcover werden erst beim Export in Kopien eingebettet.
+- Originalmusik und bestehende Themenordnercover bleiben bei Coversuche erhalten.
+
+Nachprüfung auf Windows:
+1. Aktuelles Projekt speichern, neue ZIP in eigenen Ordner entpacken, EXE starten.
+2. Projekt öffnen. Menüstruktur, Tag-Seitenleiste und Rechtsklick ausprobieren.
+3. Audio-Einstellungen wählen; zunächst wenige Titel importieren. Fortschritt,
+   Zählwerte und Abbruch prüfen. Keine vollständige Sammlung nötig.
+4. Cover gestalten und Entwurf speichern; bei Bedarf Cover-Serie mit zwei Ordnern.
+5. Titel abspielen, Covervorschläge online suchen und nach Vorschau übernehmen.
+6. Optionale Erkennung erst mit eigenem Anbieterzugang einrichten.

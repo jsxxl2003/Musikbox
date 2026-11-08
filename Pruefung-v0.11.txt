@@ -1,0 +1,18 @@
+Version 0.11 – Importdiagnose
+
+Windows-EXE und vier Testprogramme mit expliziten .NET-Framework-4.8-
+Referenzassemblies (-noconfig -nostdlib+) kompiliert.
+
+131 Verarbeitungsprüfungen bestanden (Mono, synthetische Tag-Testdateien):
+21 Strukturimport-Prüfungen + 15 DropTests + 15 TagDropTests + 80 CoreTests.
+
+Zusätzliche Berichtsprüfungen:
+- 88 Ordner / 8.098 Titel, alle unter 100 pro Ordner: erfolgreich; Bericht 88.
+- 88 Ordner / 8.098 Titel, davon 13 mit 100 Titeln: verständlicher Bericht
+  nennt 101 Zielordner und zeigt betroffene Quellordner mit je 100 Titeln.
+- Zusätzliche Musik-Unterordner werden im Fehlerbericht mit Pfad aufgeführt.
+
+Die ungleiche Verteilung und Unterordner sind reine Testfälle. Sie wurden
+nicht als Ursache bei der Nutzersammlung bestätigt. Die echte Sammlung und
+die Windows-Oberfläche sind hier nicht getestet. Version 0.11 ergänzt die
+Diagnose und behauptet keine bestätigte Behebung des konkreten Importfehlers.

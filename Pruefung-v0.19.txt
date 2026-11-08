@@ -1,0 +1,22 @@
+﻿Portable Windows-Testversion 0.19 – Prüfung 19.10.2026
+
+PaneDragUiTests: 31
+AppPickerUiTests: 41
+AlbumUiTests: 18
+CoverNameTests: 31
+CoverUiTests: 13
+
+134 gezielte Prüfungen unter Mono bestanden, Framework-4.8-Build erfolgreich.
+Neu: Import ab Laufwerken, Musik-Namensfilter und Import-Kontextmenüs;
+Cover-Wortteilsuche; Informationsspalten, Spaltenbreite und Reihenfolge;
+Größenänderung angedockter Module an Rändern/Ecken, normale Kopfzeilen-Cursor.
+Untergrenzen und bisherige Ab-/Andockfunktion geprüft.
+Bitrate wird über Windows-Dateieigenschaften gelesen; unbekannte Werte: —.
+Wortteilsuche für Cover mit Offline-Antworten geprüft, kein Live-Diensttest.
+Dateisuche gilt für den aktuellen Ordner, nicht rekursiv.
+Angedockte Module ändern die gemeinsame Aufteilung. Ohne Nachbar auf einer
+Achse ändert sich die Hauptfenstergröße. Kopfzeile bleibt Verschiebegriff.
+Keine native Windows-Ausführung: Maus/DPI, Windows-Bitrate, Audio und
+Laufwerke/USB müssen dort getestet werden. Keine neuen Export-Volltests.
+ZIP/PE, Versionskennung und fpcalc-Manifest samt Quellen/Lizenzen geprüft.
+Quellmusik und Zugangsdaten nicht enthalten.

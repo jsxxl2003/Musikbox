@@ -1,0 +1,64 @@
+﻿Portable Windows-Testversion 0.15 – Prüfung am 17.10.2026
+
+Release-Build gegen explizite .NET-Framework-4.8-Referenzassemblies.
+Windows-GUI-EXE (PE32, verwaltete .NET-Anwendung) erfolgreich gebaut.
+Keine zusätzlichen Anwendungs-DLLs; .NET Framework 4.8 erforderlich.
+
+Frisch ausgeführte Prüfungen auf diesem Quellstand unter Linux/Mono:
+CoreTests: 80
+DropTests: 15
+TagDropTests: 15
+StructureDropTests: 23
+ImportPackingTests: 9
+OverviewTests: 19
+TagEditingTests: 7
+ImportAudioTests: 20
+CoverTests: 23
+CoverNameTests: 29
+FingerprintTests: 23
+ProjectSafetyTests: 48
+PlaybackTests: 26
+UiSmokeTests: 55
+CoverUiTests: 13
+FolderCoverUiTests: 13
+Gesamt: 418 bestanden.
+
+Umfasst Import/Tags, Aufteilung 88 Ordner / 8.098 synthetische Titel,
+Kapazitätsgrenzen, echte FFmpeg-Verarbeitung, Cover/APIC-Kopien, echte
+Chromaprint-Fingerabdrücke für generiertes Audio, Undo/Redo, Sicherung und
+Wiederverbinden sowie Oberfläche und Playersteuerung.
+
+Neu geprüft: Suche nur nach Interpret, nur nach Titel oder nach freien Namen,
+fehlende Ausgaben-Cover mit Gruppen-Fallback, Abbruch und verspätete Antworten.
+Zusammengehörige Importordner werden themen- und covergetrennt aufgefüllt;
+zweimal 150 Country ergibt 99/99/99/3. Andere Themen bleiben getrennt.
+88 gleichnamige Themenordner / 8.098 Titel ergeben 82 statt 101 Zielordner.
+Ordnerbild direkt unter der Ordnerliste, fehlende/defekte Bilder mit Hinweis.
+Verstellbare Höhe der linken Bereiche und Breite der linken Seite.
+Doppelte Überschrift entfernt, obere Befehlsleisten zusammengeführt.
+Freiflächenklick beendet Zellen-/Seitentagbearbeitung ohne Eingabeverlust.
+
+Live-Prüfung der Coversuche: MusicBrainz antwortete per curl mit HTTP 200,
+aber einer HTML-Fehlerseite statt JSON. Ein bekanntes CAA-JPEG war per curl
+abrufbar. Die nativen .NET-Aufrufe konnten hier weder Namenssuche noch Cover
+bestätigen. Daher kein bestätigter Ende-zu-Ende-Onlinetest; Prüfung am
+Windows-PC erforderlich. Zusätzliche Browser-Bildersuche und lokaler Bildimport
+sind ausdrückliche Ausweichmöglichkeiten, kein Beleg für einen Live-Erfolg.
+
+Wichtige Grenzen:
+- Kein Test auf einem tatsächlichen Windows-PC und kein echter Windows-Ton.
+  Playerprotokoll und Player-Oberfläche mit simuliertem Audiogerät geprüft.
+- Kein vollständiger Exporttest an der betreuten Musikbox. Synthetische
+  Export-/Tag-/Cover-Kopien ersetzen diesen Test nicht.
+- Keine Live-Erkennung mit einem eigenen AcoustID-/ACRCloud-Zugang; eigene
+  Schlüssel und passende Anbieterbedingungen erforderlich.
+- MP3Gain-Aufrufe mit Testprogramm geprüft, keine neue echte MP3Gain-Messung.
+- Native Windows-DPAPI, Codecs, DPI und Dateisperren im Zielsystem prüfen.
+
+Das Paket enthält EXE, Runtime-Konfiguration, Startanleitung und den passenden
+Quellstand, keine Musik, privaten Projekte oder Zugangsdaten. MP3Gain, FFmpeg
+und fpcalc werden nicht mitgeliefert; Einrichtung über Einstellungsdialoge.
+
+Die älteren Arbeitsstandberichte sind historische Zwischenstände. Die damals
+geforderte Pause der Bereitstellung wurde durch den ausdrücklichen Auftrag
+zur Erstellung dieser Testversion aufgehoben.

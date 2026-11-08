@@ -1,0 +1,26 @@
+OK Track-Gain, Clipping-Schutz und dezimaler Zielpegel
+OK Lautstärkeeinstellungen im Projekt gespeichert
+OK Einstellungen nach Sortierung erhalten
+OK 15 Titel mit echtem MP3Gain exportiert
+OK Lautstärkeprotokoll geschrieben
+OK Cover und weitere ID3-Frames erhalten: Alcazar
+OK Cover und weitere ID3-Frames erhalten: Afroman
+OK Cover und weitere ID3-Frames erhalten: Alicia Keys
+OK Cover und weitere ID3-Frames erhalten: David Allan Coe
+OK Cover und weitere ID3-Frames erhalten: Deana Carter
+OK Cover und weitere ID3-Frames erhalten: David Allan Coe
+OK Cover und weitere ID3-Frames erhalten: AC-DC
+OK Cover und weitere ID3-Frames erhalten: Alan Parsons Project
+OK Cover und weitere ID3-Frames erhalten: Alice Cooper
+OK Cover und weitere ID3-Frames erhalten: Danny Vera
+OK Cover und weitere ID3-Frames erhalten: Darryl Worley
+OK Cover und weitere ID3-Frames erhalten: Dasha
+OK Cover und weitere ID3-Frames erhalten: Zlatko
+OK Cover und weitere ID3-Frames erhalten: Vengaboys
+OK Cover und weitere ID3-Frames erhalten: Whitney Houston & Enrique Iglesias
+OK Originale nach Lautstärkeanpassung bytegleich
+OK Dateinamen mit Umlauten und Sonderzeichen verarbeitet
+OK Abbruch verändert die vorherige Kopie nicht
+OK Temporäre MP3Gain-Ordner aufgeräumt
+OK Fehlende MP3Gain-Engine vor Verarbeitung erkannt
+BESTANDEN: 25 MP3Gain-Prüfungen (Linux-Engine)

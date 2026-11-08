@@ -1,0 +1,31 @@
+﻿Portable Windows-x64-Testversion 0.17.3 — Prüfung am 17.10.2026
+
+Gezielte Prüfungen:
+PaneDragUiTests: 21
+ModernUiTests: 23
+WorkspaceUiTests: 18
+Gesamt: 62 Prüfungen unter Linux/Mono bestanden.
+
+Rahmen gemäß Nutzerreferenz neu gestaltet: dunkelblaue schmale Titelleisten,
+zentrierte Großbuchstaben, beidseitige silberne Zierlinien, mehrstufige
+plastische Rahmen, silberne Fußleiste und kompakte Symbolknöpfe.
+Kreuz blendet aus; Fenstersymbol dockt an und besitzt Tooltip/zugänglichen
+Namen. Größen und Schrift der vorigen kompakten Fassung beibehalten.
+Eigene Zeichenroutinen; keine Winamp-Skins oder Winamp-Programmteile verwendet.
+UI-Screenshot visuell geprüft.
+
+Alle fünf Module weiterhin an Beschriftung und freier Kopfzeile direkt
+abtrennbar. Mauszug ohne zweiten Klick, Loslassen, Andocken und Erhalt offener
+Tag-Eingaben geprüft. Magnet-, Ziehgriff- und Bestandszählungsprüfungen erneut
+bestanden. Untere Leiste bleibt auf Ordner- und Titelanzahl beschränkt.
+
+Hauptprogramm gegen .NET-Framework-4.8-Referenzassemblies gebaut.
+Windows-PE, Versionskennung 0.17.3.0, ZIP-CRC, EXE/.config und unveränderte
+fpcalc-Paketdateien einschließlich Quellen und Lizenzen per SHA-256 validiert.
+Frühere Verarbeitungstests siehe Pruefung-v0.16.txt; diese wurden für die
+reine Rahmengestaltung nicht vollständig wiederholt.
+
+Grenzen: keine native Windows-Ausführung. Tatsächliche Windows-Mausbedienung,
+DPI-Skalierung, Mehrmonitorbetrieb und Schriftglättung bleiben zu prüfen.
+Windows-Audio, fpcalc.exe und Musikbox-Export hier nicht ausgeführt.
+Keine Live-Abfragen der Erkennungsdienste.
