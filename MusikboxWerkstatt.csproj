@@ -5,4 +5,4 @@
  <ItemGroup><Compile Include="src/*.cs"/><PackageReference Include="TagLibSharp" Version="2.3.0"/><PackageReference Include="NAudio" Version="2.2.1"/><PackageReference Include="System.Security.Cryptography.ProtectedData" Version="8.0.0"/></ItemGroup>
  <PropertyGroup><ToolsRoot Condition="Exists('$(MSBuildProjectDirectory)/tools/fpcalc/fpcalc.exe')">$(MSBuildProjectDirectory)/tools</ToolsRoot><ToolsRoot Condition="'$(ToolsRoot)'==''">$(MSBuildProjectDirectory)/../Werkzeuge</ToolsRoot></PropertyGroup>
  <ItemGroup><Content Include="$(ToolsRoot)/**/*" Link="Werkzeuge/%(RecursiveDir)%(Filename)%(Extension)" CopyToPublishDirectory="PreserveNewest" Exclude="$(ToolsRoot)/**/*.ps1"/></ItemGroup>
- 
+ </Project>
