@@ -29,7 +29,15 @@ namespace Musikbox {
     tokens.Items.Add("%"+key+"%",selected.Contains(key));
    tokens.ItemCheck+=(sender,e)=>{
     if(changing)return;
-    BeginInvoke((Action)(()=>RebuildPattern()));
+    // ItemCheck fires before CheckedItems is updated. Calculate the new
+    // pattern from NewValue immediately so Save cannot persist stale fields.
+    changing=true;
+    try {
+     text.Text=String.Join(" - ",tokens.Items.Cast<string>()
+      .Where((item,index)=>index==e.Index
+       ?e.NewValue==CheckState.Checked
+       :tokens.GetItemChecked(index)));
+    } finally { changing=false; }
    };
    text.TextChanged+=(sender,e)=>{
     if(changing)return;
