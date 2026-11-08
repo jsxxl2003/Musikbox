@@ -59,7 +59,7 @@ namespace Musikbox {
    var cancel=new StudioActionButton{Text="Abbrechen",Width=128,Height=40};
    up.Click+=(sender,e)=>move(-1);
    down.Click+=(sender,e)=>move(1);
-   save.Click+=(sender,e)=>{RebuildPattern();DialogResult=DialogResult.OK;Close();};
+   save.Click+=(sender,e)=>{DialogResult=DialogResult.OK;Close();};
    cancel.Click+=(sender,e)=>{DialogResult=DialogResult.Cancel;Close();};
    bar.Controls.AddRange(new Control[]{up,down,save,cancel});
    AcceptButton=save;CancelButton=cancel;
