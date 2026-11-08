@@ -209,14 +209,14 @@ namespace Musikbox {
   void DeleteSongsFromDisk(){
    var songs=SelectedSongs().Where(x=>x!=null).GroupBy(x=>x.Source,StringComparer.OrdinalIgnoreCase).Select(x=>x.First()).ToList();
    if(songs.Count==0)return;
-   if(AppMessage.Show(v,songs.Count+" ausgewählte Titel endgültig vom Datenträger löschen?\\r\\nDiese Aktion kann nicht rückgängig gemacht werden.","Dateien endgültig löschen",MessageBoxButtons.YesNo,MessageBoxIcon.Warning)!=DialogResult.Yes)return;
+   if(AppMessage.Show(v,songs.Count+" ausgewählte Titel endgültig vom Datenträger löschen?\r\nDiese Aktion kann nicht rückgängig gemacht werden.","Dateien endgültig löschen",MessageBoxButtons.YesNo,MessageBoxIcon.Warning)!=DialogResult.Yes)return;
    var deleted=new List<Song>();var errors=new List<string>();
    foreach(var song in songs){
     try{if(String.IsNullOrWhiteSpace(song.Source))throw new IOException("Dateipfad fehlt");if(File.Exists(song.Source))File.Delete(song.Source);deleted.Add(song);}
     catch(Exception ex){errors.Add(song.Source+": "+ex.Message);}
    }
    if(deleted.Count>0){LibraryOperations.Remove(p,deleted);Changed("Dateien vom Datenträger löschen");RefreshFolders(v.Folders.SelectedIndex);}
-   if(errors.Count>0)AppMessage.Show(v,"Nicht gelöscht:\\r\\n"+String.Join("\\r\\n",errors.Take(10)),"Löschfehler");
+   if(errors.Count>0)AppMessage.Show(v,"Nicht gelöscht:\r\n"+String.Join("\r\n",errors.Take(10)),"Löschfehler");
   }
   void RemoveSongs(){var f=Current;if(f==null)return;var songs=SelectedSongs();if(songs.Count==0)return;if(AppMessage.Show(v,songs.Count+" Titel aus dem Projekt entfernen? Originale bleiben erhalten.","Titel entfernen",MessageBoxButtons.YesNo)!=DialogResult.Yes)return;LibraryOperations.Remove(p,songs);Changed("Titel entfernen");RefreshFolders(v.Folders.SelectedIndex);}
   string Summary(Project sorted){var text=new System.Text.StringBuilder();text.AppendLine("Audio: "+(sorted.FfmpegLoudness?"FFmpeg-Lautheitsanpassung, MP3-Neucodierung":sorted.Normalize?"MP3Gain-Lautstärkeanpassung":"Lautstärke unverändert"));text.AppendLine("MP3-Ausgabe bei Neucodierung: "+Ffmpeg.EncodingLabel(sorted));text.AppendLine("Neu kodierte Titel: "+sorted.Folders.SelectMany(f=>f.Songs).Count(song=>!ImportAudio.Ready(sorted,song)&&Ffmpeg.NeedsEncoding(sorted,song)));text.AppendLine("Passende Import-Arbeitskopien: "+sorted.Folders.SelectMany(f=>f.Songs).Count(song=>ImportAudio.Ready(sorted,song)));text.AppendLine();foreach(var f in sorted.Folders){text.AppendLine(f.Name+" — "+f.Songs.Count+" Titel — Standardalbum: "+f.Theme);int i=0;foreach(var s in f.Songs)text.AppendLine("  "+(++i).ToString("D2")+"  "+s.Artist+" | "+s.Title+" | "+Rules.AlbumFor(s,f));text.AppendLine();}return text.ToString();}
