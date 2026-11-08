@@ -10,7 +10,7 @@ if (-not $WerkzeugePfad) {
 foreach($name in @('ffmpeg/ffmpeg.exe','ffmpeg/ffprobe.exe','mp3gain/mp3gain.exe','fpcalc/fpcalc.exe','freac/freaccmd.exe','whisper/whisper-cli.exe','whisper/ggml-base.bin','yt-dlp/yt-dlp.exe','yt-dlp/deno.exe')) {
  if(-not(Test-Path (Join-Path $WerkzeugePfad $name))){throw "Werkzeug fehlt: $name. Vollstaendigen Werkzeuge-Ordner des bisherigen Pakets ueber -WerkzeugePfad angeben."}
 }
-$packageName='Musikbox-Werkstatt-Studio-v0.64-QS-2026-11-08'
+$packageName='Musikbox-Werkstatt-Studio-v0.64-Cover-Suche-Mikrofon'
 $package=Join-Path $Ausgabeordner $packageName
 if(Test-Path $package){throw 'Ausgabeordner existiert bereits. Bitte einen neuen Ausgabeordner verwenden.'}
 dotnet publish MusikboxWerkstatt.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=false -p:NuGetAudit=false -p:ToolsRoot=__Werkzeuge_separat__ -o $package
