@@ -155,16 +155,15 @@ namespace Musikbox {
   void PlaySong(){var song=SelectedSong;if(song==null)return;LoadPlayer(song);StartPlayer();}
   void StartPlayer(){if(playerSong==null){if(busy)return;OpenPlayer();}if(playerSong==null)return;var before=playback.Read();bool fresh=before.Mode!=PlaybackMode.Playing&&before.Mode!=PlaybackMode.Paused;playback.Play(playerFile);playerTimer.Start();UpdatePlayer();if(fresh&&!busy&&v.OnlineCover.Checked&&p.Folders.Any(f=>f.Songs.Contains(playerSong)))ChooseTitleCover(playerSong);}
   void PlayFollowingSong(){
-   // Follow the current visible/sorted title order, never replay the finished title.
-   var rows=v.Songs.Rows.Cast<DataGridViewRow>().Where(row=>!row.IsNewRow&&row.Visible).ToList();
-   int index=rows.FindIndex(row=>Object.ReferenceEquals(row.Tag,playerSong));
-   Song next=index>=0&&index+1<rows.Count?rows[index+1].Tag as Song:null;
+   var rows=v.Songs.Rows.Cast<DataGridViewRow>().Where(row=>!row.IsNewRow&&row.Visible&&row.Tag is Song).ToList();
+   var order=playlistOrder!=null&&playlistOrder.Count>0?playlistOrder:rows.Select(row=>(Song)row.Tag).ToList();
+   int index=order.IndexOf(playerSong);Song next=index>=0&&index+1<order.Count?order[index+1]:null;
    if(next==null){playerTimer.Stop();UpdatePlayer();return;}
-   foreach(DataGridViewRow row in v.Songs.SelectedRows)row.Selected=false;
-   var nextRow=rows[index+1];nextRow.Selected=true;
-   if(nextRow.Cells.Count>0)v.Songs.CurrentCell=nextRow.Cells.Cast<DataGridViewCell>().FirstOrDefault(cell=>cell.Visible);
+   var nextRow=rows.FirstOrDefault(row=>Object.ReferenceEquals(row.Tag,next));
+   if(nextRow!=null){v.Songs.ClearSelection();var cell=nextRow.Cells.Cast<DataGridViewCell>().FirstOrDefault(c=>c.Visible);if(cell!=null)v.Songs.CurrentCell=cell;nextRow.Selected=true;if(!nextRow.Frozen)v.Songs.FirstDisplayedScrollingRowIndex=nextRow.Index;}
    LoadPlayer(next);StartPlayer();
   }
+
   void StopPlayer(){playback.Stop();playerTimer.Stop();UpdatePlayer();}
   void ResetPlayer(){string error=null;try{playback.Clear();}catch(Exception ex){error=ex.Message;}playerTimer.Stop();playerSong=null;playerFile=null;RefreshPlayerArtwork();UpdatePlayer();if(error!=null)v.Player.ShowError(error);}
   void UpdatePlayer(){v.Player.ShowState(playback.Read(),PlayerCaption,playerSong!=null);}

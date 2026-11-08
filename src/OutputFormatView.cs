@@ -4,12 +4,12 @@ using System.Linq;
 using System.Windows.Forms;
 namespace Musikbox {
  public class OutputFormatView : ModernForm {
-  readonly CheckedListBox tokens = new CheckedListBox {
+  readonly CheckedListBox tokens = new StudioCheckedListBox {
    Dock=DockStyle.Fill, CheckOnClick=true, BorderStyle=BorderStyle.None,
    BackColor=ModernTheme.Navy, ForeColor=ModernTheme.Ink,
    DrawMode=DrawMode.Normal, IntegralHeight=false
   };
-  readonly TextBox text = new TextBox {
+  readonly TextBox text = new StudioTextBox {
    Dock=DockStyle.Fill, BorderStyle=BorderStyle.FixedSingle,
    BackColor=ModernTheme.Silver, ForeColor=ModernTheme.Ink
   };

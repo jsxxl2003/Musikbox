@@ -1,52 +1,49 @@
 name: Musikbox-Werkstatt Windows Build
-
 on:
   push:
     branches: [main]
   workflow_dispatch:
-
 jobs:
   build:
     runs-on: windows-latest
-
+    timeout-minutes: 20
     steps:
-      - name: Quellcode herunterladen
-        uses: actions/checkout@v4
-
-      - name: .NET 8 installieren
-        uses: actions/setup-dotnet@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
-
-      - name: Windows-Anwendung erstellen
+      - name: Release-Build
         shell: pwsh
         run: |
-          $projects = @(Get-ChildItem -Path . -Recurse -Filter *.csproj |
-            Where-Object { $_.FullName -notmatch '[\\/](Tests|obj|bin)[\\/]' })
-
-          $project = $projects | Where-Object {
-            (Get-Content $_.FullName -Raw) -match 'WindowsDesktop|UseWindowsForms'
-          } | Select-Object -First 1
-
-          if (-not $project) {
-            throw "Kein Windows-Forms-Projekt gefunden."
+          dotnet build MusikboxWerkstatt.csproj -c Release -p:NuGetAudit=false
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+      - name: Regression und Sprachsitzungen
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force qs-output | Out-Null
+          foreach ($test in @('v061/Regression61.csproj','v064/Voice64.csproj')) {
+            $name = [IO.Path]::GetFileNameWithoutExtension($test)
+            dotnet run --project $test -c Release -p:NuGetAudit=false 2>&1 | Tee-Object "qs-output/$name.txt"
+            if ($LASTEXITCODE) { exit $LASTEXITCODE }
           }
-
-          Write-Host "Projekt: $($project.FullName)"
-          dotnet publish "$($project.FullName)" -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:EnableWindowsTargeting=true -o "$env:GITHUB_WORKSPACE\build-output"
-
-          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-
-          $exe = Get-ChildItem "$env:GITHUB_WORKSPACE\build-output" -Filter *.exe |
-            Where-Object { $_.Name -notmatch '^(ffmpeg|ffprobe|yt-dlp)' } |
-            Select-Object -First 1
-
-          if (-not $exe) { throw "Keine ausführbare Anwendung erstellt." }
-          Write-Host "Erstellte EXE: $($exe.FullName)"
-
-      - name: Portable Windows-Version bereitstellen
+      - name: Windows-Steuerelemente und Navigation
+        shell: pwsh
+        run: |
+          dotnet run --project v064/QS-Windows.csproj -c Release -p:NuGetAudit=false 2>&1 | Tee-Object qs-output/QS-Windows.txt
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          dotnet run --project v064/Workspace64.csproj -c Release -p:NuGetAudit=false 2>&1 | Tee-Object qs-output/Workspace64.txt
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+      - name: Windows-Publish
+        shell: pwsh
+        run: |
+          dotnet publish MusikboxWerkstatt.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:NuGetAudit=false -o build-output
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+      - name: Build und Pruefprotokolle
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: Musikbox-Werkstatt-Windows-Portable
-          path: build-output/
+          name: Musikbox-Werkstatt-Windows-QS
+          path: |
+            build-output/
+            qs-output/
           if-no-files-found: error
