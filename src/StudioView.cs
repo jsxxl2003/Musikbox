@@ -122,7 +122,7 @@ namespace Musikbox {
   }
   void UpdateFolderEditor(){
    if(folderEditPanel==null)return;loadingFolderEditor=true;try{
-    string name=selectedFolderName??"";var match=System.Text.RegularExpressions.Regex.Match(name,@"^(\\d{3})\\s+(.+)$");
+    string name=selectedFolderName??"";var match=System.Text.RegularExpressions.Regex.Match(name,@"^(\d{3})\s+(.+)$");
     folderEditNumber.Text=match.Success?match.Groups[1].Value:"";
     folderEditName.Text=match.Success?match.Groups[2].Value:name;
    }finally{loadingFolderEditor=false;}
