@@ -1,16 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
  <PropertyGroup>
-  <Version>0.64.0</Version><OutputType>WinExe</OutputType><TargetFramework>net8.0-windows</TargetFramework><UseWindowsForms>true</UseWindowsForms><EnableWindowsTargeting>true</EnableWindowsTargeting><ImplicitUsings>disable</ImplicitUsings><Nullable>disable</Nullable><EnableDefaultCompileItems>false</EnableDefaultCompileItems><GenerateAssemblyInfo>false</GenerateAssemblyInfo><AssemblyName>Musikbox-Werkstatt-Studio</AssemblyName><RuntimeIdentifier>win-x64</RuntimeIdentifier><SelfContained>true</SelfContained><PublishSingleFile>false</PublishSingleFile><ApplicationManifest>app.manifest</ApplicationManifest><NoWarn>SYSLIB0014;SYSLIB0021;CA1416</NoWarn>
+  <Version>0.64.0</Version><OutputType>WinExe</OutputType><TargetFramework>net8.0-windows</TargetFramework><UseWindowsForms>true</UseWindowsForms><EnableWindowsTargeting>true</EnableWindowsTargeting><ImplicitUsings>disable</ImplicitUsings><Nullable>disable</Nullable><EnableDefaultCompileItems>false</EnableDefaultCompileItems><GenerateAssemblyInfo>false</GenerateAssemblyInfo><AssemblyName>Musikbox-Werkstatt-Studio</AssemblyName><RuntimeIdentifier>win-x64</RuntimeIdentifier><SelfContained>true</SelfContained><PublishSingleFile>true</PublishSingleFile><ApplicationManifest>app.manifest</ApplicationManifest><NoWarn>SYSLIB0014;SYSLIB0021;CA1416</NoWarn>
  </PropertyGroup>
  <ItemGroup><Compile Include="src/*.cs"/><PackageReference Include="TagLibSharp" Version="2.3.0"/><PackageReference Include="NAudio" Version="2.2.1"/><PackageReference Include="System.Security.Cryptography.ProtectedData" Version="8.0.0"/></ItemGroup>
  <PropertyGroup><ToolsRoot Condition="Exists('$(MSBuildProjectDirectory)/tools/fpcalc/fpcalc.exe')">$(MSBuildProjectDirectory)/tools</ToolsRoot><ToolsRoot Condition="'$(ToolsRoot)'==''">$(MSBuildProjectDirectory)/../Werkzeuge</ToolsRoot></PropertyGroup>
  <ItemGroup><Content Include="$(ToolsRoot)/**/*" Link="Werkzeuge/%(RecursiveDir)%(Filename)%(Extension)" CopyToPublishDirectory="PreserveNewest" Exclude="$(ToolsRoot)/**/*.ps1"/></ItemGroup>
- <Target Name="ArrangePortableLayout" AfterTargets="Publish" Condition="'$(RuntimeIdentifier)'=='win-x64'">
-  <ItemGroup>
-   <_PortableRuntime Include="$(PublishDir)**/*" Exclude="$(PublishDir)Werkzeuge/**/*;$(PublishDir)Programm/**/*;$(PublishDir)Dokumentation/**/*;$(PublishDir)Daten/**/*;$(PublishDir)Quellcode/**/*;$(PublishDir)$(AssemblyName).exe" />
-  </ItemGroup>
-  <Move SourceFiles="@(_PortableRuntime)" DestinationFiles="@(_PortableRuntime->'$(PublishDir)Programm/%(RecursiveDir)%(Filename)%(Extension)')" />
-  <CreateAppHost AppHostSourcePath="$(AppHostSourcePath)" AppHostDestinationPath="$(PublishDir)$(AssemblyName).exe" AppBinaryName="Programm/$(AssemblyName)$(TargetExt)" IntermediateAssembly="@(IntermediateAssembly->'%(FullPath)')" WindowsGraphicalUserInterface="true" />
-  <MakeDir Directories="$(PublishDir)Daten;$(PublishDir)Dokumentation" />
- </Target>
-</Project>
+ 
