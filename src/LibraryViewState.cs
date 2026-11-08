@@ -14,6 +14,7 @@ namespace Musikbox {
   void SwitchLibraryMode(string mode){if(busy)return;v.Songs.EndEdit();CommitSideTags();recentImportPaths=null;libraryFolder=null;groupField=groupValue=null;v.LibraryMode=mode=="Alle"?"Titel":mode;PopulateLibrary();}
   void SelectGroupFolder(){if(refresh||v.LibraryMode!="Ordner"||v.Groups.CurrentRow==null)return;var row=v.Groups.CurrentRow;if(!row.Selected)return;var entry=row.Tag as Tuple<string,string>;if(entry==null||entry.Item1!="folder")return;int index=p.Folders.FindIndex(f=>f.Name==entry.Item2);if(index<0)return;bool before=refresh;refresh=true;try{v.Folders.SelectedIndex=index;}finally{refresh=before;}if(Current!=null)ShowFolderArtwork(Current);}
   void CaptureLibraryViews(){titleViewState=LibraryViewState.Capture(v.Songs,titleViewState);if(renderedGroupMode!=null){groupViewStates.TryGetValue(renderedGroupMode,out var previous);groupViewStates[renderedGroupMode]=LibraryViewState.Capture(v.Groups,previous);}}
+  void RestoreActiveLibraryView(){bool before=refresh;refresh=true;try{if(v.LibraryMode=="Titel")titleViewState.Restore(v.Songs,EditedPath);else if(groupViewStates.TryGetValue(v.LibraryMode,out var state))state.Restore(v.Groups,null,false);else v.RestoreGroupSort();}finally{refresh=before;}}
   string EditedPath{get{return editedSong==null?null:Path.GetFullPath(editedSong.Source);}}
  }
 }
