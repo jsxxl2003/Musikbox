@@ -30,9 +30,10 @@ namespace Musikbox {
   }
   public static void AppendEditingCommands(ContextMenuStrip menu){
    menu.Items.Add(new ToolStripSeparator());
-   foreach(string label in new[]{"Rückgängig","Ausschneiden","Kopieren","Einfügen","Löschen","Alle auswählen"}){
+   foreach(string label in new[]{"Rückgängig","Ausschneiden","Kopieren","Einfügen","Löschen"}){
     var item=menu.Items.Add(label);item.Enabled=false;
    }
+   menu.Items.Add("Alle auswählen",null,(s,e)=>{var grid=menu.SourceControl as DataGridView;if(grid!=null)grid.SelectAll();});
   }
  }
 }
