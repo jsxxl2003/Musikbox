@@ -51,18 +51,22 @@ jobs:
           key: mw-tools-win64-stable-v1
           restore-keys: |
             mw-tools-win64-
-      - name: Vorhandene Werkzeuge übernehmen
-        if: steps.tools.outputs.cache-matched-key == ''
-        shell: pwsh
-        run: |
-          throw 'Kein bisheriges Werkzeugpaket im Actions-Cache vorhanden. Einmalig den vorhandenen Werkzeuge-Ordner als Cache bereitstellen; keine automatische Neuinstallation aller Programme.'
+      - name: Aktuelles Programm ohne Fremdwerkzeuge
+        uses: actions/upload-artifact@v4
+        with:
+          name: MW-064-Programm
+          path: build-output/
+          if-no-files-found: error
       - name: Nur fehlendes Sherpa-Sprachmodell ergänzen
+        if: steps.tools.outputs.cache-matched-key != ''
         shell: pwsh
         run: ./Sherpa-Modell.ps1 -Ziel "$env:RUNNER_TEMP/MW-Werkzeuge"
       - name: Vollstaendiges Paket und Entpackpruefung
+        if: steps.tools.outputs.cache-matched-key != ''
         shell: pwsh
         run: ./Bauen.ps1 -WerkzeugePfad "$env:RUNNER_TEMP/MW-Werkzeuge" -PublishOrdner "$env:GITHUB_WORKSPACE/build-output" -Pruefprotokolle "$env:GITHUB_WORKSPACE/qs-output" -Ausgabeordner "$env:RUNNER_TEMP/Paket"
       - name: Komplettpaket MW-064
+        if: steps.tools.outputs.cache-matched-key != ''
         uses: actions/upload-artifact@v4
         with:
           name: MW-064
