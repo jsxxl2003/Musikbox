@@ -22,7 +22,7 @@ namespace Musikbox {
   FolderImportMode folderImportMode=FolderImportMode.PreserveStructure;
   BoxFolder Current {get{if(v.LibraryMode=="Ordner"){var row=v.Groups.CurrentRow;var group=row!=null&&row.Selected?row.Tag as Tuple<string,string>:null;return group==null?null:p.Folders.FirstOrDefault(f=>f.Name==group.Item2);}return v.Folders.SelectedItem as BoxFolder;}}
   public Controller(MainView view,string backupRoot=null,Playback player=null,VoiceService speech=null) {
-   preferChromeSpeech=speech==null;voice=speech??new VoiceService();
+   preferChromeSpeech=false;voice=speech??new VoiceService();
    playback=player??new Playback();
    this.backupRoot=backupRoot;history.Reset(p,true);backups=new ProjectBackups(null,backupRoot);
    v=view;v.CanDrop=()=>!busy;v.PathsDropped+=ImportDropped;
