@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Musikbox – Google-Sprachsuche Test</title>
+<style>body{background:#191823;color:#eee;font:17px system-ui;margin:0;padding:35px}main{max-width:680px;margin:auto}button{background:#8e35d7;border:0;border-radius:10px;color:white;padding:16px 25px;font:inherit;cursor:pointer}button:disabled{opacity:.5}input{box-sizing:border-box;width:100%;padding:15px;background:#29263b;color:white;border:1px solid #675280;border-radius:9px;font:inherit}p{line-height:1.6}small{color:#aaa}</style></head>
+<body><main><h1>Musikbox · Google-Sprachsuche</h1><p>Dieser Test nutzt die kostenlose Chrome-Spracherkennung. Er benötigt Internet und eine Mikrofonfreigabe. Es wird kein Google-Cloud-Konto benötigt.</p><p><button id="start">🎙 Aufnahme starten</button> <button id="stop" disabled>Stopp</button></p><p id="status">Bereit</p><label>Erkannter Suchbegriff<input id="result" readonly placeholder="Hier erscheint die Erkennung"></label><p id="time"></p><small>Teste „Sunflower“, „Glen Campbell“, „Lainey Wilson“ und andere Musiktitel. Die Spracherkennung kann Audiodaten an Googles Dienst übertragen.</small></main>
+<script>
+const Recognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+const start=document.getElementById('start'),stop=document.getElementById('stop'),status=document.getElementById('status'),result=document.getElementById('result'),time=document.getElementById('time');
+let rec,t0;
+if(!Recognition){start.disabled=true;status.textContent='Dieser Browser unterstützt die Chrome-Spracherkennung nicht. Bitte Google Chrome verwenden.'}
+else{
+ start.onclick=()=>{rec=new Recognition();rec.lang='de-DE';rec.continuous=false;rec.interimResults=true;rec.maxAlternatives=5;t0=performance.now();result.value='';time.textContent='';start.disabled=true;stop.disabled=false;status.textContent='Mikrofon aktiv – bitte sprechen';
+ rec.onresult=e=>{const r=e.results[e.results.length-1];result.value=r[0].transcript;if(r.isFinal){time.textContent='Zeit bis Ergebnis: '+((performance.now()-t0)/1000).toFixed(2)+' Sekunden';status.textContent='Erkannt';}};
+ rec.onerror=e=>{status.textContent='Fehler: '+e.error};rec.onend=()=>{start.disabled=false;stop.disabled=true;if(status.textContent==='Mikrofon aktiv – bitte sprechen')status.textContent='Aufnahme beendet';};try{rec.start()}catch(e){status.textContent=e.message;start.disabled=false;stop.disabled=true}};
+ stop.onclick=()=>rec?.stop();
+}
+</script></body></html>
