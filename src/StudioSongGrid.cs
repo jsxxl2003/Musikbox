@@ -9,6 +9,13 @@ namespace Musikbox {
   DataGridViewRow deferredClick;Point pressed;bool rubberSelecting;Point rubberStart;
   protected override void OnMouseDown(MouseEventArgs e){
    var hit=HitTest(e.X,e.Y);
+   if(rubberSelecting){rubberSelecting=false;Capture=false;}
+   if(e.Button==MouseButtons.Right&&hit.RowIndex>=0){
+    var row=Rows[hit.RowIndex];
+    if(!row.Selected){ClearSelection();row.Selected=true;}
+    if(hit.ColumnIndex>=0)CurrentCell=row.Cells[hit.ColumnIndex];
+    return;
+   }
    if(e.Button==MouseButtons.Left&&ModifierKeys==Keys.None&&((hit.RowIndex<0&&hit.Type==DataGridViewHitTestType.None)||hit.Type==DataGridViewHitTestType.RowHeader)){
     rubberSelecting=true;rubberStart=e.Location;Capture=true;ClearSelection();return;
    }
@@ -32,6 +39,6 @@ namespace Musikbox {
    }
    var size=SystemInformation.DragSize;if(!new Rectangle(pressed.X-size.Width/2,pressed.Y-size.Height/2,size.Width,size.Height).Contains(e.Location))deferredClick=null;base.OnMouseMove(e);}
   protected override void OnRowPostPaint(DataGridViewRowPostPaintEventArgs e){base.OnRowPostPaint(e);if(!RowHeadersVisible)return;using(var brush=new SolidBrush(ModernTheme.Navy))e.Graphics.FillRectangle(brush,0,e.RowBounds.Top,RowHeadersWidth,e.RowBounds.Height);}
-  protected override void OnMouseUp(MouseEventArgs e){if(rubberSelecting){rubberSelecting=false;Capture=false;return;}base.OnMouseUp(e);var row=deferredClick;deferredClick=null;if(e.Button==MouseButtons.Left&&row!=null&&row.DataGridView==this){ClearSelection();row.Selected=true;}}
+  protected override void OnMouseUp(MouseEventArgs e){if(rubberSelecting){rubberSelecting=false;Capture=false;base.OnMouseUp(e);return;}base.OnMouseUp(e);var row=deferredClick;deferredClick=null;if(e.Button==MouseButtons.Left&&row!=null&&row.DataGridView==this){ClearSelection();row.Selected=true;}}
  }
 }
