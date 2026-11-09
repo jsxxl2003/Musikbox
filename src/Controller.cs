@@ -11,7 +11,7 @@ namespace Musikbox {
   readonly ChromeSpeechBridge chromeSpeech=new ChromeSpeechBridge();readonly bool preferChromeSpeech;
   readonly Playback playback;
   readonly System.Windows.Forms.Timer playerTimer=new System.Windows.Forms.Timer{Interval=250};Song playerSong;string playerFile;
-  readonly MainView v;Project p=new Project();bool refresh,dirty,busy;CancellationTokenSource cancel;
+  readonly MainView v;Project p=new Project();bool refresh,dirty,busy,selectionRefreshQueued;CancellationTokenSource cancel;
   string lastImportReport="Noch kein Drag-and-drop-Import ausgeführt.";
   List<Song> sideSelection=new List<Song>();
   bool sideCommitting;
@@ -48,7 +48,7 @@ namespace Musikbox {
    v.Folders.SelectedIndexChanged+=(s,e)=>{if(refresh)return;CommitSideTags();libraryFolder=Current;groupField=groupValue=null;v.LibraryMode="Titel";v.CoverTabs.SelectedIndex=0;ShowSongs();};
    v.LayoutChanging+=()=>{v.Songs.EndEdit();CommitSideTags();};
    v.SongSelectionDismissed+=()=>Run(DismissSongSelection);
-   v.Songs.SelectionChanged+=(s,e)=>{if(refresh||sideCommitting)return;CommitSideTags();SyncSideTags();};v.TagEditor.ApplyRequested+=SaveSideTagsToFiles;
+   v.Songs.SelectionChanged+=(s,e)=>{if(refresh||sideCommitting||selectionRefreshQueued)return;selectionRefreshQueued=true;v.BeginInvoke((Action)(()=>{selectionRefreshQueued=false;if(v.IsDisposed||refresh||sideCommitting)return;CommitSideTags();SyncSideTags();}));};v.TagEditor.ApplyRequested+=SaveSideTagsToFiles;
    v.Songs.CellEndEdit+=(s,e)=>{if(refresh||e.RowIndex<0)return;var song=(Song)v.Songs.Rows[e.RowIndex].Tag;string value=Convert.ToString(v.Songs.Rows[e.RowIndex].Cells[e.ColumnIndex].Value).Trim();if(e.ColumnIndex==0)song.Artist=value;else if(e.ColumnIndex==1)song.Title=value;else if(e.ColumnIndex==2&&song.Album!=value){song.Album=value;song.AlbumOverride=true;}else if(v.Songs.Columns[e.ColumnIndex].Name=="Jahr")song.Year=value;else if(v.Songs.Columns[e.ColumnIndex].Name=="Genre")song.Genre=value;else if(v.Songs.Columns[e.ColumnIndex].Name=="Kommentar")song.Comment=value;else if(v.Songs.Columns[e.ColumnIndex].Name=="Tracknummer")song.Track=value;var key=TagSchema.Fields.FirstOrDefault(f=>f.Column==v.Songs.Columns[e.ColumnIndex].Name&&f.Writable);if(key!=null){if(song.PendingTags==null)song.PendingTags=new Dictionary<string,string>();song.PendingTags[key.Key]=value;}Changed("Titel bearbeiten");UpdateStatus();SyncSideTags();};
    v.Songs.DataError+=(s,e)=>{e.ThrowException=false;};
    v.FormClosing+=(s,e)=>{CancelLibrarySearch();voice.Stop();if(busy){AppMessage.Show(v,"Bitte zuerst den laufenden Vorgang abbrechen und dessen Ende abwarten.");e.Cancel=true;}else if(!CanDiscard())e.Cancel=true;else try{FlushBackup();}catch(Exception ex){e.Cancel=AppMessage.Show(v,"Die Projektsicherung ist fehlgeschlagen:\r\n"+ex.Message+"\r\nTrotzdem schließen?","Projektsicherung",MessageBoxButtons.YesNo,MessageBoxIcon.Warning)!=DialogResult.Yes;}};
