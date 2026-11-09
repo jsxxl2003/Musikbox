@@ -60,6 +60,18 @@ try {
   if($LASTEXITCODE){throw "Whisper-Startpruefung fehlgeschlagen: $profile"}
  }
  Download 'https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-base.bin' "$Ziel/whisper/ggml-base.bin" '60ed5bc3dd14eea856493d334349b405782ddcaf0028d4b5df4088345fba2efe'
+ # Multilingual offline model for sherpa-onnx; no browser or API account required.
+ $sherpaArchive=Join-Path $temp 'sherpa-base.tar.bz2'
+ Download 'https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/sherpa-onnx-whisper-base.tar.bz2' $sherpaArchive
+ $sherpaExtract=Join-Path $temp 'sherpa-extracted'
+ New-Item -ItemType Directory -Force $sherpaExtract,"$Ziel/sherpa-onnx" | Out-Null
+ tar -xjf $sherpaArchive -C $sherpaExtract
+ if($LASTEXITCODE){throw 'Sherpa-ONNX-Modell konnte nicht entpackt werden.'}
+ foreach($name in @('base-encoder.int8.onnx','base-decoder.int8.onnx','base-tokens.txt')) {
+  $match=@(Get-ChildItem $sherpaExtract -Recurse -File -Filter $name)
+  if($match.Count -ne 1){throw "Sherpa-ONNX-Modell fehlt: $name"}
+  Copy-Item $match[0].FullName "$Ziel/sherpa-onnx/$name"
+ }
  Download 'https://raw.githubusercontent.com/openai/whisper/v20250625/LICENSE' "$Ziel/whisper/LICENSE-OpenAI-Whisper.txt"
  Get-ChildItem $Ziel -Recurse -File | Where-Object {$_.Extension -in @('.exe','.dll','.bin')} | ForEach-Object {
   [pscustomobject]@{Datei=[IO.Path]::GetRelativePath($Ziel,$_.FullName);SHA256=(Get-FileHash $_.FullName).Hash}
