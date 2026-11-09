@@ -98,7 +98,7 @@ namespace Musikbox {
    control.DragDrop+=(sender,e)=>{
     if(!CanDrop()||!e.Data.GetDataPresent(DataFormats.FileDrop))return;
     var paths=e.Data.GetData(DataFormats.FileDrop) as string[];if(paths==null||paths.Length==0)return;
-    int selected=Folders.SelectedIndex;
+    int selected=-1;
     if(Object.ReferenceEquals(sender,Folders)){int hit=Folders.IndexFromPoint(Folders.PointToClient(new Point(e.X,e.Y)));if(hit>=0)selected=hit;}
     ReceiveFileDrop((Control)sender,paths,selected);
    };
