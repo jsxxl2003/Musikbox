@@ -54,6 +54,26 @@ jobs:
       - name: Nur fehlendes Sherpa-Sprachmodell ergänzen
         shell: pwsh
         run: ./Sherpa-Modell.ps1 -Ziel "$env:GITHUB_WORKSPACE/build-output/Werkzeuge"
+      - name: Sicherheitspruefung und SHA256-Dateiliste
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $root = Join-Path $env:GITHUB_WORKSPACE 'build-output'
+          $defender = Join-Path $env:ProgramFiles 'Windows Defender/MpCmdRun.exe'
+          if (-not (Test-Path $defender)) {
+            $candidates = @(Get-ChildItem 'C:/ProgramData/Microsoft/Windows Defender/Platform' -Filter MpCmdRun.exe -Recurse -ErrorAction SilentlyContinue | Sort-Object FullName -Descending)
+            if ($candidates.Count -gt 0) { $defender = $candidates[0].FullName }
+          }
+          if (-not (Test-Path $defender)) { throw 'Windows Defender nicht verfuegbar; Paket wird nicht ausgeliefert.' }
+          & $defender -Scan -ScanType 3 -File $root -DisableRemediation
+          if ($LASTEXITCODE -ne 0) { throw "Windows Defender Scan fehlgeschlagen (Code $LASTEXITCODE). Keine Auslieferung." }
+          $files = @(Get-ChildItem $root -File -Recurse | Where-Object { $_.Name -ne 'SHA256SUMS.txt' } | Sort-Object FullName)
+          $lines = foreach ($file in $files) {
+            $relative = $file.FullName.Substring($root.Length + 1).Replace('\\','/')
+            "$(Get-FileHash -LiteralPath $file.FullName -Algorithm SHA256 | Select-Object -ExpandProperty Hash)  $relative"
+          }
+          $lines | Set-Content -Path (Join-Path $root 'SHA256SUMS.txt') -Encoding utf8
+          Write-Host "Defender-Scan erfolgreich; $($files.Count) Dateien mit SHA256 protokolliert."
       - name: Programm mit Sherpa-Sprachmodell ausliefern
         uses: actions/upload-artifact@v4
         with:
