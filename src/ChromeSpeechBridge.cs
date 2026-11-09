@@ -18,7 +18,7 @@ namespace Musikbox {
   public event Action<string> Status;
   public void Start(){
    Stop();
-   int port;using(var tcp=new TcpListener(IPAddress.Loopback,0)){tcp.Start();port=((IPEndPoint)tcp.LocalEndpoint).Port;}
+   int port;var tcp=new TcpListener(IPAddress.Loopback,0);tcp.Start();try{port=((IPEndPoint)tcp.LocalEndpoint).Port;}finally{tcp.Stop();}
    var server=new HttpListener();string prefix="http://127.0.0.1:"+port+"/";server.Prefixes.Add(prefix);
    try{server.Start();}catch(Exception ex){server.Close();Failed?.Invoke("Lokaler Chrome-Sprachtest kann nicht gestartet werden: "+ex.Message);return;}
    listener=server;cancel=new CancellationTokenSource();active=true;
