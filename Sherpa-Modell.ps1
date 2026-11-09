@@ -7,16 +7,16 @@ New-Item -ItemType Directory -Force $folder | Out-Null
 $temp=Join-Path ([IO.Path]::GetTempPath()) ('sherpa-'+[guid]::NewGuid().ToString('N'))
 New-Item -ItemType Directory -Force $temp | Out-Null
 try {
- $archive=Join-Path $temp 'model.tar.bz2'
- $url='https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/sherpa-onnx-whisper-base.tar.bz2'
- curl.exe --fail --location --retry 4 --retry-all-errors --retry-delay 5 --connect-timeout 20 --max-time 360 --output $archive $url
- if($LASTEXITCODE){throw "Sherpa-Modell-Download fehlgeschlagen: $LASTEXITCODE"}
- tar -xjf $archive -C $temp
- if($LASTEXITCODE){throw 'Sherpa-Modell konnte nicht entpackt werden.'}
+ $base='https://huggingface.co/csukuangfj/sherpa-onnx-whisper-base/resolve/main/'
  foreach($name in $names){
-  $files=@(Get-ChildItem $temp -Recurse -File -Filter $name)
-  if($files.Count -ne 1){throw "Sherpa-Datei fehlt: $name"}
-  Copy-Item $files[0].FullName (Join-Path $folder $name) -Force
+  $destination=Join-Path $folder $name
+  if((Test-Path $destination) -and (Get-Item $destination).Length -gt 100000){continue}
+  $partial=Join-Path $temp $name
+  $url=$base+$name+'?download=true'
+  curl.exe --fail --location --retry 4 --retry-all-errors --retry-delay 5 --connect-timeout 20 --max-time 900 --silent --show-error --output $partial $url
+  if($LASTEXITCODE){throw "Sherpa-Modell-Datei konnte nicht geladen werden: $name (curl $LASTEXITCODE)"}
+  if((Get-Item $partial).Length -lt 100000){throw "Sherpa-Modell-Datei unvollständig: $name"}
+  Move-Item $partial $destination -Force
  }
  Write-Host 'Nur Sherpa-Modell ergänzt; alle bestehenden Werkzeuge unverändert.'
 }finally{Remove-Item $temp -Recurse -Force -ErrorAction SilentlyContinue}
