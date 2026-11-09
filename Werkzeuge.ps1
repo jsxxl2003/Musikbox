@@ -6,9 +6,18 @@ New-Item -ItemType Directory -Force $Ziel,$temp | Out-Null
 function Download($url,$path,$sha='') {
  New-Item -ItemType Directory -Force (Split-Path $path) | Out-Null
  Write-Host "Download: $url"
- curl.exe --fail --location --retry 2 --retry-all-errors --connect-timeout 20 --max-time 240 --silent --show-error --output $path $url
- if($LASTEXITCODE){throw "Download fehlgeschlagen: $url (curl $LASTEXITCODE)"}
- if($sha -and (Get-FileHash $path -Algorithm SHA256).Hash -ne $sha){throw "Falsche SHA256-Pruefsumme: $url"}
+ if((Test-Path $path) -and $sha -and (Get-FileHash $path -Algorithm SHA256).Hash -eq $sha){Write-Host "Vorhandene geprüfte Datei: $path";return}
+ $downloaded=$false
+ for($attempt=1;$attempt -le 5;$attempt++){
+  curl.exe --fail --location --retry 2 --retry-all-errors --retry-delay 3 --connect-timeout 20 --max-time 240 --silent --show-error --output $path $url
+  if($LASTEXITCODE -eq 0){
+   if($sha -and (Get-FileHash $path -Algorithm SHA256).Hash -ne $sha){throw "Falsche SHA256-Pruefsumme: $url"}
+   $downloaded=$true;break
+  }
+  $code=$LASTEXITCODE
+  if($attempt -lt 5){$delay=[Math]::Min(60,5*[Math]::Pow(2,$attempt - 1));Write-Warning "Downloadversuch $attempt/5 fehlgeschlagen (curl $code); erneuter Versuch in $delay Sekunden.";Start-Sleep -Seconds $delay}
+ }
+ if(-not $downloaded){throw "Download nach fünf Versuchen fehlgeschlagen: $url (curl $code)"}
 }
 function Unzip($url,$name,$sha='') {
  $zip=Join-Path $temp ($name+'.zip'); Download $url $zip $sha
