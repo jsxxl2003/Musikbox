@@ -51,13 +51,16 @@ jobs:
           key: mw-tools-win64-stable-v1
           restore-keys: |
             mw-tools-win64-
-      - name: Aktuelles Programm ohne Fremdwerkzeuge
+      - name: Nur fehlendes Sherpa-Sprachmodell ergänzen
+        shell: pwsh
+        run: ./Sherpa-Modell.ps1 -Ziel "$env:GITHUB_WORKSPACE/build-output/Werkzeuge"
+      - name: Programm mit Sherpa-Sprachmodell ausliefern
         uses: actions/upload-artifact@v4
         with:
           name: MW-064-Programm
           path: build-output/
           if-no-files-found: error
-      - name: Nur fehlendes Sherpa-Sprachmodell ergänzen
+      - name: Sherpa-Modell auch im vorhandenen Werkzeugpaket bereitstellen
         if: steps.tools.outputs.cache-matched-key != ''
         shell: pwsh
         run: ./Sherpa-Modell.ps1 -Ziel "$env:RUNNER_TEMP/MW-Werkzeuge"
