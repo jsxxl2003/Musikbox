@@ -16,19 +16,22 @@ namespace Musikbox {
   void InitializeStudio(){
    InitializeImportCounters();PortablePaths.Configure(p);personalVoice=new VoiceCorrections(Path.Combine(PortablePaths.Data,"Sprachkorrekturen.tsv"));v.OnlineCover.Checked=false;v.TagEditor.TrackNumbersRequested+=()=>Run(OpenTrackNumbers);if(!v.Songs.Columns.Contains("Tracknummer"))v.Songs.Columns.Add("Tracknummer","Tracknummer");
    v.SearchChanged+=q=>{libraryFolder=null;groupField=null;groupValue=null;v.LibraryMode="Titel";v.PresentSearchResults(false);QueueLibrarySearch(q,false);};
-   v.VoiceStopRequested+=()=>voice.Stop();
+   v.VoiceStopRequested+=()=>{chromeSpeech.Stop();voice.Stop();};
    v.LibraryModeChanged+=SwitchLibraryMode;v.FolderSaveRequested+=(path,name,number)=>Run(()=>SaveSelectedFolder(path,name,number));v.Groups.SelectionChanged+=(s,e)=>SelectGroupFolder();
    v.TagPathsDropped+=paths=>{var wanted=AllSongs.Where(song=>paths.Any(path=>String.Equals(song.Source,path,StringComparison.OrdinalIgnoreCase)||(Directory.Exists(path)&&Path.GetFullPath(song.Source).StartsWith(Path.GetFullPath(path).TrimEnd(Path.DirectorySeparatorChar)+Path.DirectorySeparatorChar,StringComparison.OrdinalIgnoreCase)))).ToList();
     if(wanted.Count==0)return;v.SearchBox.Clear();v.LibraryMode="Titel";libraryFolder=null;groupField=groupValue=null;PopulateLibrary();v.Songs.ClearSelection();foreach(DataGridViewRow row in v.Songs.Rows)row.Selected=wanted.Contains(row.Tag as Song);SyncSideTags();};
    v.StudioAction+=OpenStudioModule;
    v.Groups.CellDoubleClick+=(s,e)=>{if(e.RowIndex<0)return;var entry=v.Groups.Rows[e.RowIndex].Tag as Tuple<string,string>;if(entry==null)return;if(entry.Item1=="folder")libraryFolder=p.Folders.FirstOrDefault(f=>f.Name==entry.Item2);else{groupField=entry.Item1;groupValue=entry.Item2;}v.LibraryMode="Titel";PopulateLibrary();};
-   v.Microphone.Click+=async(s,e)=>{if(voice.Active){voice.Stop();return;}if(busy){v.SetVoiceState(false,"Bitte zuerst den laufenden Vorgang beenden.");return;}await voice.Start(AllSongs.ToArray());};
+   v.Microphone.Click+=async(s,e)=>{if(chromeSpeech.Active){chromeSpeech.Stop();v.SetVoiceState(false,"Google-Sprachsuche beendet");return;}if(voice.Active){voice.Stop();return;}if(busy){v.SetVoiceState(false,"Bitte zuerst den laufenden Vorgang beenden.");return;}if(preferChromeSpeech){chromeSpeech.Start();return;}await voice.Start(AllSongs.ToArray());};
+   chromeSpeech.Recognized+=result=>UI(()=>{HandleVoice(new[]{result});v.SetVoiceState(false,"Google erkannt: "+result);});
+   chromeSpeech.Status+=message=>UI(()=>v.SetVoiceState(true,message));
+   chromeSpeech.Failed+=message=>UI(()=>{v.SetVoiceState(false,message);AppMessage.Show(v,message,"Google-Sprachsuche");});
    voice.RecognitionCompleted+=(generation,phrases)=>UI(()=>{if(voice.Active&&voice.Generation==generation)HandleVoice(phrases);});voice.StatusUpdated+=(generation,active,message)=>UI(()=>{if(voice.Generation!=generation)return;v.Status.Text=message;v.SetVoiceState(active,message);});voice.ErrorUpdated+=(generation,message)=>UI(()=>{if(voice.Generation==generation)AppMessage.Show(v,message,"Sprachsteuerung");});
    v.Player.PreviousRequested+=()=>RunPlayback(()=>StepSong(-1));v.Player.NextRequested+=()=>RunPlayback(()=>StepSong(1));v.Player.VolumeRequested+=value=>RunPlayback(()=>playback.SetVolume(value));
    v.TagEditor.WriteFilesRequested+=()=>Run(()=>{CommitSideTags();WriteTagCopies();});
    v.Button("Katalog als CSV",()=>Run(ExportCatalog));v.Button("Tags als Dateikopien",()=>Run(WriteTagCopies));v.Button("Audio-Werkzeuge",()=>OpenStudioModule("Audio-Werkzeuge"));v.Button("Tag-Editor",()=>OpenStudioModule("Tag-Editor"));v.Button("Audiokonvertierung",()=>OpenStudioModule("Konvertierung"));v.Button("Wiedergabelisten",()=>OpenStudioModule("Wiedergabelisten"));v.ArrangeMenus();
    v.ProjectPathRequested+=file=>Run(()=>{if(!CanDiscard())return;ReplaceProject(Storage.Load(file),file,true);});
-   v.FormClosed+=(s,e)=>{artworkGeneration++;importCountTimer.Stop();importCountTimer.Dispose();CancelLibrarySearch();voice.Dispose();};
+   v.FormClosed+=(s,e)=>{artworkGeneration++;importCountTimer.Stop();importCountTimer.Dispose();CancelLibrarySearch();chromeSpeech.Dispose();voice.Dispose();};
   }
   HashSet<string> recentImportPaths;
   void PopulateLibrary(){
