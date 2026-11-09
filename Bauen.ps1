@@ -7,7 +7,7 @@ if (-not $WerkzeugePfad) {
  $WerkzeugePfad=Join-Path (Split-Path $PSScriptRoot) 'Werkzeuge'
  if (-not (Test-Path $WerkzeugePfad)) { $WerkzeugePfad=Join-Path $PSScriptRoot 'tools' }
 }
-foreach($name in @('ffmpeg/ffmpeg.exe','ffmpeg/ffprobe.exe','mp3gain/mp3gain.exe','fpcalc/fpcalc.exe','freac/freaccmd.exe','whisper/whisper-cli.exe','whisper/whisper-cli-compatible.exe','whisper/ggml-base.bin','yt-dlp/yt-dlp.exe','yt-dlp/deno.exe')) {
+foreach($name in @('ffmpeg/ffmpeg.exe','ffmpeg/ffprobe.exe','mp3gain/mp3gain.exe','fpcalc/fpcalc.exe','freac/freaccmd.exe','whisper/whisper-cli.exe','whisper/whisper-cli-compatible.exe','whisper/ggml-base.bin','sherpa-onnx/base-encoder.int8.onnx','sherpa-onnx/base-decoder.int8.onnx','sherpa-onnx/base-tokens.txt','yt-dlp/yt-dlp.exe','yt-dlp/deno.exe')) {
  if(-not(Test-Path (Join-Path $WerkzeugePfad $name))){throw "Werkzeug fehlt: $name. Vollstaendigen Werkzeuge-Ordner des bisherigen Pakets ueber -WerkzeugePfad angeben."}
 }
 $packageName='MW'
