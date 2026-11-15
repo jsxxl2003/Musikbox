@@ -122,7 +122,8 @@ namespace Musikbox {
   }
   void ShowSongs(){if(v.Cover.Image!=null){v.Cover.Image.Dispose();v.Cover.Image=null;}if(Current!=null)ShowFolderArtwork(Current);PopulateLibrary();}
   void ImportDropped(string[] paths,int targetIndex){ImportDropped(paths,targetIndex,false,false);}
-  async void ImportDropped(string[] paths,int targetIndex,bool keepModule,bool prepareAudio=false){
+  async void ImportDropped(string[] paths,int targetIndex,bool keepModule,bool prepareAudio=false){await ImportDroppedAsync(paths,targetIndex,keepModule,prepareAudio);}
+  async Task ImportDroppedAsync(string[] paths,int targetIndex,bool keepModule,bool prepareAudio=false){
    if(busy)return;v.Songs.EndEdit();cancel=new CancellationTokenSource();var token=cancel.Token;SetBusy(true);var counter=BeginImportCounters();DropResult completed=null;
    try {
     completed=await Task.Run(()=>{var read=DropImport.Read(p,paths,targetIndex,()=>token.ThrowIfCancellationRequested(),folderImportMode,ReadProgress,true,song=>counter.Add(song));ReadProgress(read.FoldersAdded,read.FilesAdded);
