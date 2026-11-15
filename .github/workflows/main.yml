@@ -51,6 +51,28 @@ jobs:
           key: mw-tools-win64-stable-v1
           restore-keys: |
             mw-tools-win64-
+      - name: Portable Werkzeuge bereitstellen und pruefen
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $cache = Join-Path $env:RUNNER_TEMP 'MW-Werkzeuge'
+          $required = @('yt-dlp/yt-dlp.exe','yt-dlp/deno.exe','ffmpeg/ffmpeg.exe','ffmpeg/ffprobe.exe')
+          $missing = @($required | Where-Object { -not (Test-Path (Join-Path $cache $_) -PathType Leaf) })
+          if ($missing.Count -gt 0) { ./Werkzeuge.ps1 -Ziel $cache }
+          $target = Join-Path $env:GITHUB_WORKSPACE 'build-output/Werkzeuge'
+          New-Item -ItemType Directory -Force $target | Out-Null
+          foreach ($folder in @('yt-dlp','ffmpeg')) {
+            Copy-Item (Join-Path $cache $folder) $target -Recurse -Force
+          }
+          foreach ($file in $required) {
+            if (-not (Test-Path (Join-Path $target $file) -PathType Leaf)) { throw "Portable Werkzeugdatei fehlt: $file" }
+          }
+          & (Join-Path $target 'yt-dlp/yt-dlp.exe') --version
+          if ($LASTEXITCODE) { throw 'yt-dlp Startpruefung fehlgeschlagen.' }
+          & (Join-Path $target 'yt-dlp/deno.exe') --version
+          if ($LASTEXITCODE) { throw 'Deno Startpruefung fehlgeschlagen.' }
+          & (Join-Path $target 'ffmpeg/ffmpeg.exe') -version
+          if ($LASTEXITCODE) { throw 'FFmpeg Startpruefung fehlgeschlagen.' }
       - name: Nur fehlendes Sherpa-Sprachmodell ergänzen
         shell: pwsh
         run: ./Sherpa-Modell.ps1 -Ziel "$env:GITHUB_WORKSPACE/build-output/Werkzeuge"
