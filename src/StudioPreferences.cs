@@ -4,8 +4,9 @@ namespace Musikbox {
  static string FilePath(string key){if(!Regex.IsMatch(key,@"^[A-Za-z0-9_-]+$"))throw new ArgumentException("Ungültiger Einstellungsschlüssel.");return Path.Combine(PortablePaths.Data,key+".txt");}
  public static string Get(string key,string fallback=""){try{string p=FilePath(key);return File.Exists(p)?File.ReadAllText(p):fallback;}catch{return fallback;}}
  public static void Set(string key,string value){Directory.CreateDirectory(PortablePaths.Data);string p=FilePath(key),temp=p+"."+Guid.NewGuid().ToString("N")+".tmp";try{File.WriteAllText(temp,value??"");File.Move(temp,p,true);}finally{if(File.Exists(temp))File.Delete(temp);}}
- public static string Folder(string key){string p=Get("Ziel-"+key);if(Directory.Exists(p))return p;p=Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);return Directory.Exists(p)?p:PortablePaths.Data;}
- public static void SaveFolder(string key,string path){if(!Directory.Exists(path))throw new DirectoryNotFoundException(path);Set("Ziel-"+key,Path.GetFullPath(path));}
+ static string VideoFolderPath(){return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),"Musikbox-Werkstatt","Video-Audio-Import-Ziel.txt");}
+ public static string Folder(string key){string p=Get("Ziel-"+key);if(key=="Video-Audio-Import"){string shared=VideoFolderPath();if(File.Exists(shared)){p=File.ReadAllText(shared).Trim();if(!String.IsNullOrWhiteSpace(p))return p;}if(!String.IsNullOrWhiteSpace(p)){SaveFolder(key,p);return p;}return "";}if(Directory.Exists(p))return p;p=Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);return Directory.Exists(p)?p:PortablePaths.Data;}
+ public static void SaveFolder(string key,string path){if(!Directory.Exists(path))throw new DirectoryNotFoundException(path);string full=Path.GetFullPath(path);if(key=="Video-Audio-Import"){string shared=VideoFolderPath();Directory.CreateDirectory(Path.GetDirectoryName(shared));string temp=shared+"."+Guid.NewGuid().ToString("N")+".tmp";try{File.WriteAllText(temp,full);File.Move(temp,shared,true);}finally{if(File.Exists(temp))File.Delete(temp);}}else Set("Ziel-"+key,full);}
  }
  public static class OutputFormatSettings {
  public static readonly string[] Available={"artist","title","album","genre","track","year","_directory","acoustid_id","ordner"};
