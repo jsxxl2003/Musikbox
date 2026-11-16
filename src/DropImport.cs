@@ -78,6 +78,7 @@ namespace Musikbox {
       }else foreach(var song in folder.Songs){checkCancel();coveredFiles.Add(song.Source);if(AddByTags(candidate,song,folder,folder)){result.FilesAdded++;if(firstAdded==null)firstAdded=song.Source;}else result.Skipped++;}
      }
     }else if(File.Exists(path)&&Ffmpeg.Extensions.Contains(Path.GetExtension(path).ToLowerInvariant()))loose.Add(path);
+    else if(File.Exists(path)&&new[]{".jpg",".jpeg",".png",".bmp",".gif",".webp",".tif",".tiff"}.Contains(Path.GetExtension(path).ToLowerInvariant()))continue; // Cover images are not audio import candidates.
     else result.Warnings.Add(Path.GetFileName(path)+": keine unterstützte Audiodatei oder kein erreichbarer Ordner. ZIP-Dateien bitte zuerst entpacken.");
    }
    var looseCandidate=mode==FolderImportMode.PreserveStructure?original.WithFolders(new List<BoxFolder>()):candidate;
