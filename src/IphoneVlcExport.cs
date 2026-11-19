@@ -20,6 +20,20 @@ namespace Musikbox {
     var browser=new Button{Left=225,Top=215,Width=190,Height=38,Text="VLC im Browser öffnen"};
     var cancel=new Button{Left=430,Top=215,Width=140,Height=38,Text="Schließen"};
     dialog.Controls.AddRange(new Control[]{help,address,status,send,browser,cancel});
+    var usb=new Button{Left=20,Top=260,Width=550,Height=32,Text="USB: Dateien für Apple-Geräte-Dateifreigabe öffnen"};
+    dialog.Height=355;
+    dialog.Controls.Add(usb);
+    usb.Click+=(s,e)=>{
+     try{
+      // USB app file sharing is controlled by Apple Devices; do not pretend the
+      // Windows app can write into the iOS VLC sandbox directly.
+      var first=songs[0].Source;
+      System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo("explorer.exe","/select,\\\""+first+"\\\""){UseShellExecute=true});
+      var folders=songs.Select(x=>Path.GetDirectoryName(x.Source)).Distinct(StringComparer.OrdinalIgnoreCase).Count();
+      AppMessage.Show(dialog,"USB-Übertragung mit Apple-Geräte (Windows):\\n\\n1. iPhone per USB verbinden, entsperren und diesem PC vertrauen.\\n2. Apple-Geräte öffnen → iPhone → Dateien → VLC.\\n3. Im geöffneten Explorer die gewünschten Originaldateien auswählen und in die VLC-Dateifreigabe ziehen (oder über 'Datei hinzufügen' auswählen).\\n\\n"+songs.Count+" Titel ausgewählt, in "+folders+" Quellordner(n). Bei mehreren Ordnern die Dateien ordnerweise hinzufügen.\\n\\nEs werden keine zusätzlichen Dateien auf C: angelegt.");
+     }catch(Exception ex){AppMessage.Show(dialog,ex.Message);}
+    };
+
     cancel.Click+=(s,e)=>dialog.Close();
     bool Valid(out Uri uri){uri=null;return Uri.TryCreate(address.Text.Trim(),UriKind.Absolute,out uri)&&uri.Scheme==Uri.UriSchemeHttp&&uri.UserInfo.Length==0&&uri.HostNameType!=UriHostNameType.Unknown;}
     browser.Click+=(s,e)=>{if(!Valid(out var uri)){AppMessage.Show(dialog,"Bitte die in VLC angezeigte HTTP-Adresse eingeben.");return;}StudioPreferences.Set("IphoneVlcUrl",uri.GetLeftPart(UriPartial.Authority));try{System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(uri.AbsoluteUri){UseShellExecute=true});}catch(Exception ex){AppMessage.Show(dialog,ex.Message);}};
