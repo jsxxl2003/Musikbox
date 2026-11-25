@@ -62,7 +62,7 @@ namespace Musikbox {
    InvalidateArtwork();SyncSideTags(false);RefreshPlayerArtwork();
    AppMessage.Show(v,changed+" Dateien: Cover entfernt."+(errors.Count>0?"\r\nFehler ("+errors.Count+"):\r\n"+String.Join("\r\n",errors.Take(10)):""),"Single-Cover entfernen");
   }
-  void OpenStudioModule(string page){CancelLibrarySearch();CaptureLibraryViews();using(v.BeginStudioPageChange(page)){OpenStudioModuleCore(page);}RestoreActiveLibraryView();ApplySearchResultOrder();}
+  void OpenStudioModule(string page){if(page=="Single-Cover entfernen"){Run(RemoveSingleCovers);return;}CancelLibrarySearch();CaptureLibraryViews();using(v.BeginStudioPageChange(page)){OpenStudioModuleCore(page);}RestoreActiveLibraryView();ApplySearchResultOrder();}
   void OpenStudioModuleCore(string page){if(!busy){v.Songs.EndEdit();CommitSideTags();}if(new[]{"Audio-Werkzeuge","Tag-Editor","Konvertierung","MP3Gain","fre:ac","FFmpeg","Video-Audio-Import"}.Contains(page)&&v.LibraryMode!="Titel")SwitchLibraryMode("Titel");v.SelectStudioPage(page);switch(page){case "Tag-Konvertierung":case "Tag-Editor":OpenTagConversion();return;case "Konvertierung":OpenConversion();return;case "MP3Gain":OpenAudioTools();return;case "fre:ac":OpenFreac();return;case "FFmpeg":OpenFfmpegTools();return;case "Video-Audio-Import":OpenVideoAudioImport();return;case "Bibliothek":return;case "Audio-Werkzeuge":OpenAudioTools();return;case "Wiedergabelisten":OpenPlaylists();return;case "Statistiken":OpenStatistics();return;}
    if(new[]{"Coversuche","Coverbearbeitung","Covergestaltung","Cover zuweisen / exportieren"}.Contains(page)){OpenCoverSubmodule(page);return;}
    Panel panel;FlowLayoutPanel buttons;
