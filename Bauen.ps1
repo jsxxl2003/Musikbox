@@ -20,7 +20,10 @@ if($PublishOrdner) {
  dotnet publish MusikboxWerkstatt.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=false -p:NuGetAudit=false -p:ToolsRoot=__Werkzeuge_separat__ -o $package
  if($LASTEXITCODE){throw 'Windows-Publish fehlgeschlagen.'}
 }
-Copy-Item $WerkzeugePfad (Join-Path $package 'Werkzeuge') -Recurse
+$toolTarget=Join-Path $package 'Werkzeuge'
+New-Item -ItemType Directory -Force $toolTarget | Out-Null
+Copy-Item (Join-Path $WerkzeugePfad '*') $toolTarget -Recurse -Force
+if(-not(Test-Path "$toolTarget/mp3gain/mp3gain.exe" -PathType Leaf)){throw 'MP3Gain fehlt am vorgesehenen Paketpfad.'}
 foreach($dir in @('Daten','Dokumentation','Quellcode')){New-Item -ItemType Directory (Join-Path $package $dir) -Force | Out-Null}
 $source=Join-Path $package 'Quellcode'
 # Nur versionierte Dateien: keine bin/obj-Verzeichnisse oder privaten Daten.
@@ -65,6 +68,8 @@ try {
  $check=Join-Path $Ausgabeordner ('Pruefpfad-' + ('x'*100))
  [IO.Compression.ZipFile]::ExtractToDirectory($zip,$check)
  if(-not(Test-Path "$check/MW/Musikbox-Werkstatt-Studio.exe")){throw 'Entpackpruefung fehlgeschlagen.'}
+ if(-not(Test-Path "$check/MW/Werkzeuge/mp3gain/mp3gain.exe" -PathType Leaf)){throw 'MP3Gain fehlt im entpackten Archiv.'}
+ if(-not(Test-Path "$check/MW/Werkzeuge/ffmpeg/ffmpeg.exe" -PathType Leaf)){throw 'FFmpeg fehlt im entpackten Archiv.'}
  Remove-Item $check -Recurse -Force
 } finally {$archive.Dispose()}
 Write-Host ('Vollstaendiges Paket erstellt und entpackt: '+$zip)
